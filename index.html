@@ -1,0 +1,1592 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>지출김군</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@600;700&family=IBM+Plex+Mono:wght@500;700&display=swap">
+<style>
+/* 디자인 계획: 건국대 녹색 정체성 · 회계 장부(원장) 느낌의 정돈된 업무 도구.
+   상단 GNB + 탭, 본문은 좌(입력 카드) / 우(점검 결과) 2열 → 모바일 1열. 숫자는 mono, 상태는 칩 색상으로 구분. */
+:root{
+  --bg:#f3f6f4; --card:#ffffff; --fg:#14201a; --mut:#56655d; --line:#d5ded8; --soft:#e2f1e8;
+  --brand:#00703e; --brand2:#115029; --btn:#005128; --onbrand:#ffffff; --red:#e84855; --teams:#4b53bc;
+  --ok:#0b7a43; --okbg:#e0f3e8; --warn:#9a5b00; --warnbg:#fff1d6; --bad:#b3261e; --badbg:#fde4e1; --chk:#2c5aa0; --chkbg:#e3ecf9; --na:#6b7770; --nabg:#eceeed;
+  --c1:#036b3f; --c2:#0f7d82; --c3:#7a8f1c; --c4:#5b6b63;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace; --sans:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif; --serif:"Noto Serif KR",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111a15; --card:#17201b; --fg:#e3ece6; --mut:#9db0a5; --line:#2b3a32; --soft:#1b3326;
+  --brand:#5aa77c; --brand2:#8fd1ae; --btn:#00703e; --onbrand:#07261a; --red:#ff6b77; --teams:#a9b0ff;
+  --ok:#6fd49c; --okbg:#173325; --warn:#f0be63; --warnbg:#3a2c10; --bad:#ff958d; --badbg:#401d1a; --chk:#8fb4f0; --chkbg:#1b2a44; --na:#98a69e; --nabg:#222c26; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111a15; --card:#17201b; --fg:#e3ece6; --mut:#9db0a5; --line:#2b3a32; --soft:#1b3326;
+  --brand:#5aa77c; --brand2:#8fd1ae; --btn:#00703e; --onbrand:#07261a; --red:#ff6b77; --teams:#a9b0ff;
+  --ok:#6fd49c; --okbg:#173325; --warn:#f0be63; --warnbg:#3a2c10; --bad:#ff958d; --badbg:#401d1a; --chk:#8fb4f0; --chkbg:#1b2a44; --na:#98a69e; --nabg:#222c26; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.55;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:22px max(16px,env(safe-area-inset-left,0px)) 96px max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+.grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:16px;align-items:start}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.card.band{padding:0;overflow:hidden}
+.card.band>.bh{background:var(--bandc,var(--c1));color:#fff;padding:13px 18px;font-family:var(--serif);font-weight:700;font-size:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.card.band>.bh small{font-family:var(--sans);font-weight:400;font-size:12px;opacity:.88}
+.card.band>.bb{padding:16px 18px}
+.card h2{font-family:var(--serif);font-size:16px;font-weight:700;margin:0 0 12px;display:flex;align-items:center;gap:0}
+h2::before{content:"";display:inline-block;width:6px;height:.95em;margin-right:10px;border-radius:3px;background:var(--red);flex:none}
+.card h3{font-size:13px;margin:14px 0 8px;color:var(--brand);letter-spacing:.2px}
+.f{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.f{grid-template-columns:minmax(0,1fr)}}
+.f .full{grid-column:1/-1}
+label.l{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--mut);min-width:0}
+label.l input,label.l select,label.l textarea{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--fg);min-width:0;width:100%}
+label.l input:focus,label.l select:focus,label.l textarea:focus{outline:2px solid var(--brand);outline-offset:0}
+.num{font-family:var(--mono);text-align:right}
+.chkrow{display:flex;gap:8px;align-items:flex-start;font-size:13px;padding:5px 0;cursor:pointer}
+.chkrow input{margin-top:4px;accent-color:var(--brand)}
+.chkrow.h{color:var(--mut)}
+.btn{background:var(--btn);color:#fff;border:0;border-radius:6px;padding:9px 16px;cursor:pointer;font-weight:700}
+.btn.g{background:var(--card);color:var(--brand);border:1px solid var(--line)}
+.btn.g:hover{border-color:var(--brand)}
+.btn.s{padding:5px 10px;font-size:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{font-size:12px;color:var(--mut)}
+.sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+@media(max-width:520px){.sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.sum div{border-radius:10px;padding:10px;text-align:center}
+.sum b{display:block;font-size:22px;font-family:var(--mono);line-height:1.1}
+.sum span{font-size:11.5px}
+.s-bad{background:var(--badbg);color:var(--bad)} .s-warn{background:var(--warnbg);color:var(--warn)} .s-chk{background:var(--chkbg);color:var(--chk)} .s-ok{background:var(--okbg);color:var(--ok)} .s-na{background:var(--nabg);color:var(--na)}
+.verdict{border-radius:10px;padding:12px 14px;margin-bottom:12px;font-weight:700}
+.it{border:1px solid var(--line);border-left-width:5px;border-radius:9px;padding:9px 12px;margin-bottom:8px;background:var(--card)}
+.it.bad{border-left-color:var(--bad)} .it.warn{border-left-color:var(--warn)} .it.chk{border-left-color:var(--chk)} .it.ok{border-left-color:var(--ok)} .it.na{border-left-color:var(--na)}
+.it .t{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.it .t b{font-size:13.5px}
+.chip{font-size:11px;border-radius:99px;padding:1px 8px;font-weight:700;white-space:nowrap;flex:none}
+.chip.bad{background:var(--badbg);color:var(--bad)} .chip.warn{background:var(--warnbg);color:var(--warn)} .chip.chk{background:var(--chkbg);color:var(--chk)} .chip.ok{background:var(--okbg);color:var(--ok)} .chip.na{background:var(--nabg);color:var(--na)}
+.it p{margin:4px 0 0;font-size:12.5px;color:var(--mut)}
+.it p.fix{color:var(--fg)} .it p.fix::before{content:"보완 · ";font-weight:700;color:var(--brand)}
+.cat{font-size:11px;color:var(--mut);margin:14px 0 6px;font-weight:700;letter-spacing:.3px;text-transform:none}
+.doc{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:7px;font-size:13px;cursor:pointer}
+.doc:hover{background:var(--soft)}
+.doc input{margin-top:4px;accent-color:var(--brand)}
+.doc.miss span{color:var(--bad);font-weight:500}
+.paper{background:#fff;color:#111;border:1px solid #bbb;border-radius:4px;padding:26px 24px;max-width:780px;margin:0 auto;font-size:13px;line-height:1.7}
+.paper h2{text-align:center;font-size:20px;margin:0 0 4px;letter-spacing:6px;color:#111}
+.paper table{width:100%;border-collapse:collapse;margin:10px 0}
+.paper th,.paper td{border:1px solid #444;padding:5px 8px;text-align:left;vertical-align:top;font-size:12.5px}
+.paper th{background:#e8efe9;width:22%;font-weight:700}
+.paper .st{font-weight:700}
+.scroll{overflow-x:auto}
+table.ref{width:100%;border-collapse:collapse;font-size:12.5px}
+table.ref th,table.ref td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.ref th{background:var(--soft);color:var(--brand2)}
+.pg{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin:6px 0 12px}
+.pg i{display:block;height:100%;background:var(--brand);width:0}
+.flt{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.flt button{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:3px 11px;cursor:pointer;font-size:12px;color:var(--mut)}
+.flt button.on{background:var(--brand);color:var(--onbrand);border-color:var(--brand)}
+
+/* ── 규정김군 공통 GNB·마스트헤드·전체메뉴·하단바 (kurule 구조 반영) ── */
+.ku-gnb{position:sticky;top:0;z-index:120;display:flex;align-items:center;gap:12px;min-height:56px;padding:6px max(16px,calc((100% - 1480px)/2 + 16px));background:var(--card);border-bottom:1px solid var(--line)}
+.ku-logo{display:flex;align-items:center;gap:8px;flex:none}
+.ku-logo img{height:30px;width:auto;display:block}.ku-logo .ku-w{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ku-logo .ku-g{display:none}:root:not([data-theme="light"]) .ku-logo .ku-w{display:block}}
+:root[data-theme="dark"] .ku-logo .ku-g{display:none}:root[data-theme="dark"] .ku-logo .ku-w{display:block}
+:root[data-theme="light"] .ku-logo .ku-g{display:block}:root[data-theme="light"] .ku-logo .ku-w{display:none}
+.ku-nm{display:flex;flex-direction:column;line-height:1.15;border-left:1px solid var(--line);padding-left:10px}
+.ku-nm b{display:flex;align-items:center;gap:5px;font-size:17px;font-weight:900;letter-spacing:-.03em;white-space:nowrap}
+.ku-nm small{font-size:9.5px;letter-spacing:.12em;color:var(--mut);white-space:nowrap}
+.beta-tag{font-style:normal;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--red);border-radius:3px;padding:1px 5px;line-height:1.4}
+nav.gn{display:flex;gap:2px;margin-left:8px}
+nav.gn button{background:none;border:0;border-bottom:2px solid transparent;color:var(--fg);font-size:14px;font-weight:700;padding:8px 10px;cursor:pointer;white-space:nowrap}
+nav.gn button:hover{color:var(--brand)}
+nav.gn button[aria-selected=true]{color:var(--brand);border-bottom-color:var(--brand)}
+.ku-sp{flex:1}
+.ku-gnb{flex-wrap:nowrap}
+.ku-bp{display:flex;gap:8px}
+.ku-bp span{font-size:11.5px;color:var(--mut);white-space:nowrap;display:inline-flex;gap:4px;align-items:center}
+.ku-bp b{font-family:var(--mono);font-size:11.5px;font-weight:700;color:#fff;background:var(--c);border-radius:3px;padding:1px 6px}
+.ku-who{display:flex;flex-direction:column;line-height:1.2;text-align:right;font-size:12px;color:var(--mut)}
+.ku-who b{color:var(--fg);font-size:12.5px}.ku-who span{font-family:var(--mono);font-size:11px}
+.gb{display:grid;place-items:center;width:40px;height:40px;flex:none;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer;padding:0}
+.gb:hover{border-color:var(--brand);color:var(--brand)}
+.gb svg{width:20px;height:20px}
+.gb.all{background:var(--brand);border-color:var(--brand);color:var(--onbrand)}
+.gb.all:hover{background:var(--btn);color:#fff}
+.tm-menu{position:relative;flex:none}
+.tm-btn{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px;border:1px solid color-mix(in srgb,var(--teams) 40%,var(--line));border-radius:6px;background:var(--card);color:var(--teams);font:700 13px/1 var(--sans);cursor:pointer;white-space:nowrap}
+.tm-btn .beta-tag{font-size:9px}.tm-ic{width:17px;height:17px;flex:none}
+.tm-pop{position:absolute;top:calc(100% + 8px);right:0;z-index:130;width:min(380px,calc(100vw - 32px));display:flex;flex-direction:column;gap:10px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--teams);border-radius:8px;box-shadow:0 10px 28px rgba(0,0,0,.18);padding:12px 14px}
+.tm-pop b{font-size:14px}.tm-pop code{font-family:var(--mono);font-size:11.5px;color:var(--mut)}
+.tm-pop textarea,.tm-pop select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:7px 9px;color:var(--fg)}
+.tm-pop textarea{min-height:84px;resize:vertical}
+.tm-note{margin:0;font-size:11.5px;color:var(--mut)}
+.tm-pop .pri{background:var(--teams);color:#fff;border-color:var(--teams)}
+:root:not([data-theme="light"]) .tm-pop .pri{color:#0d1033}
+.masthead{background:linear-gradient(120deg,var(--brand) 0%,var(--brand2) 100%);color:#fff;padding:34px max(16px,env(safe-area-inset-left,0px)) 28px max(16px,env(safe-area-inset-right,0px))}
+:root[data-theme="dark"] .masthead,:root:not([data-theme="light"]) .masthead{--mh:1}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .masthead{background:linear-gradient(120deg,#00703e 0%,#115029 100%)}}
+:root[data-theme="dark"] .masthead{background:linear-gradient(120deg,#00703e 0%,#115029 100%)}
+.mh-in{max-width:1180px;margin:0 auto;position:relative}
+.masthead .tag{font-size:12.5px;letter-spacing:.03em;color:#e6f3ec;margin-bottom:8px}
+.masthead h1{font-family:var(--serif);font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1.35;margin:0;color:#fff}
+.masthead .sub{margin-top:8px;color:#e6f3ec;font-size:14px;max-width:720px}
+.meta-badge{position:absolute;top:0;right:0;text-align:right;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:9px 13px;font-size:12px;color:#e6f3ec;line-height:1.6}
+.meta-badge .k{color:#b7d6c5;margin-right:6px}
+@media (max-width:860px){.meta-badge{position:static;display:inline-block;margin-top:12px;text-align:left}}
+.ku-drawer{position:fixed;inset:0;z-index:200}
+.ku-drawer-bg{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.ku-drawer-p{position:absolute;top:0;right:0;bottom:0;width:min(360px,92vw);background:var(--card);border-left:1px solid var(--line);overflow-y:auto;padding:0 0 calc(24px + env(safe-area-inset-bottom,0px))}
+.ku-drawer-h{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--brand2);color:#fff;position:sticky;top:0}
+:root:not([data-theme="light"]) .ku-drawer-h{color:#fff}
+.ku-drawer-h b{font-family:var(--serif);font-size:16px}
+.ku-drawer-x{background:none;border:0;color:inherit;font-size:26px;line-height:1;cursor:pointer;padding:0 4px}
+.ku-drawer h3{font-size:11.5px;letter-spacing:.06em;color:var(--mut);margin:16px 18px 6px;font-family:var(--sans);font-weight:700}
+.ku-drawer nav a,.ku-drawer nav button{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:none;border:0;border-left:3px solid transparent;color:var(--fg);padding:9px 18px;font-size:14px;cursor:pointer}
+.ku-drawer nav a:hover,.ku-drawer nav button:hover{background:var(--soft);border-left-color:var(--brand)}
+.ku-drawer nav [aria-current=page]{background:var(--soft);border-left-color:var(--brand);font-weight:700}
+.ku-drawer .lk{font-size:11px;color:var(--mut)}
+@media (max-width:1440px){.ku-bp{display:none}}
+@media (max-width:1180px){.ku-who{display:none}}
+@media (max-width:900px){.tm-lb,.tm-btn .beta-tag{display:none}.tm-btn{width:40px;padding:0;justify-content:center}}
+@media (max-width:720px){.ku-nm small{display:none}.ku-nm b{font-size:15.5px}.ku-logo img{height:26px}.ku-gnb{gap:6px;padding:5px max(10px,env(safe-area-inset-right,0px)) 5px max(12px,env(safe-area-inset-left,0px))}#searchBtn,#themeBtn{display:none}.tm-pop{position:fixed;left:12px;right:12px;top:60px;width:auto}.masthead h1{font-size:23px}}
+.sr input[type=search]{width:100%;font-size:16px;padding:11px 14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+.sr input[type=search]:focus{outline:2px solid var(--brand)}
+.sr mark{background:var(--warnbg);color:var(--warn);border-radius:2px;padding:0 2px}
+.src{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px}
+.src a{color:var(--teams);font-weight:700;font-size:12.5px}
+
+/* ── 견적김군 구조: 헤더(로고·GNB 탭) · 옵션바 · kcard · 하단 독 · 법적 푸터 ── */
+nav.gn a{white-space:nowrap;color:var(--fg);font-weight:700;font-size:14px;padding:8px 10px;border-bottom:2px solid transparent}
+nav.gn a:hover{color:var(--brand)}
+nav.gn a[aria-current=page]{color:var(--brand);border-bottom-color:var(--brand)}
+nav.gn a:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+@media (max-width:900px){.ku-gnb{flex-wrap:wrap;row-gap:0;padding-bottom:0}nav.gn{order:10;flex:1 1 100%;margin:0;overflow-x:auto;max-width:100%}nav.gn a{padding:9px 12px}}
+.optbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px;padding:7px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.optbar .ob-t{font-weight:700;font-size:13px;color:var(--brand)}
+.optbar .tog{display:inline-flex;gap:6px;align-items:center;font-size:13px;cursor:pointer}
+.optbar .tog input{accent-color:var(--brand)}
+.optbar .lnk{margin-left:auto;font-size:12.5px;color:var(--teams);font-weight:700}
+details.mn{position:relative}
+details.mn>summary{list-style:none;cursor:pointer;font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:7px;padding:6px 12px}
+details.mn>summary::-webkit-details-marker{display:none}
+details.mn>summary:hover{border-color:var(--brand);color:var(--brand)}
+details.mn>summary.primary{background:var(--btn);border-color:var(--btn);color:#fff;font-weight:700;padding:8px 16px;font-size:14px}
+details.mn>summary.primary:hover{color:#fff;filter:brightness(1.1)}
+.mn-list{position:absolute;z-index:40;top:calc(100% + 6px);left:0;min-width:230px;max-width:min(340px,86vw);background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 28px rgba(0,0,0,.18);padding:6px;display:flex;flex-direction:column;gap:2px}
+.mn.up .mn-list{top:auto;bottom:calc(100% + 6px)}
+.mn.r .mn-list{left:auto;right:0}
+.mn-list button,.mn-list label{display:flex;gap:8px;align-items:center;text-align:left;width:100%;background:none;border:0;border-radius:5px;padding:8px 10px;font:inherit;font-size:13.5px;color:var(--fg);cursor:pointer}
+.mn-list button:hover,.mn-list label:hover{background:var(--soft)}
+.mn-list small{display:block;color:var(--mut);font-size:11.5px}
+.mn-list h4{margin:6px 10px 2px;font-size:11px;letter-spacing:.06em;color:var(--mut)}
+.mn-list input{accent-color:var(--brand)}
+.kcard{background:var(--card);border:1px solid var(--line);border-radius:10px;min-width:0}
+.kcard>header{display:flex;align-items:center;gap:10px;padding:12px 16px 0;flex-wrap:wrap}
+.kcard>header h2{margin:0;font-size:15px;font-family:var(--sans);font-weight:700}
+.kcard>header h2::before{display:none}
+.kcard>header .sub{margin-left:auto;font-size:12px;color:var(--mut)}
+.kstep{font-family:var(--mono);font-size:11.5px;font-weight:700;color:#fff;background:var(--brand2);border-radius:3px;padding:1px 6px}
+:root:not([data-theme="light"]) .kstep{color:#fff}
+.kbody{padding:10px 16px 16px}
+.sec{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:-.02em;margin:6px 0 6px;display:flex;align-items:center}
+h2.sec::before{height:22px;width:6px;margin-right:10px}
+.lead{color:var(--mut);margin:0 0 14px;max-width:84ch;font-size:14px;line-height:1.5}
+.pvbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.pvbar h2{margin:0}.pvbar small{font-family:var(--sans);font-size:13px;color:var(--mut);font-weight:400;margin-left:8px}
+.pvbar .sp{flex:1}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.dock-in{max-width:1480px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px))}
+.dock .status{font-size:12.5px;color:var(--mut);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dock .status b{font-family:var(--mono);color:var(--fg)}
+.dock .sp{flex:1}
+.dock .keys{font-size:12px;color:var(--mut)}
+@media (max-width:640px){.dock .keys,.dock .status{display:none}.dock-in{gap:6px}}
+.legal{background:var(--card);border-top:1px solid var(--line);font-size:12.5px;color:var(--mut);margin:26px 0 0;padding:18px 0 24px;background:none}
+.legal>div{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
+.legal p{margin:0;overflow-wrap:anywhere;min-width:0}
+.legal>div{min-width:0}
+body{overflow-x:clip}
+body,p,li,td,th,label,span,div,h1,h2,h3,h4,button,summary,textarea{word-break:keep-all;overflow-wrap:break-word;line-break:strict}
+code,input,.mono,.n{word-break:normal;overflow-wrap:anywhere}
+.legal .beta-note{color:var(--warn);background:var(--warnbg);border-radius:4px;padding:8px 12px}
+.legal .beta-note b{margin-right:6px}
+.legal .copy{color:var(--fg);font-size:13.5px}
+.legal a{color:var(--brand)}
+
+/* ── 서류 업로드 · AI 연결 메뉴 · 모달 ── */
+.menu{position:relative;flex:none}
+.chipbtn{display:inline-flex;align-items:center;gap:4px;height:40px;padding:0 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);cursor:pointer;font:inherit;font-size:13px}
+.chipbtn:hover{border-color:var(--brand)}
+.ai-pill{display:inline-block;font-size:12px;font-weight:700;padding:1px 9px;border-radius:99px;border:1px solid var(--line);color:var(--mut);background:var(--bg);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ai-pill.on{color:var(--ok);background:var(--okbg);border-color:color-mix(in srgb,var(--ok) 35%,transparent)}
+.ai-pill.off{color:var(--bad);background:var(--badbg);border-color:color-mix(in srgb,var(--bad) 35%,transparent)}
+.menu-pop{position:absolute;top:calc(100% + 8px);right:0;z-index:130;width:min(390px,calc(100vw - 32px));max-height:calc(100vh - 90px);overflow:auto;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--brand);border-radius:8px;box-shadow:0 10px 28px rgba(0,0,0,.2);padding:12px;display:flex;flex-direction:column;gap:10px}
+.menu-pop h4{margin:4px 0 0;font-size:13px;font-weight:700}
+.conn-card{border:1px solid color-mix(in srgb,var(--ok) 35%,var(--line));background:var(--okbg);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.conn-card.off{border-color:color-mix(in srgb,var(--bad) 35%,var(--line));background:var(--badbg)}
+.cc-top{display:flex;gap:10px;align-items:center}
+.cc-ic{width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.cc-top b{display:block;font-size:15px}.cc-top small{color:var(--mut);font-size:12px}
+.cc-open{display:block;text-align:center;background:var(--btn);color:#fff;border-radius:6px;padding:10px;font-weight:800;font-size:14px}
+.conn-more summary{cursor:pointer;font-weight:700;color:var(--brand);font-size:13.5px}
+.cm-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.cm{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;font:inherit;color:var(--fg)}
+.cm .rd{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);flex:none;margin-top:3px}
+.cm[aria-checked=true]{border-color:var(--brand);background:var(--soft)}
+.cm[aria-checked=true] .rd{border-color:var(--brand);background:radial-gradient(var(--brand) 45%,transparent 50%)}
+.cm.dis{opacity:.55}
+.cm b{display:block;font-size:14px}.cm small{display:block;color:var(--mut);font-size:12px;line-height:1.4}
+.menu-pop .tip{margin:0;font-size:12.5px;color:var(--mut)}
+.menu-pop .note{margin:0;font-size:12px;color:var(--mut);background:var(--bg);border-radius:6px;padding:8px 10px}
+.basis2{list-style:none;margin:0;padding:0;font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+.basis2 li{display:flex;justify-content:space-between;gap:10px}
+.basis2 b{font-family:var(--mono);font-size:11.5px;white-space:nowrap}
+.cnt{display:inline-block;min-width:20px;text-align:center;border:1px solid var(--brand);color:var(--brand);border-radius:99px;font-size:11px;font-weight:700;padding:0 6px;margin-left:4px}
+.btn.wide{width:100%;text-align:center}
+@media (max-width:720px){.menu-pop{position:fixed;left:12px;right:12px;top:60px;width:auto}.ai-pill{max-width:96px}.chipbtn{height:40px}}
+.drop-zone{border:2px dashed var(--brand);border-radius:8px;background:var(--soft);padding:16px 12px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center}
+.drop-zone.drop{border-style:solid}
+.drop-zone b{font-size:15px;color:var(--brand2)}
+.drop-zone small{color:var(--mut);font-size:12.5px}
+:root:not([data-theme="light"]) .drop-zone b{color:var(--fg)}
+.up-btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.shot-zone{border:1px dashed var(--line);border-radius:8px;background:var(--card);padding:8px 12px;font-size:12.5px;color:var(--mut);text-align:center;cursor:pointer;margin-top:8px}
+.shot-zone:focus,.shot-zone.focus{outline:2px solid var(--brand)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.th{width:132px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card);display:flex;flex-direction:column;position:relative}
+.th img{height:92px;object-fit:cover;width:100%;cursor:zoom-in;background:var(--bg)}
+.th select{font:inherit;font-size:12px;border:0;border-top:1px solid var(--line);background:var(--card);color:var(--fg);padding:4px 6px;width:100%}
+.th .fn{font-size:11px;color:var(--mut);padding:2px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th .x{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;cursor:pointer;line-height:1}
+.others{margin-top:8px;font-size:12px;color:var(--mut)}
+.others code{font-family:var(--mono);font-size:11.5px;background:var(--bg);border-radius:4px;padding:0 5px;margin-right:4px;display:inline-block}
+.ai-sum{font-size:13.5px;padding:10px 14px;border-left:4px solid var(--brand);background:var(--soft);border-radius:0 6px 6px 0;margin-bottom:12px}
+.ai-sum:empty{display:none}
+.ai-sum ul{margin:6px 0 0;padding-left:18px}
+.te-wrap{position:fixed;inset:0;z-index:300;background:rgba(10,30,20,.55);display:grid;place-items:center;padding:16px}
+.te{background:var(--card);border-radius:8px;border-top:5px solid var(--brand);max-width:100%;max-height:calc(100vh - 32px);display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.te-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.te-h h3{margin:0;font-family:var(--serif);font-size:17px}
+.te-h .link{background:none;border:0;color:var(--mut);cursor:pointer;font:inherit;font-size:13px}
+.mdl-body{padding:14px 16px;overflow:auto;min-height:0;display:flex;flex-direction:column;gap:10px}
+.mdl-body h4{margin:6px 0 0;font-size:13.5px}
+.mdl-body input[type=text],.mdl-body input[type=password],.mdl-body select,.mdl-body textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;color:var(--fg);font:inherit;font-size:14px}
+.mdl-body textarea{min-height:120px;resize:vertical}
+.mdl-note{font-size:12.5px;color:var(--mut);margin:0}
+.mdl-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mdl-t{width:100%;border-collapse:collapse;font-size:12.5px}
+.mdl-t th,.mdl-t td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:middle}
+.mdl-t td.n{font-family:var(--mono);white-space:nowrap}
+.mdl-scroll{overflow:auto;max-height:50vh}
+.te-f{display:flex;gap:8px;justify-content:flex-end;padding:10px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.te-f button,.mdl-body button,.mdl-t button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:6px;padding:6px 12px;cursor:pointer}
+.te-f button.primary{background:var(--btn);border-color:var(--btn);color:#fff;font-weight:700}
+.cf-steps{margin:0;padding-left:20px;font-size:13.5px}
+.cam video{width:100%;max-height:60vh;background:#000;border-radius:4px}
+.chk2{display:flex;gap:8px;align-items:flex-start;font-size:13px}
+.spin::before{content:"";display:inline-block;width:12px;height:12px;border:2px solid var(--brand);border-right-color:transparent;border-radius:50%;margin-right:6px;vertical-align:-2px;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin::before{animation:none}}
+.dock .btn.run{padding:8px 16px;font-size:14px}
+@media (max-width:640px){.dock .btn.run{padding:8px 12px}}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:8px 16px;border-radius:99px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+.toast.on{opacity:1}
+footer{margin-top:22px;color:var(--mut);font-size:11.5px;line-height:1.6}
+[hidden]{display:none!important}
+</style>
+
+<div class="ku-gnb" role="banner">
+  <a class="ku-logo" href="#check" data-go="check" aria-label="지출김군 홈">
+    <img class="ku-g" src="data:image/png;base64,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" alt="KU"><img class="ku-w" src="data:image/png;base64,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" alt="KU">
+    <span class="ku-nm"><b>지출김군<em class="beta-tag">BETA</em></b><small>ANCHOR EXPENDITURE CHECK</small></span>
+  </a>
+  <nav class="gn" id="gn" aria-label="주 메뉴"></nav>
+  <span class="ku-sp"></span>
+  <div class="ku-bp" title="점검에 반영한 기준 문서 차수"><span style="--c:var(--c1)">앵커 지침 <b>4차</b></span><span style="--c:var(--c2)">서울 기준 <b>3차</b></span><span style="--c:var(--c3)">산학연 <b>5차</b></span><span style="--c:var(--c4)">산단 내규 <b>4차</b></span></div>
+  <div class="menu" id="aiMenu">
+    <button type="button" class="chipbtn" id="aiChip" aria-haspopup="true" aria-expanded="false" title="Claude(AI) 연결"><span id="modePill" class="ai-pill">확인 중</span> ▾</button>
+    <div class="menu-pop" id="aiPop" hidden>
+      <div class="conn-card" id="connCard">
+        <div class="cc-top"><span class="cc-ic" aria-hidden="true">C</span><div><b id="ccTitle">확인 중</b><small id="ccSub"></small></div></div>
+        <a class="cc-open" id="ccOpen" href="https://claude.ai/artifact/Gax5WaBLDCgsni7zwPjYJU" target="_blank" rel="noopener">지출김군 claude.ai에서 열기 ↗</a>
+      </div>
+      <details class="conn-more" id="connMore" open>
+        <summary>다른 연결 방식</summary>
+        <div class="cm-list" id="qm" role="radiogroup" aria-label="연결 방식">
+          <button class="cm" data-m="account" type="button" role="radio" aria-checked="false"><i class="rd"></i><span><b>본인 Claude 계정</b><small>claude.ai 링크로 열면 자동 연결 · 본인 사용 한도에서 차감</small></span></button>
+          <button class="cm" data-m="chat" type="button" role="radio" aria-checked="false"><i class="rd"></i><span><b>Claude 채팅창 이용</b><small>요청문 복사 → claude.ai 채팅에 붙여넣기 → 답을 다시 붙여넣기 · 어디서나 · 키 불필요</small></span></button>
+          <button class="cm" data-m="apikey" type="button" role="radio" aria-checked="false"><i class="rd"></i><span><b>Claude API 키</b><small>내려받은 HTML 파일에서 사용 · API 요금 별도</small></span></button>
+          <button class="cm" data-m="rules" type="button" role="radio" aria-checked="false"><i class="rd"></i><span><b>AI 없이 기본 규칙</b><small>입력값·파일명으로 금액·날짜·결재선·단가 규칙만 점검</small></span></button>
+        </div>
+      </details>
+      <p class="tip" id="aiTip"></p>
+      <div><button type="button" class="btn g s" id="modeBtn">연결 세부 설정 (API 키·모델)</button></div>
+      <button type="button" class="btn g wide" id="otherAiBtn">✎ 다른 AI(ChatGPT·Gemini 등)용 프롬프트 제안</button>
+      <h4>점검 사용</h4>
+      <div class="row"><span class="ai-pill on" id="useState">이용 횟수 제한 없음</span></div>
+      <p class="note">AI 연결이 안 되면 오른쪽 <b>Teams 채팅</b>으로 앵커김군에게 바로 문의하세요.</p>
+      <h4>점검 기준 확인일</h4>
+      <ul class="basis2" id="basisList"></ul>
+      <div class="row"><button type="button" class="btn g s" id="histBtn">점검 이력</button><button type="button" class="btn g s" id="vaultBtn">보관함 <span class="cnt" id="vaultCnt">0</span></button><button type="button" class="btn g s" id="helpBtn">도움말 ?</button></div>
+    </div>
+  </div>
+  <div class="tm-menu">
+    <button type="button" class="tm-btn" id="tmBtn" aria-haspopup="dialog" aria-expanded="false" title="Teams로 앵커김군에게 채팅 (베타)"><svg class="tm-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H11l-4.6 3.7c-.5.4-1.4.1-1.4-.6V16h-.5A2.5 2.5 0 0 1 2 13.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><path d="M8 8.5h8M8 12h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="tm-lb">Teams 채팅</span><em class="beta-tag">BETA</em></button>
+    <div class="tm-pop" id="tmPop" hidden role="dialog" aria-label="Teams 채팅 문의">
+      <div><b>지출김군 문의 → 앵커김군 Teams 채팅</b><br><code>coolzet@konkuk.ac.kr</code></div>
+      <label class="hint">문의 유형<select id="tmType"><option>사용 문의</option><option>오류 신고</option><option>규정 내용 정정 요청</option><option>베타 사용 의견</option><option>기능 개선 제안</option><option>기타</option></select></label>
+      <label class="hint">보낼 내용<textarea id="tmMsg" placeholder="궁금한 점, 잘못된 금액·조문, 오류가 난 상황을 적어 주세요."></textarea></label>
+      <p class="tm-note">개인정보와 내부 금액 자료는 적지 마세요.</p>
+      <div class="row"><a class="btn s pri" id="tmGo" href="https://teams.microsoft.com/l/chat/0/0?users=coolzet@konkuk.ac.kr" target="_blank" rel="noopener">Teams에서 채팅 열기</a><button type="button" class="btn g s" id="tmCopy">내용 복사</button></div>
+      <p class="tm-note">Teams가 열리면 받는 사람이 채워져 있습니다. 내용은 복사해 붙여 넣고 보내기는 Teams에서 직접 누르세요.</p>
+    </div>
+  </div>
+  <span class="ku-who"><b>앵커김군</b><span>coolzet@konkuk.ac.kr</span></span>
+  <button type="button" class="gb" id="searchBtn" aria-label="통합 검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></button>
+  <button type="button" class="gb" id="themeBtn" aria-label="테마 전환"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></button>
+  <button type="button" class="gb all" id="allBtn" aria-haspopup="dialog" aria-label="전체 메뉴"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2.1"/><circle cx="12" cy="5" r="2.1"/><circle cx="19" cy="5" r="2.1"/><circle cx="5" cy="12" r="2.1"/><circle cx="12" cy="12" r="2.1"/><circle cx="19" cy="12" r="2.1"/><circle cx="5" cy="19" r="2.1"/><circle cx="12" cy="19" r="2.1"/><circle cx="19" cy="19" r="2.1"/></svg></button>
+</div>
+<div class="wrap">
+<section id="p-check">
+  <div class="optbar" role="group" aria-label="점검 옵션">
+    <span class="ob-t">점검 옵션</span>
+    <label class="tog"><input type="checkbox" id="optChk" checked><span>직접 확인 항목 표시</span></label>
+    <label class="tog"><input type="checkbox" id="optOk" checked><span>적합 항목 표시</span></label>
+    <details class="mn" id="scopeMenu"><summary>점검 항목 ▾</summary><div class="mn-list" id="scopeList"></div></details>
+    <a class="lnk" href="https://coolzet-ai.github.io/kurule/konkuk-main-budget-guide.html" target="_blank" rel="noopener">규정김군에서 근거 보기 ↗</a>
+  </div>
+  <section class="kcard" id="inPane" style="margin-bottom:16px">
+    <header><span class="kstep">00</span><h2>지출서류 올리기</h2><span class="sub">압축파일(.zip) · 이미지 · PDF · 화면 캡처 · 붙여넣기</span></header>
+    <div class="kbody">
+      <div class="drop-zone" id="dropZone">
+        <b>지출서류 압축파일(.zip)을 끌어다 놓거나 선택하세요</b>
+        <small>견적서·세금계산서·검수조서·통장 사본 등을 한 번에 올립니다. 압축 안의 이미지·PDF는 화면으로 읽고, 글 파일은 내용을, 그 밖의 파일은 파일명만 반영합니다.</small>
+        <div class="up-btns">
+          <button type="button" class="btn" id="upBtn">파일·압축파일 선택</button>
+          <button type="button" class="btn g" id="capBtn">화면 캡처</button>
+        </div>
+        <input type="file" id="upFile" multiple accept=".zip,application/zip,application/x-zip-compressed,image/*,.pdf,application/pdf,.txt,.csv,.md,.json" hidden>
+      </div>
+      <div class="shot-zone" id="shotZone" tabindex="0" role="button" aria-label="스크린샷 붙여넣기">스크린샷을 찍은 뒤 여기를 누르고 <b>Ctrl+V</b>(Mac은 ⌘+V)로 붙여 넣으세요. 페이지 어디서든 붙여넣기됩니다.</div>
+      <div class="tray" id="tray"></div>
+      <div class="others" id="others"></div>
+      <details class="more" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700;color:var(--brand);font-size:13.5px">서류 내용을 글로 붙여 넣기 (선택)</summary>
+        <label class="l" style="margin-top:8px"><textarea id="pasteIn" rows="4" placeholder="결재 문서, 세금계산서, 이체 내역 등의 글을 붙여 넣으세요."></textarea></label>
+        <label class="chkrow"><input type="checkbox" id="maskOn" checked><span>개인정보 가림 — 글로 붙여 넣은 내용의 주민등록번호·이메일·카드번호를 가려서 보냅니다(이미지·PDF는 가려지지 않습니다)</span></label>
+      </details>
+      <div class="hint" id="inMsg" role="status" style="margin-top:8px"></div>
+    </div>
+  </section>
+  <div class="grid">
+    <section class="kcard">
+      <header><span class="kstep">01</span><h2>지출 건 입력</h2><span class="sub">입력할수록 점검이 정교해집니다</span></header>
+      <div class="kbody">
+      <div class="f">
+        <label class="l full">집행 항목(세목)<select id="type"></select></label>
+        <label class="l">지출 금액(원, VAT 포함)<input id="amount" class="num" inputmode="numeric" placeholder="0"></label>
+        <label class="l">지급 방식<select id="pay"></select></label>
+        <label class="l">시행품의 결재 단계<select id="appr"></select></label>
+        <label class="l">거래처·수령인(메모)<input id="payee" placeholder="예) ○○기획 / 홍길동"></label>
+      </div>
+      <h3>일정</h3>
+      <div class="f">
+        <label class="l">시행품의 결재일<input type="date" id="dProp"></label>
+        <label class="l">사업 수행·계약·발주일<input type="date" id="dStart"></label>
+        <label class="l">납품·용역완료·행사일<input type="date" id="dDeliv"></label>
+        <label class="l">검수 완료일<input type="date" id="dInsp"></label>
+        <label class="l">지출(결제·이체)일<input type="date" id="dPay"></label>
+      </div>
+      <div id="spec"></div>
+      <h3>공통 확인</h3>
+      <div id="common"></div>
+      </div>
+    </section>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <section class="kcard" id="resCard">
+        <header><span class="kstep">02</span><h2>점검 결과</h2><span class="sub">보완해야 할 내용 · 점검사항</span></header>
+        <div class="kbody"><div id="aiSum" class="ai-sum"></div><div id="verdict"></div><div class="sum" id="sum"></div><div id="items"></div></div>
+      </section>
+      <section class="kcard">
+        <header><span class="kstep">03</span><h2>제출서류 확인</h2><span class="sub">갖춘 서류는 체크</span></header>
+        <div class="kbody"><div id="docs"></div></div>
+      </section>
+    </div>
+  </div>
+  <div class="dock" role="toolbar" aria-label="점검 작업">
+    <div class="dock-in">
+      <details class="mn up" id="workMenu"><summary>작업 ▾</summary><div class="mn-list">
+        <button id="sessNew" type="button" class="btn primary" style="background:var(--btn);color:#fff;font-weight:700">＋ 새 지출 세션<small style="color:#e6f3ec">지금 작업은 보관함에 남습니다</small></button>
+        <h4>입력 도구</h4>
+        <button id="sampleBtn" type="button">예시 불러오기</button>
+        <button id="resetBtn" type="button">입력 지우기</button>
+        <h4>현재 작업</h4>
+        <div class="mdl-row" style="padding:0 10px"><input id="sessName" maxlength="40" autocomplete="off" aria-label="작업 이름" style="flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;color:var(--fg)"><button id="sessKeep" type="button" style="width:auto">보관</button></div>
+        <h4>최근 작업 <span class="cnt" id="sessCnt">0</span></h4>
+        <div id="sessList" style="display:flex;flex-direction:column"></div>
+        <button id="sessAll" type="button">보관함 전체 보기</button>
+        <small style="padding:2px 10px 6px;color:var(--mut);font-size:11.5px">입력하는 대로 이 브라우저에 자동 보관됩니다(최근 30개). 서류 원본 이미지·PDF는 보관하지 않습니다.</small>
+      </div></details>
+      <button type="button" class="btn run" id="runBtn">서류 점검하기</button>
+      <button type="button" class="btn g" id="stopBtn" hidden>중지</button>
+      <span class="status" id="dockStatus"></span>
+      <span class="sp"></span>
+      <details class="mn up r" id="expMenu"><summary class="primary">확정하고 복사 ▾</summary><div class="mn-list">
+        <button id="cpAll" type="button">전체 복사<small>보완사항·점검사항·서류 현황</small></button>
+        <button id="cpFix" type="button">보완 필요 사항만 복사</button>
+        <button id="cpChk" type="button">직접 확인 점검사항만 복사</button>
+        <button id="cpDoc" type="button">제출서류 목록 복사</button>
+        <button id="cpGo" type="button">점검 결과서 탭으로 이동</button>
+        <h4>파일로 저장</h4>
+        <button id="saveTxtBtn" type="button">텍스트 파일로 저장</button>
+        <button id="saveJsonBtn" type="button">작업 파일(JSON)로 저장</button>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section id="p-form" hidden>
+  <div class="pvbar"><h2 class="sec">서식 미리보기 <small>지출 증빙 점검 결과서</small></h2><span class="sp"></span><button class="btn" id="copyForm" type="button">점검 결과 복사</button></div>
+  <div class="paper" id="paper"></div>
+</section>
+
+<section id="p-list" hidden>
+  <h2 class="sec">지출 전 체크리스트</h2>
+  <p class="lead">결재·지급 방식·계약·검수·항목별 기준·변경이월정산 단계별로 지출 전에 확인할 항목입니다. 체크 상태는 이 브라우저에 보관됩니다.</p>
+  <div class="card">
+    <div class="pg"><i id="pgbar"></i></div>
+    <div class="hint" id="pgtxt" style="margin-bottom:10px"></div>
+    <div id="cl"></div>
+    <div class="row" style="margin-top:10px"><button class="btn g s" id="clReset" type="button">체크 초기화</button></div>
+  </div>
+</section>
+
+<section id="p-cases" hidden>
+  <h2 class="sec">적발 사례 해설</h2>
+  <p class="lead">집행 불가·부당집행 유형입니다. 지침의 ‘집행 제한 항목’과 부당사용 방지 규정(Ⅲ-5)에서 뽑은 유형입니다. 적발 시 지원금 일부·전액 회수·삭감, 협약 해지 등 제재가 가능합니다.</p>
+    <div class="flt" id="caseFlt"></div>
+    <div id="caseList"></div>
+  </div>
+</section>
+
+<section id="p-ref" hidden>
+  <h2 class="sec">한도·단가 기준표</h2>
+  <p class="lead">점검 엔진이 적용하는 금액·단가·한도 기준입니다. 최종 기준은 지침 원문과 산학협력단 내규를 따릅니다.</p>
+  <div class="card scroll">
+    <table class="ref" id="refTbl"></table>
+  </div>
+  <h2 class="sec" style="margin-top:22px">서식 번호 한눈에</h2>
+  <div class="card scroll">
+    <table class="ref" id="formTbl"></table>
+  </div>
+</section>
+
+<section id="p-search" hidden>
+  <h2 class="sec">통합 검색</h2><div class="card sr">
+    <input type="search" id="q" autocomplete="off" placeholder="점검 기준·사례·체크리스트·서식에서 찾기 (예: 간이영수증, 회의비, 3천만원, 이월)">
+    <div class="hint" id="qc" style="margin:8px 0"></div><div id="qr"></div></div>
+</section>
+<footer class="legal"><div>
+  <p class="beta-note"><b>BETA</b>시험 운영 중입니다. 자동 점검 결과는 참고용 제안이며, 최종 확인 책임은 담당자·결재권자에게 있습니다.</p>
+  <p class="copy"><b>© 2026 건국대학교 앵커사업단 · 앵커김군. All rights reserved.</b></p>
+  <p>지출김군의 화면 구성, 점검 규칙 데이터, 체크리스트·적발 사례 해설은 「저작권법」의 보호를 받습니다. 업무 목적의 이용과 출처를 밝힌 짧은 인용은 가능합니다. 인용한 법령과 기관 지침은 각 법령과 소관 기관의 것이며, KU 이니셜 마크는 건국대학교 상징물입니다.</p>
+  <p>기준: 건국대학교 ANCHOR사업단 사업비 관리 지침(2026.10., 10.28 수정안) · 앵커 지침 4차 · 서울 기준 3차 · 산학연 매뉴얼 5차 · 산단 내규 4차 · 구매계약업무요강 28차 · 검수요강 23차 · 요강에 없는 사항은 국가계약법령 준용 (기관 지침이 다르면 지침 우선) · 앵커사업단 업무 지원용 비공식 도구 · <b>베타 버전</b> · 문의 coolzet@konkuk.ac.kr · <a href="https://teams.microsoft.com/l/chat/0/0?users=coolzet%40konkuk.ac.kr" target="_blank" rel="noopener">Teams 채팅</a> · <a href="https://coolzet-ai.github.io/kurule/" target="_blank" rel="noopener">규정김군</a> · <a href="https://coolzet-ai.github.io/kuestimate/" target="_blank" rel="noopener">견적김군</a></p>
+</div></footer>
+</div>
+<div class="ku-drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drT" hidden>
+  <div class="ku-drawer-bg" data-close></div>
+  <div class="ku-drawer-p"><div class="ku-drawer-h"><b id="drT">전체 메뉴</b><button type="button" class="ku-drawer-x" data-close aria-label="메뉴 닫기">×</button></div><nav id="drNav" aria-label="전체 페이지"></nav></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+/* ───── 기초 데이터 ───── */
+var MINW=10320; // 2026년 최저시급(원) — 변경 시 입력 안내
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var fmt=function(n){return (Math.round(n)||0).toLocaleString("ko-KR")};
+var LS={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("on");setTimeout(function(){t.classList.remove("on")},1800)}
+function copyText(s){
+  var done=function(){toast("복사했습니다")};
+  var fb=function(){var ta=document.createElement("textarea");ta.value=s;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){toast("복사에 실패했습니다")}document.body.removeChild(ta)};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(s).then(done,fb)}else fb();
+}
+
+var TYPES=[
+ ["ilyong","인건비 · 일용임금(보조인력)","인건비"],
+ ["sangyong","인건비 · 상용임금·퇴직금·4대보험","인건비"],
+ ["bojik","인건비 · 보직수당","인건비"],
+ ["seonggwa","인건비 · 성과급(인센티브)","인건비"],
+ ["janghak","장학금(등록금성)","장학금"],
+ ["jaeji","건국ANCHOR인재지원금(RA·TA)","프로그램 운영"],
+ ["sisang","시상금(경진대회 등)","프로그램 운영"],
+ ["expert","전문가 활용비(자문·강연·원고·번역 등)","프로그램 운영"],
+ ["meeting","회의비·행사 식비·다과비","운영비"],
+ ["goods","일반수용비 · 물품 구입(소모품·인쇄·홍보물)","운영비"],
+ ["service","일반용역비 · 용역·라이선스","운영비"],
+ ["material","재료비(시약·실험실습 재료)","운영비"],
+ ["asset","장비·기자재 구입(자산취득비)","장비·기자재"],
+ ["rental","임차료·유지보수","장비·기자재"],
+ ["travel","여비(국내·국외)","여비"],
+ ["other","기타 사업운영 경비(공공요금·보험료 등)","기타"]
+];
+var PERSONAL={ilyong:1,sangyong:1,bojik:1,seonggwa:1,janghak:1,jaeji:1,sisang:1,expert:1};
+var PAYS=[["enara","e나라도움 사업비 전용카드"],["transfer","계좌이체(세금계산서 근거 업체·수혜자 직접)"],["corp","산학협력단 법인카드"],["cash","현금(카드·이체 불가 사유)"],["personal","개인카드·개인 선결제 후 정산"],["simple","간이영수증만 있음"]];
+var APPR=[["0","센터장 전결"],["1","사업부단장 전결"],["2","총괄부단장 경유 → 사업단장"]];
+
+var COMMON=[
+ ["related","사업계획서(단위과제) 내용과 직접 관련된 지출"],
+ ["vat","부가세 환급 가능분 제외 집행액(해당 시)"],
+ ["fund","국고보조금·대응자금 집행내역 구분"],
+ ["noDup","타 사업·타 재원 중복 지급 없음"],
+ ["seal","원본 전자문서시스템 등록 및 지출서류 사본 진본확인 도장"],
+ ["restr","결제 업종이 카드 사용제한 업종(유흥·위생·레저·사행 등) 아님"],
+ ["approved","결재 완료된 시행품의 기안문 첨부"]
+];
+
+/* 유형별 입력 필드 */
+var SPEC={
+ ilyong:[
+  ["who","sel","신분",[["u","건국대 학부생"],["m","대학원생(석사)"],["d","대학원생(박사)"],["g","일반인·재학생 이외"]]],
+  ["rate","num","시급(원)"],["hday","num","1일 근로시간(h)"],["hweek","num","4주 평균 주당 소정근로시간(h)"],
+  ["badge","chk","근로자 인적사항·통장·신분증 사본을 받았다"]
+ ],
+ sangyong:[["reg","chk","e나라도움에 참여인력으로 등록했다"],["dedic","chk","사업 전담조직으로 인사발령·업무분장이 되어 있고 실제 전담한다"],["retire","chk","퇴직금 적립 대상 기간이 당해 사업기간에 포함된다"]],
+ bojik:[["annual","num","해당인의 보직수당+성과급 연간 합산(원)"],["dup","chk","타 사업에서 동일 보직수당을 받고 있다"]],
+ seonggwa:[["annual","num","해당인의 보직수당+성과급 연간 합산(원)"],["crit","chk","자체 평가기준·평가결과 근거가 결재문서에 있다"],["equal","chk","평가 없이 균등 배분했다"],["dup","chk","동일 성과로 타 사업에서도 지급받았다"]],
+ janghak:[["enrolled","chk","재학생(또는 석·박사 수료생)이다"],["tuition","chk","등록금(수업료) 범위 안의 지원이다"],["kosaf","chk","한국장학재단 중복지원 여부를 확인했다"],["part","chk","본 사업 참여 학생이다"]],
+ jaeji:[
+  ["who","sel","신분",[["u","학부생"],["m","대학원생(석사)"],["d","대학원생(박사)"]]],
+  ["rate","num","시급(원)"],["mamt","num","해당 월 누적 지급액(원, 이번 건 포함)"],
+  ["emp","chk","근로소득이 있거나 4대보험에 가입되어 있다(직장인)"],["dupRd","chk","연구개발비 학생인건비를 동시에 받는다"],["leave","chk","휴학·취업·자퇴 등 자격을 잃었다"]
+ ],
+ sisang:[["place","num","1등 시상금(원)"],["crit","chk","시상기준·시상자 명단이 결재문서에 있다"],["tax","chk","기타소득 원천징수 대상 여부를 확인했다"]],
+ expert:[
+  ["kind","sel","지급 종류",[["adv","자문료"],["lec","강연료"],["mtg","회의수당"],["wr","원고·번역·통역·속기료"],["vod","온라인 콘텐츠 강의료"]]],
+  ["grade","sel","전문가 등급",[["A","국내 A급(교수·책임급, 박사 8년+ 등)"],["B","국내 B급(부교수·조교수·선임급 등)"],["X","연구책임자 인정(경력서류 제출)"]]],
+  ["hours","num","자문 시간(h) / 회의 건수 / 강연 회수"],["annual","num","동일인 당해 회계연도 지급 누계(원, 이번 건 포함)"],
+  ["vodMin","num","(온라인 강의) 1개 주차 재생시간(분)"],["vodExt","sel","(온라인 강의) 강의자",[["in","내부 전문가"],["out","외부 전문가"]]],
+  ["inside","chk","내부 교·직원이 본 업무범위(정규강의·연구 등)에 해당하는 활동에 대한 지급이다"],["lecAdv","chk","강연 목적 초청인데 자문료를 함께 지급한다"],["own","chk","본인 명의 계좌로 입금한다"]
+ ],
+ meeting:[
+  ["heads","num","참석 인원(명)"],["ext","chk","외부 인원이 참석했다"],["liquor","chk","주류가 포함되어 있다"],["minutes","chk","회의록[서식6]에 참석자 자필서명이 있다"],["time","chk","행사·회의 일시·장소·안건이 회의록에 명확하다"]
+ ],
+ goods:[["method","sel","구매 방식",[["q","견적서(1부)"],["c","비교견적"],["b","입찰"],["s","수의계약(업체지정)"]]],["split","chk","동일 물품·용도를 나누어 발주(쪼개기)했다"]],
+ service:[["method","sel","계약 방식",[["q","견적서(1부)"],["c","비교견적"],["b","입찰"],["s","수의계약(업체지정)"]]],["split","chk","동일 용역을 나누어 발주(쪼개기)했다"],["rep","chk","용역 결과보고서를 받았다"]],
+ material:[["method","sel","구매 방식",[["q","견적서(1부)"],["c","비교견적"],["b","입찰"],["s","수의계약(업체지정)"]]],["split","chk","나누어 발주(쪼개기)했다"]],
+ asset:[
+  ["method","sel","구매 방식",[["q","견적서(1부)"],["c","비교견적"],["b","입찰"],["s","수의계약(업체지정)"]]],
+  ["review","sel","심의·승인 현황",[["n","해당 없음/미진행"],["u","대학 자체 심의 완료"],["s","서울앵커센터 사전승인 완료"],["c","중앙앵커센터 사전승인 완료"]]],
+  ["sum","num","동일 모델 다수 구매 시 합계금액(원)"],
+  ["ledger","chk","자산관리대장 등재(비품) 계획·완료"],["sticker","chk","관리번호·구입재원 표기 스티커/바코드 부착 계획"],["dupchk","chk","대학·지역 기존 장비와 중복성을 검토했다(ZEUS)"],["personal","chk","교직원 개인 연구용이다"]
+ ],
+ rental:[["method","sel","계약 방식",[["q","견적서(1부)"],["c","비교견적"],["b","입찰"],["s","수의계약(업체지정)"]]],["within","chk","임차기간이 보조사업기간 안에 있다"],["first","chk","계약 후 최초 지급이다"]],
+ travel:[["over","chk","국외 출장이다"],["pre","chk","(국외) 지출 전 서울앵커센터에 사전보고했다"],["sys","chk","(국외) 대학 국외출장시스템 등록을 했다"],["purpose","chk","출장 목적·일정이 사업과 직접 관련되고 외유성이 아니다"]],
+ other:[["note","chk","지침 ‘집행 제한 항목’에 해당하지 않음을 확인했다"]]
+};
+
+/* ───── 상태 ───── */
+var C={type:"goods",amount:"",pay:"enara",appr:"0",payee:"",dProp:"",dStart:"",dDeliv:"",dInsp:"",dPay:"",s:{},c:{},docs:{}};
+var CL={};
+(function load(){var a=LS.get("jbg.case");if(a){try{var o=JSON.parse(a);for(var k in o)C[k]=o[k]}catch(e){}}var b=LS.get("jbg.cl");if(b){try{CL=JSON.parse(b)}catch(e){}}})();
+function save(){LS.set("jbg.cl",JSON.stringify(CL));if(typeof draftSave==="function")draftSave()}
+function amt(){return parseInt(String(C.amount).replace(/[^0-9]/g,""),10)||0}
+function sv(k){var v=C.s[k];return v}
+function sn(k){return parseFloat(String(C.s[k]||"").replace(/[^0-9.]/g,""))||0}
+
+/* ───── 날짜 유틸 ───── */
+function D(s){if(!s)return null;var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2])}
+function fy(d){return d.getMonth()>=2?d.getFullYear():d.getFullYear()-1}   // 사업연도: 3.1~다음해 2월 말
+function fyEnd(y){return new Date(y+1,2,0)}                                  // 다음해 2월 말일
+function ymd(d){return d.getFullYear()+"."+("0"+(d.getMonth()+1)).slice(-2)+"."+("0"+d.getDate()).slice(-2)}
+
+/* ───── 제출서류 ───── */
+function docList(){
+  var t=C.type,a=amt(),m=sv("method")||"q",L=[];
+  var F1="원인행위 결재문서 [서식1]";
+  var add=function(x){L.push(x)};
+  add("결재 완료된 시행품의 기안문(증빙 첨부 필수)");
+  switch(t){
+   case "ilyong":
+     add(F1);
+     add(sv("who")==="u"?"근로확인서 [서식3] (건국대 학부생은 근로계약 대신)":"근로계약서 (산학협력단 통해 체결 — 대학원생·일반인)");
+     add("개인정보 수집·이용 및 제3자 제공 동의서 [서식2]");add("일용근무자 출근부 [서식4]");add("활동보고서 [서식5]");add("신분증 사본, 통장사본");add("계좌이체 확인증(후첨)");break;
+   case "sangyong":add("지출결의서");add("지급 관련 결재문서(총괄표·산정 총괄표)");add("근로소득 원천징수 영수증(연말정산 이후 첨부)");add("계좌이체 확인증(후첨)");add("인사발령·업무분장 증빙(공신력 있는 증빙)");break;
+   case "bojik":add(F1);add("보직수당 지급내역서 [서식10]");add("계좌이체 확인증(후첨)");break;
+   case "seonggwa":add(F1);add("직원 성과평가 결과(결재문서 포함)");add("인센티브 집행 체크리스트 [서식23] (5년 보존)");add("계좌이체 확인증(후첨)");break;
+   case "janghak":add(F1);add("장학생 추천서, 재학증명서, 신분증 사본, 입금자 통장사본");add("개인정보 수집·이용 및 제3자 제공 동의서 [서식2]");add("장학금 지급 관련 내부 결재문서(선정기준 포함)");add("한국장학재단 중복지원 여부 확인서");add("계좌이체 확인증(후첨)");break;
+   case "jaeji":add(F1);add("(교육·연구)조교 신청(추천)서 [서식12]");add("교육조교·연구조교 복무협약서 [서식13]");add("연구 및 교육조교 복무 서약서 [서식14]");add("출근부 [서식15], 활동 보고서 [서식16]");add("신분증 사본, 통장사본");add("개인정보 수집·이용 및 제3자 제공 동의서 [서식2]");add("건국ANCHOR인재지원금 신청자 명부 [서식17]");add("계좌이체 확인증(후첨)");break;
+   case "sisang":add(F1);add("시상기준·시상자 명단이 명시된 결재문서");add("시상자 신분증 사본, 통장사본");add("개인정보 수집·이용 및 제3자 제공 동의서 [서식2]");add("시상금 수령확인증 [서식18]");add("계좌이체 확인증(후첨)");break;
+   case "expert":
+     add(F1);add("(필요시) 전문가 활용 계획서 [서식8]");add("전문가 활용비 지급 신청서 [서식9]");add("전문가 이력서, 신분증 사본, 통장사본, 강의(자문)자료");add("개인정보 수집·이용 및 제3자 제공 동의서 [서식2]");add("계좌이체 확인증(후첨)");
+     if(sv("grade")==="X")add("전문성 인정 경력 관련 서류(연구책임자 인정 시)");
+     if(a>2000000)add("위탁계약 서류(사업자등록증·고유번호증 첨부) — 건당 200만원 초과");break;
+   case "meeting":add(F1);add("회의록 [서식6] (참석자 자필서명)");add("영수증(사업비카드 매출전표)");break;
+   case "goods":case "material":case "service":case "asset":case "rental":{
+     var isSvc=(t==="service"),th1=isSvc?10000000:5000000;
+     add(F1);
+     if(t==="rental"){add("임차계약서, 견적서, 비교견적서, 세금계산서(최초 지급 시)");add("임차기간·산출내역서·임차 여부 사진이 포함된 품의서");add("평시: 세금계산서, 산출내역서");break}
+     if(a<5000000&&!isSvc||a<10000000&&isSvc){
+        add(isSvc?"견적서, 비교견적서, 사업자등록증, 통장사본":"견적서(물품 구매 시)"+(t==="asset"||t==="material"?", 사업자등록증, 통장사본":""));
+        add("세금계산서 또는 카드 영수증, 거래명세서(거래내역서)");
+        if(isSvc)add("용역 결과보고서");
+     }else if(a<20000000){
+        add("견적서, 비교견적서, 사업자등록증, 입금통장 사본");
+        if(a>=10000000)add(isSvc?"용역계약서":"물품구매 계약서");
+        add("세금계산서, 거래명세서(거래내역서)");
+        if(isSvc)add("용역 결과보고서");
+     }else{
+        add("입찰 관련 서류(입찰계획서류, "+(isSvc?"용역 제안요청서(RFP)":"입찰 물품 관련 요청서")+")");
+        add("사업자등록증, 입금통장 사본, "+(isSvc?"용역계약서":"물품구매 계약서")+", 계약이행 보증보험증권");
+        add("세금계산서, 거래명세서(거래내역서)");
+        if(isSvc)add("용역 결과보고서");
+     }
+     if(m==="s")add("업체지정 사유서 [서식11] (특허·독점이면 특허등록원부, 통상실시권 범위, 대체품 조사 첨부)");
+     add("납품 확인 및 검수조서 [서식22]");
+     if(t==="asset"){
+        if(a>=30000000||sn("sum")>=30000000){add("[추가] 서울앵커센터 또는 중앙앵커센터 사전 심의·승인 서류");add("심의요청 공문, 연구시설·장비·기자재 심의요청서, 사업계획서 발췌, 서약서, 비교견적서, 중복성검토확인서(ZEUS)")}
+        add("자산관리대장 등재 확인, 관리번호 스티커·바코드 부착 사진");
+     }
+     break}
+   case "travel":add(F1);add("출장 보고서 [서식7]");if(sv("over"))add("출입국일 확인 서류(인보이스·항공권 등), 출장 목적/기간/장소 확인 자료");break;
+   default:add(F1);add("영수증 또는 세금계산서");add("(필요시) 견적서, 거래명세서, 사진 등 증빙");
+  }
+  if(C.pay==="cash")add("현금 사용 사유서 및 현금영수증");
+  return L;
+}
+
+/* ───── 점검 엔진 ───── */
+function check(){
+  var R=[],t=C.type,a=amt();
+  var P=function(cat,st,title,msg,fix){R.push({cat:cat,st:st,title:title,msg:msg||"",fix:fix||""})};
+
+  if(!a)P("기본","chk","금액 미입력","지출 금액을 입력하면 구간별 계약·결재·서류 기준이 자동 적용됩니다.","");
+
+  /* 1 결재·원인행위 */
+  var need=a>100000000?2:a>5000000?1:0;
+  if(a){
+    var names=["센터장 전결","사업부단장 전결","사업단장(총괄부단장 경유)"];
+    if(+C.appr<need)P("결재·원인행위","bad","시행품의 결재선 부족","금액 "+fmt(a)+"원은 ‘"+names[need]+"’ 이상 결재가 필요합니다(500만원 이하 센터장 전결 / 500만원 초과~1억원 이하 사업부단장 전결 / 1억원 초과 사업단장).","상위 결재선으로 시행품의를 다시 상신하거나 결재선을 보완해야 합니다.");
+    else P("결재·원인행위","ok","결재선 적정",names[+C.appr]+"로 금액 구간에 맞습니다.");
+  }
+  if(!C.c.approved)P("결재·원인행위","chk","시행품의 증빙 첨부 확인","결재 완료된 시행품의 기안문이 증빙으로 첨부되어 있지 않으면 집행이 불허됩니다.","시행품의(기본계획) → 사업수행 → 결과보고 → 지출 원인행위 기안 → 청구서 순서를 확인해야 합니다.");
+  var dP=D(C.dProp),dS=D(C.dStart),dV=D(C.dDeliv),dI=D(C.dInsp),dY=D(C.dPay);
+  if(dP&&dS){
+    if(dS<dP)P("결재·원인행위","bad","사후 품의(계약·수행이 결재보다 앞섬)","사업 수행·계약일("+ymd(dS)+")이 시행품의 결재일("+ymd(dP)+")보다 빠릅니다. 시행품의·원인행위 없이는 지출할 수 없습니다.","사업 수행 전에 결재를 득해야 합니다. 이미 진행됐다면 사유와 함께 지출 가능 여부를 사업단에 협의해야 합니다.");
+    else P("결재·원인행위","ok","품의 → 수행 순서 적정","시행품의 결재일이 수행·계약일보다 앞섭니다.");
+  }else if(!dP)P("결재·원인행위","chk","시행품의 결재일 미입력","일정을 입력하면 사후 품의 여부를 자동 점검합니다.");
+
+  /* 2 기간·회계 */
+  if(dS&&dV){
+    if(fy(dS)!==fy(dV))P("기간·회계","bad","원인행위와 거래가 다른 사업연도","원인행위("+ymd(dS)+")는 "+fy(dS)+"사업연도, 납품·용역("+ymd(dV)+")은 "+fy(dV)+"사업연도입니다. 원인행위와 거래행위는 같은 사업연도(3.1~다음해 2월 말)에 발생해야 당해 지출로 인정됩니다.","이월 승인 또는 사업계획 변경 절차 여부를 확인해야 합니다.");
+    else P("기간·회계","ok","원인행위·거래 동일 사업연도",fy(dS)+"사업연도 안에서 발생했습니다.");
+  }
+  if(dS&&dY){
+    if(fy(dY)!==fy(dS))P("기간·회계","bad","지출이 사업연도를 넘김","지출일("+ymd(dY)+")이 원인행위 사업연도("+fy(dS)+")를 벗어났습니다.","사업연도 안에서 지출하거나 승인된 이월 건인지 확인해야 합니다.");
+    else if(dS.getFullYear()!==dY.getFullYear())P("기간·회계","warn","회계연도(12.31) 경과 — e나라도움 이월 필요","회계연도(1.1~12.31)가 바뀐 뒤 사업연도 종료일(2월 말)까지 집행하려면 e나라도움에서 회계연도 이월 승인이 필수입니다.","e나라도움 이월 신청·승인 여부 확인.");
+  }
+  if(dV&&dI&&dI<dV)P("검수","bad","검수일이 납품일보다 앞섬","검수 완료일("+ymd(dI)+")이 납품·완료일("+ymd(dV)+")보다 빠릅니다.","검수조서 일자를 확인·정정해야 합니다.");
+  if(["goods","service","material","asset","rental"].indexOf(t)>=0){
+    if(dI&&dY&&dY<dI)P("검수","bad","검수 전 지출","지출일("+ymd(dY)+")이 검수 완료일("+ymd(dI)+")보다 앞섭니다. 검수 후 지급이 원칙입니다.","납품 확인 및 검수조서 [서식22] 이후 지급해야 합니다.");
+    if(dY&&!dI)P("검수","chk","검수일 미입력","물품·용역은 납품 확인 및 검수조서 [서식22]가 지출 서류입니다.","검수 완료 후 지출했는지 확인해야 합니다.");
+  }
+
+  /* 3 지급 방식·증빙 */
+  var pay=C.pay;
+  if(PERSONAL[t]){
+    if(pay!=="transfer")P("지급 방식·증빙","bad","개인 지급 경비는 수혜자 계좌이체","인건비·수당·성과급·장학금·시상금 등 개인에게 지급되는 경비는 수혜자에게 직접 계좌이체해야 합니다.","지급 방식을 계좌이체로 변경하고 이체확인증을 후첨해야 합니다.");
+    else P("지급 방식·증빙","ok","수혜자 직접 계좌이체","개인 지급 경비 원칙에 부합합니다.");
+  }else{
+    var pm={
+     enara:["ok","e나라도움 사업비 전용카드","원칙적 지출 방법입니다."],
+     transfer:["ok","계좌이체","세금계산서 청구를 근거로 발행자에게 직접 이체해야 합니다."],
+     corp:["warn","산학협력단 법인카드","당해연도 사업비 교부 전에 e나라도움 카드·계좌이체가 불가한 경우에만 허용되며, 산학협력연구비 내규 용도로 사용해야 합니다."],
+     cash:["warn","현금 사용","카드 사용·계좌이체가 불가능한 경우(교통·통신시설 미비 등)에 한해 가능합니다. 사유서와 현금영수증이 필요합니다."],
+     personal:["bad","개인카드·개인 선결제","지침상 인정되는 지출 방법(전용카드·계좌이체·예외적 법인카드/현금)이 아닙니다."],
+     simple:["bad","간이영수증","간이영수증은 증빙으로 인정되지 않습니다. 전자세금계산서, 카드 매출전표, 공공기관 영수증, 계좌이체 증빙을 갖춰야 합니다."]
+    }[pay];
+    P("지급 방식·증빙",pm[0],pm[1],pm[2],pm[0]==="ok"?"":"e나라도움 전용카드 또는 세금계산서 기반 계좌이체로 전환해야 합니다.");
+  }
+  if(!C.c.restr)P("지급 방식·증빙","chk","제한업종 확인","유흥·위생(이미용·사우나·마사지)·레저(골프·노래방·PC방·헬스)·사행·성인용품·총포 업종 결제는 불허됩니다.","가맹점 업종을 확인해야 합니다.");
+
+  /* 4 구매·계약 */
+  var buyTypes=["goods","service","material","asset"];
+  if(buyTypes.indexOf(t)>=0&&a){
+    var svc=t==="service";
+    var req=svc?(a>=20000000?3:a>=10000000?2:1):(a>=20000000?3:a>=5000000?2:1);
+    var rank={q:1,c:2,b:3,s:9}, mth=sv("method")||"q";
+    var tier=["","견적서(개별구매)","비교견적(산학협력단 중앙구매)","입찰(산학협력단 중앙구매)"][req];
+    if(mth==="s"){
+      P("구매·계약","warn","수의계약 — 업체지정 사유서 필요","수의계약은 업체지정 사유서 [서식11]가 필수이며, 특허·독점이면 특허등록원부·통상실시권 범위·대체품 조사를 첨부해야 합니다.","사유의 적법성(국가계약법 시행령 수의계약 사유)을 검토해야 합니다.");
+    }else if(rank[mth]<req)P("구매·계약","bad","금액 구간 대비 계약 방식 미흡","금액 "+fmt(a)+"원은 ‘"+tier+"’ 기준에 해당합니다. 선택하신 방식은 한 단계 낮습니다.","절차를 상향하거나 분할 발주가 아닌지 확인해야 합니다.");
+    else P("구매·계약","ok","계약 방식이 금액 구간에 부합","금액 구간 기준은 ‘"+tier+"’입니다.");
+    if(sv("split"))P("구매·계약","bad","쪼개기 발주 의심","동일 물품·용역을 나누어 발주해 계약 방식 기준을 회피한 것으로 보일 수 있습니다.","합산 금액으로 절차를 다시 적용해야 합니다.");
+    if(a>=10000000)P("구매·계약","chk","계약서 징구","1,000만원 이상은 "+(svc?"용역":"물품구매")+" 계약서가 필요하며, 2,000만원 이상은 계약이행 보증보험증권도 필요합니다.","");
+    if(svc&&!sv("rep"))P("검수","chk","용역 결과보고서","용역 완료 후 결과보고서와 검수조서가 지출 서류입니다.","");
+  }
+  if(t==="rental"){
+    if(!sv("within"))P("구매·계약","bad","임차기간이 사업기간 밖","임차는 보조사업기간 안에 적용되어야 합니다.","임차 기간·산출내역·비교견적·사진이 포함된 품의서를 작성해야 합니다.");
+    else P("구매·계약","ok","임차기간 적정","임차기간이 보조사업기간 안에 있습니다.");
+  }
+
+  /* 5 자산 */
+  if(t==="asset"){
+    var big=Math.max(a,sn("sum")), rv=sv("review")||"n";
+    if(sn("sum")>=30000000&&a<30000000)P("자산·장비","bad","동일 모델 다수 구매 합계 3천만원 이상","3천만원 미만 동일 모델을 여러 대 구매해 합계가 3천만원 이상이면 심의 대상입니다.","합계 기준으로 심의 절차를 진행해야 합니다.");
+    if(big>=100000000){
+      P("자산·장비",rv==="c"?"ok":"bad","1억원 이상 — 중앙앵커센터 사전승인",rv==="c"?"승인 완료로 입력되었습니다.":"대학(협의체) 심의·의결 후 중앙앵커센터 사전승인이 필요합니다. 미승인 구입은 집행 제한 항목입니다.","승인 완료 후 구매해야 합니다.");
+    }else if(big>=30000000){
+      P("자산·장비",(rv==="s"||rv==="c")?"ok":"bad","3천만원 이상 — 서울앵커센터 사전승인",(rv==="s"||rv==="c")?"사전승인 완료로 입력되었습니다.":"대학(협의체) 심의·의결 → 서울앵커센터 승인 → 구매 순서입니다. 미승인 구입은 집행 제한 항목입니다.","심의요청 공문·심의요청서·사업계획서 발췌·서약서·비교견적서·중복성검토확인서를 갖춰야 합니다.");
+      P("자산·장비","warn","중요재산 관리 대상","3천만원 이상 연구시설·장비는 중요재산으로 보고·공시·처분 제한 등 보조금 관련 법령에 따라 관리해야 합니다.","");
+    }else P("자산·장비",rv==="n"?"chk":"ok","3천만원 미만 — 대학 자체 심의","대학 자체 심의 후 절차에 맞춰 구매합니다.");
+    if(!sv("ledger"))P("자산·장비","bad","자산관리대장 등재","장비·기자재는 반드시 대학 자산관리대장에 등재해야 합니다(비품이면 등재, 소모품이면 비등재).","관재팀 기준으로 비품/소모품 구분을 확인해야 합니다.");
+    if(!sv("sticker"))P("자산·장비","warn","관리번호·재원 표기","관리번호, 일련번호, 구입재원, 구입연월일이 담긴 스티커·바코드·RFID를 부착하고 ‘교육부 및 서울시의 지역성장 인재양성체계(앵커) 사업비로 구입’ 문구를 표기해야 합니다.","");
+    if(!sv("dupchk")&&big>=30000000)P("자산·장비","warn","중복성 검토","대학·지역에 이미 등록된 장비와 중복되지 않는지 증빙(ZEUS 중복성검토확인서)을 갖춰야 합니다.","");
+    if(sv("personal"))P("자산·장비","bad","개인연구용 장비","교·직원 및 기관 직원의 개인연구 활동을 위한 장비·기자재 구입은 집행 제한 항목입니다.","");
+    if(dI){var lim=new Date(fyEnd(fy(dI)).getFullYear(),fyEnd(fy(dI)).getMonth()-2,fyEnd(fy(dI)).getDate());
+      if(dI>lim)P("자산·장비","bad","도입 완료 기한 초과","연구시설·장비는 사업연도 종료일 2개월 전("+ymd(lim)+")까지 구입·설치(검수 완료)를 마쳐야 합니다.","이월·변경심의로 차년도 도입 승인을 받았는지 확인해야 합니다.");
+      else P("자산·장비","ok","도입 완료 기한 이내","완료 기한은 "+ymd(lim)+"입니다.");}
+  }
+
+  /* 6 항목별 기준 */
+  if(t==="ilyong"){
+    var who=sv("who")||"u",cap={u:12000,m:18000,d:20000},r=sn("rate"),hd=sn("hday");
+    if(who==="g"){
+      if(r&&r<MINW)P("항목별 기준","bad","최저시급 미달","시급 "+fmt(r)+"원이 최저시급("+fmt(MINW)+"원, 2026년 기준 — 변동 시 확인)보다 낮습니다.","");
+      else if(r>MINW)P("항목별 기준","warn","최저시급 초과","재학생 이외는 최저시급 기준 지급입니다.","단가 근거를 확인해야 합니다.");
+      else if(r)P("항목별 기준","ok","최저시급 기준","재학생 이외 지급 기준에 부합합니다.");
+    }else if(r){
+      if(r>cap[who])P("항목별 기준","bad","시급 상한 초과","상한은 시간당 "+fmt(cap[who])+"원(학부 12,000원 · 석사 18,000원 · 박사 20,000원)입니다.","단가를 상한 이내로 조정해야 합니다.");
+      else P("항목별 기준","ok","시급 상한 이내","시급이 상한 "+fmt(cap[who])+"원/시간 이내입니다.");
+    }
+    if(hd>8)P("항목별 기준","bad","1일 8시간 초과","근로 가능 시간은 09:00~18:00, 1일 최대 8시간이며 휴게(12:00~13:00)는 근로시간에서 제외합니다.","");
+    else if(hd)P("항목별 기준","ok","1일 근로시간 적정","1일 "+hd+"시간으로 기준에 맞습니다.");
+    var hw=sn("hweek");
+    if(hw&&hw>=15)P("항목별 기준","warn","초단기간 근로(주 15시간 미만) 아님","주 15시간 이상이면 초단기 근로자 지급기준이 아닌 일반 근로 기준·4대보험 가입요건 검토가 필요합니다(국민연금: 1개월 이상·월 60시간 이상 또는 월 220만원 이상 등).","");
+    if(!sv("badge"))P("항목별 기준","chk","인적사항·통장·신분증 사본","일용임금 제출서류에 신분증·통장 사본이 포함됩니다.","");
+    P("항목별 기준","chk","보험·계약 구분","학부생은 근로계약이 아닌 근로확인서 [서식3], 대학원생(연구등록 수료생 포함)·일반인은 산학협력단을 통한 근로계약입니다. 산재보험은 모든 근로자 의무, 고용보험은 3개월 이상 계속 근로 시 가입입니다.","");
+  }
+  if(t==="sangyong"){
+    if(!sv("reg"))P("항목별 기준","bad","e나라도움 참여인력 등록","인건비 집행 전 e나라도움에 참여인력을 등록해야 합니다.","");
+    if(!sv("dedic"))P("항목별 기준","bad","전담 여부","사업 업무를 전담하지 않는 교·직원 급여는 집행 제한 항목입니다. 인사발령·업무분장과 실질 전담이 모두 필요합니다.","");
+    if(!sv("retire"))P("항목별 기준","bad","퇴직금 적립 기간","당해 연도 사업기간에 포함된 근무기간에 해당하지 않는 퇴직금 적립은 집행 불가입니다.","");
+  }
+  if(t==="bojik"||t==="seonggwa"){
+    var an=sn("annual");
+    if(an>10000000)P("항목별 기준","bad","연간 1인 1,000만원 초과","보직수당+성과급 합산은 연간 1인당 최대 1,000만원입니다.","");
+    else if(an)P("항목별 기준","ok","연간 1인 한도 이내","연간 합계 "+fmt(an)+"원으로 한도 이내입니다.");
+    P("항목별 기준","chk","총사업비 5% 범위","보직수당·성과급 합산액은 사업비 총액의 5% 범위(간접비 별도 편성 시 그 밖의 운영경비 3%)입니다.","사업 전체 집행액과 대조해야 합니다.");
+    if(sv("dup"))P("항목별 기준","bad","타 사업 중복 지급","동일 성과·보직으로 타 사업과 중복 지급한 보직수당·성과급은 집행 제한입니다.","");
+  }
+  if(t==="seonggwa"){
+    if(sv("equal")||!sv("crit"))P("항목별 기준","bad","평가근거 없는 균등배분(나눠먹기)","별도 자체평가 기준·결과 없이 균등 배분은 불가하며, 평가기준이 명시되어야 합니다.","평가기준·결과를 결재문서에 포함하고 [서식23]을 작성해야 합니다.");
+    else P("항목별 기준","ok","평가기준 근거 있음","[서식23] 인센티브 집행 체크리스트를 5년간 보존해야 합니다.");
+  }
+  if(t==="janghak"){
+    if(!sv("enrolled"))P("항목별 기준","bad","재학생 여부","휴학생·졸업생·졸업유예생은 지급 불가입니다(석·박사 수료생은 가능).","");
+    if(!sv("tuition"))P("항목별 기준","bad","등록금(수업료) 범위","생활비 보조 성격 장학금은 불가(근로장학금 제외)이며, 한 학생에 등록금 범위 내에서만 지원합니다.","");
+    if(!sv("kosaf"))P("항목별 기준","bad","한국장학재단 이중지원","재단이 규정한 이중 지원 범위를 초과할 수 없어 중복지원 확인서가 필요합니다.","");
+    if(!sv("part"))P("항목별 기준","bad","사업 미참여 학생","본 사업에 참여하지 않는 학생에 대한 장학금은 집행 제한입니다.","");
+  }
+  if(t==="jaeji"){
+    var w=sv("who")||"u",cp={u:[12000,1300000],m:[18000,2300000],d:[20000,3000000]}[w],rr=sn("rate"),ma=sn("mamt");
+    if(rr&&rr>cp[0])P("항목별 기준","bad","시급 상한 초과","시급이 상한 "+fmt(cp[0])+"원/시간을 초과합니다.","");
+    if(ma&&ma>cp[1])P("항목별 기준","bad","월 한도 초과","월 한도는 "+fmt(cp[1])+"원입니다(학부 130만원 · 석사 230만원 · 박사 300만원).","");
+    else if(ma)P("항목별 기준","ok","월 한도 이내","월 지급액 "+fmt(ma)+"원은 한도 "+fmt(cp[1])+"원 이내입니다.");
+    if(sv("emp"))P("항목별 기준","bad","자격요건 미충족(직장인)","직장을 가지지 않은 전일제 학생(근로소득 없음·4대보험 미가입)이어야 합니다.","");
+    if(sv("dupRd"))P("항목별 기준","bad","학생인건비 중복 수혜","건국ANCHOR인재지원금과 연구개발비 학생인건비는 동시에 받을 수 없습니다.","");
+    if(sv("leave"))P("항목별 기준","bad","자격 상실","휴학·취업·자퇴 시 상실일부터 지급 중단, 부정 시 즉시 전액 환수입니다.","");
+  }
+  if(t==="sisang"){
+    var pl=sn("place");
+    if(pl>2500000)P("항목별 기준","bad","1등 시상금 상한 초과","1등 시상금 상한은 250만원입니다.","");
+    else if(pl)P("항목별 기준","ok","1등 시상금 상한 이내","1등 시상금 "+fmt(pl)+"원은 상한 이내입니다.");
+    if(!sv("crit"))P("항목별 기준","bad","시상기준·명단","시상기준, 시상자 명단이 명시된 결재문서가 필요합니다.","");
+    if(!sv("tax"))P("항목별 기준","chk","원천징수","시상금은 소득 구분에 따른 원천징수 대상 여부를 산학협력단 기준으로 확인해야 합니다.","");
+  }
+  if(t==="expert"){
+    var k=sv("kind")||"adv",g=sv("grade")||"A",h=sn("hours"),an2=sn("annual");
+    var hr={A:200000,B:150000,X:200000},dy={A:600000,B:450000,X:600000};
+    if(k==="adv"){
+      if(h){var ph=a/h;
+        if(ph>hr[g])P("항목별 기준","bad","시간당 자문료 상한 초과","시간당 "+fmt(ph)+"원으로 상한 "+fmt(hr[g])+"원(A급 20만원 · B급 15만원)을 초과합니다.","");
+        else P("항목별 기준","ok","시간당 자문료 이내","시간당 "+fmt(ph)+"원으로 상한 이내입니다.");}
+      else P("항목별 기준","chk","자문 시간 미입력","시간 수를 입력하면 시간당 단가를 점검합니다.");
+      if(a>dy[g])P("항목별 기준","bad","일 자문료 상한 초과","1일 자문료 총합은 A급 60만원, B급 45만원을 초과할 수 없습니다.","");
+    }
+    if(k==="lec"){ if(h&&a/h>500000)P("항목별 기준","bad","강연료 상한 초과","회당 50만원 이하입니다.",""); else if(h)P("항목별 기준","ok","강연료 이내","회당 "+fmt(a/h)+"원으로 상한 이내입니다."); else P("항목별 기준","chk","강연 회수 미입력","");}
+    if(k==="mtg"){ if(h&&a/h>100000)P("항목별 기준","bad","회의수당 상한 초과","회의 1건당 10만원 이하입니다.",""); else if(h)P("항목별 기준","ok","회의수당 이내","건당 "+fmt(a/h)+"원으로 상한 이내입니다."); else P("항목별 기준","chk","회의 건수 미입력",""); if(!sv("own"))P("항목별 기준","bad","본인 명의 계좌","회의수당은 본인 명의 계좌 입금이 원칙입니다.","");}
+    if(k==="wr")P("항목별 기준","chk","단가표 대조","번역(한→영·일·중 5만/A4) · 원고(국문 일반 1만/200자 원고지 1장 기준 등) · 통역(30만/1일 3시간) · 속기(30만~40만/시간) 단가를 ‘기준표’ 탭에서 확인해야 합니다.","기존 원고 재사용 시 중복영역 30% 미만 미지급, 30~70% 50%, 70% 이상 100%를 지급합니다.");
+    if(k==="vod"){
+      var mn=sn("vodMin"),ex=(sv("vodExt")||"in")==="out",capv;
+      if(mn){capv=mn<25?(ex?250000:200000):mn<50?(ex?300000:250000):mn<75?(ex?350000:300000):(ex?400000:350000);
+        if(a>capv)P("항목별 기준","bad","온라인 강의료 상한 초과","재생 "+mn+"분, "+(ex?"외부":"내부")+" 전문가 상한은 "+fmt(capv)+"원입니다.","");
+        else P("항목별 기준","ok","온라인 강의료 이내","상한 "+fmt(capv)+"원 이내입니다.");}
+      else P("항목별 기준","chk","재생시간 미입력","");
+      P("항목별 기준","chk","신규 촬영 최초 1회","신규 개발 촬영 건에 한하여 최초 1회만 지원되며, 강의자가 직접 강의한 재생시간만 인정됩니다.","");
+    }
+    if(an2>10000000)P("항목별 기준","bad","동일인 연 1,000만원 초과","동일 회계연도 내 동일인에게 최대 1,000만원입니다.","");
+    else if(an2)P("항목별 기준","ok","동일인 연 한도 이내","연 누계 "+fmt(an2)+"원으로 한도 이내입니다.");
+    else P("항목별 기준","chk","동일인 연 누계 확인","동일 회계연도 동일인 누계를 입력해야 합니다(최대 1,000만원).","");
+    if(a>2000000)P("항목별 기준","warn","건당 200만원 초과 — 위탁계약","건당 2,000,000원 초과 지급 건은 위탁계약으로 처리하고 사업자등록증·고유번호증을 첨부해야 합니다.","");
+    if(sv("inside"))P("항목별 기준","bad","기존 업무범위 활동에 대한 수당","대학으로부터 보수를 받는 내부 교·직원의 본 업무범위(정규강의·연구·학생지도 등)에 대한 수당은 집행 제한입니다.","");
+    if(sv("lecAdv"))P("항목별 기준","bad","강연 초청에 자문료 지급","강연 목적 초청일 경우 자문료를 지급할 수 없습니다.","");
+    if(g==="X")P("항목별 기준","warn","등급 예외 인정","연구책임자가 인정한 등급은 경력 관련 서류 제출이 필요하며 미비 시 보완 요청될 수 있습니다.","");
+  }
+  if(t==="meeting"){
+    var hc=sn("heads");
+    if(hc){var ph2=a/hc,lim2=sv("ext")?50000:30000;
+      if(ph2>lim2)P("항목별 기준","bad","1인당 식대·다과비 한도 초과","1인당 "+fmt(ph2)+"원으로 한도 "+fmt(lim2)+"원을 초과합니다(내부 인원만 참석 3만원 · 외부 인원 참석 5만원). 일반수용비 회의 운영은 외부인원 참여가 필요합니다.","");
+      else P("항목별 기준","ok","1인당 한도 이내","1인당 "+fmt(ph2)+"원은 한도 "+fmt(lim2)+"원 이내입니다.");}
+    else P("항목별 기준","chk","참석 인원 미입력","1인당 금액을 계산하려면 인원을 입력해야 합니다.");
+    if(sv("liquor"))P("항목별 기준","bad","주류 포함","주류 구입 비용은 집행 불가입니다.","");
+    if(!sv("minutes"))P("항목별 기준","bad","회의록 자필서명","회의비는 사업비카드로 결제하고, 회의록 [서식6]에 참석자 자필서명을 받아야 합니다.","");
+    if(pay!=="enara")P("항목별 기준","warn","회의비는 사업비카드 사용","회의비는 반드시 사업비카드로 결제해야 합니다.","");
+    P("항목별 기준","chk","야근 식대 구분","연구개발비 초과근무식대는 1인 2만원 이내이며 평일 낮, 심야(23~06시), 출장비 식대와 중복된 분은 불가입니다.","");
+  }
+  if(t==="travel"){
+    if(sv("over")){
+      if(!sv("pre"))P("항목별 기준","bad","국외출장 사전보고","국외여비는 적정성 등에 대해 지출 전 서울앵커센터에 사전보고해야 합니다.","");
+      if(!sv("sys"))P("항목별 기준","bad","국외출장시스템 등록","대학 자체 국외출장시스템 등록 및 결과보고서 작성으로 관리해야 합니다.","");
+    }
+    if(!sv("purpose"))P("항목별 기준","bad","출장 목적","외유성이거나 목적이 불분명한 출장비는 집행 제한입니다.","");
+    P("항목별 기준","chk","여비 기준","산학협력연구비 중앙관리 및 연구지원 내규 [별첨1 국내 · 별첨2 국외] 기준을 따릅니다.","");
+  }
+  if(t==="other"&&!sv("note"))P("항목별 기준","chk","제한항목 해당 여부","개인 연구활동비, 학원 수강료, 상품권 등 대가성 비용, 통상 교직원 연수·워크숍비 등은 집행할 수 없습니다.","‘적발 사례’ 탭에서 확인해야 합니다.");
+
+  /* 7 공통 확인 */
+  COMMON.forEach(function(c){
+    if(c[0]==="approved"||c[0]==="restr")return;
+    if(!C.c[c[0]])P("공통 확인","chk",c[1].replace(/\.$/,""),"아직 확인되지 않았습니다.","");
+  });
+
+  /* AI 서류 판독 결과 */
+  if(AIX&&AIX.items)AIX.items.forEach(function(o){P("서류 판독(AI)",o.s,o.title,o.r,o.fix)});
+  /* 서류 */
+  var docs=docList(),miss=0;
+  docs.forEach(function(d,i){if(!C.docs[C.type+":"+i])miss++});
+  if(miss)P("제출서류","warn","미구비 서류 "+miss+"건","③ 제출서류 확인 목록에서 갖추지 못한 서류를 확인해야 합니다.","");
+  else if(docs.length)P("제출서류","ok","제출서류 모두 구비","");
+  return {R:R,docs:docs,miss:miss};
+}
+
+/* ───── 렌더 ───── */
+var ST={bad:"보완 필요",warn:"확인 필요",chk:"직접 확인",ok:"적합",na:"해당 없음"};
+var res;
+function typeLabel(){return (TYPES.filter(function(x){return x[0]===C.type})[0]||[])[1]}
+function renderSpec(){
+  var h="",L=SPEC[C.type]||[];
+  if(L.length){h+="<h3>"+typeLabel()+" 세부 입력</h3><div class='f'>";
+    L.forEach(function(f){
+      if(f[1]==="num")h+="<label class='l'>"+f[2]+"<input class='num' data-s='"+f[0]+"' inputmode='decimal' value='"+(C.s[f[0]]||"")+"'></label>";
+      else if(f[1]==="sel"){h+="<label class='l'>"+f[2]+"<select data-s='"+f[0]+"'>"+f[3].map(function(o){return "<option value='"+o[0]+"'"+((C.s[f[0]]||f[3][0][0])===o[0]?" selected":"")+">"+o[1]+"</option>"}).join("")+"</select></label>"}
+      else h+="<label class='chkrow full'><input type='checkbox' data-s='"+f[0]+"'"+(C.s[f[0]]?" checked":"")+"><span>"+f[2]+"</span></label>";
+    });
+    h+="</div>";}
+  $("#spec").innerHTML=h;
+  $$("#spec [data-s]").forEach(function(el){
+    var ev=el.type==="checkbox"?"change":(el.tagName==="SELECT"?"change":"input");
+    el.addEventListener(ev,function(){var k=el.dataset.s;C.s[k]=el.type==="checkbox"?el.checked:el.value;update()});
+  });
+}
+function renderDocs(){
+  var h=res.docs.map(function(d,i){var k=C.type+":"+i,on=!!C.docs[k];return "<label class='doc"+(on?"":" miss")+"'><input type='checkbox' data-d='"+k+"'"+(on?" checked":"")+"><span>"+d+"</span></label>"}).join("");
+  $("#docs").innerHTML=h;
+  $$("#docs [data-d]").forEach(function(el){el.addEventListener("change",function(){C.docs[el.dataset.d]=el.checked;update(true)})});
+}
+var OPT={hid:{},ok:true,chk:true};
+(function(){var o=LS.get("jbg.opt");if(o){try{OPT=JSON.parse(o)}catch(e){}}OPT.hid=OPT.hid||{}})();
+function visible(){return res.R.filter(function(r){return !OPT.hid[r.cat]&&!(OPT.ok===false&&r.st==="ok")&&!(OPT.chk===false&&r.st==="chk")})}
+function renderScope(){
+  var cats=[];res.R.forEach(function(r){if(cats.indexOf(r.cat)<0)cats.push(r.cat)});
+  $("#scopeList").innerHTML="<h4>표시할 점검 분류</h4>"+cats.map(function(c){return "<label><input type='checkbox' data-cat='"+c+"'"+(OPT.hid[c]?"":" checked")+"><span>"+c+"</span></label>"}).join("");
+  $$("#scopeList [data-cat]").forEach(function(el){el.addEventListener("change",function(){if(el.checked)delete OPT.hid[el.dataset.cat];else OPT.hid[el.dataset.cat]=1;LS.set("jbg.opt",JSON.stringify(OPT));renderItems()})});
+}
+function renderItems(){
+  var cnt={bad:0,warn:0,chk:0,ok:0},VR=visible();
+  VR.forEach(function(r){cnt[r.st]=(cnt[r.st]||0)+1});
+  var sm="";
+  if(AIX&&(AIX.summary||(AIX.flags&&AIX.flags.length))){sm="<b>AI 서류 판독 총평</b> "+esc(AIX.summary||"")+((AIX.flags&&AIX.flags.length)?"<ul>"+AIX.flags.map(function(f){return "<li>"+esc(f)+"</li>"}).join("")+"</ul>":"")}
+  $("#aiSum").innerHTML=sm;
+  var v,cls;
+  if(cnt.bad){v="보완 필요 "+cnt.bad+"건이 있어 지출 전 해결해야 합니다";cls="s-bad"}
+  else if(cnt.warn){v="확인 필요 "+cnt.warn+"건이 있어 증빙·사유를 보강해야 합니다";cls="s-warn"}
+  else if(cnt.chk){v="직접 확인 "+cnt.chk+"건이 남아 있어 확인 후 지출해야 합니다";cls="s-chk"}
+  else{v="입력 범위에서는 지적 사항이 없습니다";cls="s-ok"}
+  $("#verdict").innerHTML="<div class='verdict "+cls+"'>"+v+"</div>";
+  $("#sum").innerHTML=[["bad","보완 필요"],["warn","확인 필요"],["chk","직접 확인"],["ok","적합"]].map(function(x){return "<div class='s-"+x[0]+"'><b>"+(cnt[x[0]]||0)+"</b><span>"+x[1]+"</span></div>"}).join("");
+  var order={bad:0,warn:1,chk:2,ok:3},by={},cats=[];
+  $("#dockStatus").innerHTML="보완 <b>"+(cnt.bad||0)+"</b> · 확인 <b>"+(cnt.warn||0)+"</b> · 직접 확인 <b>"+(cnt.chk||0)+"</b> · 적합 <b>"+(cnt.ok||0)+"</b>";
+  VR.forEach(function(r){if(!by[r.cat]){by[r.cat]=[];cats.push(r.cat)}by[r.cat].push(r)});
+  var h="";
+  cats.forEach(function(c){
+    h+="<div class='cat'>"+c+"</div>";
+    by[c].sort(function(a,b){return order[a.st]-order[b.st]}).forEach(function(r){
+      h+="<div class='it "+r.st+"'><div class='t'><b>"+r.title+"</b><span class='chip "+r.st+"'>"+ST[r.st]+"</span></div>"+(r.msg?"<p>"+r.msg+"</p>":"")+(r.fix?"<p class='fix'>"+r.fix+"</p>":"")+"</div>";
+    });
+  });
+  $("#items").innerHTML=h;
+}
+function paper(){
+  var a=amt(),pl=res.R.filter(function(r){return r.st==="bad"||r.st==="warn"}),ck=res.R.filter(function(r){return r.st==="chk"});
+  var today=new Date();
+  var row=function(k,v){return "<tr><th>"+k+"</th><td>"+(v||"-")+"</td></tr>"};
+  var h="<h2>지출 증빙 점검 결과서</h2><p style='text-align:center;margin:0 0 10px;font-size:12px'>건국대학교 ANCHOR사업단 · 사업비 관리 지침(2026.10.) 기준 · 점검일 "+ymd(today)+"</p>";
+  h+="<table>"+row("집행 항목",typeLabel())+row("지출 금액",a?fmt(a)+"원":"")+row("지급 방식",(PAYS.filter(function(p){return p[0]===C.pay})[0]||[])[1])+row("거래처·수령인",C.payee)+row("일정","시행품의 "+(C.dProp||"-")+" / 수행·계약 "+(C.dStart||"-")+" / 납품 "+(C.dDeliv||"-")+" / 검수 "+(C.dInsp||"-")+" / 지출 "+(C.dPay||"-"))+"</table>";
+  h+="<p class='st'>1. 보완해야 할 내용 ("+pl.length+"건)</p>";
+  h+=pl.length?"<table>"+pl.map(function(r,i){return "<tr><th>"+(i+1)+". "+r.title+"</th><td>["+ST[r.st]+"] "+r.msg+(r.fix?"<br>→ "+r.fix:"")+"</td></tr>"}).join("")+"</table>":"<p>해당 없음</p>";
+  h+="<p class='st'>2. 직접 확인할 점검사항 ("+ck.length+"건)</p>";
+  h+=ck.length?"<ul style='margin:4px 0 8px 18px;padding:0'>"+ck.map(function(r){return "<li>"+r.title+(r.msg?" — "+r.msg:"")+"</li>"}).join("")+"</ul>":"<p>해당 없음</p>";
+  h+="<p class='st'>3. 제출서류 구비 현황</p><table>"+res.docs.map(function(d,i){return "<tr><td style='width:60px'>"+(C.docs[C.type+":"+i]?"구비":"<b>미구비</b>")+"</td><td>"+d+"</td></tr>"}).join("")+"</table>";
+  $("#paper").innerHTML=h;
+}
+function plain(){
+  var out=["[지출 증빙 점검 결과] "+typeLabel()+" / "+(amt()?fmt(amt())+"원":"금액 미입력")];
+  var bad=res.R.filter(function(r){return r.st==="bad"||r.st==="warn"});
+  out.push("","■ 보완해야 할 내용 ("+bad.length+"건)");
+  bad.forEach(function(r,i){out.push((i+1)+". ["+ST[r.st]+"] "+r.title+" — "+r.msg+(r.fix?" → "+r.fix:""))});
+  var ck=res.R.filter(function(r){return r.st==="chk"});
+  out.push("","■ 직접 확인할 점검사항 ("+ck.length+"건)");ck.forEach(function(r,i){out.push((i+1)+". "+r.title)});
+  if(AIX&&AIX.summary)out.push("","■ AI 서류 판독 총평",AIX.summary);
+  out.push("","■ 제출서류");res.docs.forEach(function(d,i){out.push((C.docs[C.type+":"+i]?"[구비] ":"[미구비] ")+d)});
+  return out.join("\n");
+}
+function update(skipSpec){
+  res=check();save();renderScope();renderItems();renderDocs();paper();
+}
+function fillForm(){
+  $("#type").innerHTML=TYPES.map(function(t){return "<option value='"+t[0]+"'"+(t[0]===C.type?" selected":"")+">"+t[1]+"</option>"}).join("");
+  $("#pay").innerHTML=PAYS.map(function(p){return "<option value='"+p[0]+"'"+(p[0]===C.pay?" selected":"")+">"+p[1]+"</option>"}).join("");
+  $("#appr").innerHTML=APPR.map(function(p){return "<option value='"+p[0]+"'"+(String(p[0])===String(C.appr)?" selected":"")+">"+p[1]+"</option>"}).join("");
+  $("#amount").value=C.amount?fmt(amt()):"";$("#payee").value=C.payee||"";
+  ["dProp","dStart","dDeliv","dInsp","dPay"].forEach(function(k){$("#"+k).value=C[k]||""});
+  $("#common").innerHTML=COMMON.map(function(c){return "<label class='chkrow'><input type='checkbox' data-c='"+c[0]+"'"+(C.c[c[0]]?" checked":"")+"><span>"+c[1]+"</span></label>"}).join("");
+  $$("#common [data-c]").forEach(function(el){el.addEventListener("change",function(){C.c[el.dataset.c]=el.checked;update()})});
+  renderSpec();
+}
+$("#type").addEventListener("change",function(e){C.type=e.target.value;C.s={};renderSpec();update()});
+$("#pay").addEventListener("change",function(e){C.pay=e.target.value;update()});
+$("#appr").addEventListener("change",function(e){C.appr=e.target.value;update()});
+$("#amount").addEventListener("input",function(e){var n=e.target.value.replace(/[^0-9]/g,"");C.amount=n;e.target.value=n?fmt(+n):"";update()});
+$("#payee").addEventListener("input",function(e){C.payee=e.target.value;update()});
+["dProp","dStart","dDeliv","dInsp","dPay"].forEach(function(k){$("#"+k).addEventListener("change",function(e){C[k]=e.target.value;update()})});
+$("#copyForm").addEventListener("click",function(){copyText(plain())});
+
+/* ───── 체크리스트 ───── */
+var CHK=[
+ ["결재·절차",[
+  ["c1","시행품의(기본계획) 결재 완료 후 사업을 수행했는가","결재 완료된 시행품의 기안문이 증빙에 첨부되어야 하며, 사후 품의는 불가"],
+  ["c2","금액별 결재선을 지켰는가","500만 이하 센터장 / 500만 초과~1억 이하 사업부단장 / 1억 초과 사업단장"],
+  ["c3","사업결과보고 → 지출 원인행위 기안 → 청구서 순서를 지켰는가","청구서(ERP)도 동일 금액 구간 결재선 적용"],
+  ["c4","원인행위와 지출(거래)이 같은 사업연도 안에 있는가","사업연도 3.1~다음해 2월 말, 회계연도 1.1~12.31"]]],
+ ["지급 방식·증빙",[
+  ["p1","e나라도움 전용카드 또는 세금계산서 기반 계좌이체로 지출했는가","법인카드·현금은 예외 사유 필요"],
+  ["p2","개인 지급 경비는 수혜자 본인 계좌로 직접 이체했는가","인건비·회의수당·성과급·장학금 등"],
+  ["p3","간이영수증이 아닌 인정 증빙(세금계산서·카드전표·공공기관 영수증 등)인가","전자세금계산서는 발행일자·품명·수량·단가·금액 명기"],
+  ["p4","결제 업종이 사용제한 업종이 아닌가","유흥·위생·레저·사행·기타"],
+  ["p5","원본은 전자문서시스템 등록, 지출서류에는 사본+진본확인 도장인가","증빙은 사업 종료 후 5년 보관"],
+  ["p6","국고보조금과 대응자금을 구분했고 환급 가능한 부가세는 제외했는가","수익금·카드포인트 등은 국비·지방비로 반납"]]],
+ ["구매·계약",[
+  ["b1","금액 구간에 맞는 계약 방식을 적용했는가","물품 500만 미만 개별 / 500만~2천만 비교견적 / 2천만 이상 입찰. 용역·라이선스는 1천만·2천만 기준"],
+  ["b2","1,000만원 이상은 계약서, 2,000만원 이상은 이행보증보험증권을 받았는가",""],
+  ["b3","수의계약이면 업체지정 사유서 [서식11]를 작성했는가","특허·독점은 특허등록원부·통상실시권 범위·대체품 조사 첨부"],
+  ["b4","같은 건을 나누어 발주(쪼개기)하지 않았는가",""]]],
+ ["검수·자산",[
+  ["a1","납품 확인 및 검수조서 [서식22]를 받고 지급했는가","검수 후 지급"],
+  ["a2","비품은 자산관리대장에 등재하고 관리번호·재원 표기를 붙였는가","소모품은 비등재"],
+  ["a3","3천만 원 이상 장비는 사전 심의·승인(서울앵커센터/1억 이상 중앙)을 받았는가","동일 모델 다수 구매 합계도 포함"],
+  ["a4","장비는 사업연도 종료 2개월 전까지 검수를 마쳤는가","12월 말 전후"]]],
+ ["항목별 지급 기준",[
+  ["i1","일용임금 시급 상한(학부 12,000·석사 18,000·박사 20,000, 일반인 최저시급) 이내인가","1일 8시간, 휴게 12~13시 제외"],
+  ["i2","인재지원금 월 한도(130만·230만·300만원)와 자격요건을 확인했는가","직장인·연구개발비 학생인건비 중복 불가"],
+  ["i3","보직수당+성과급이 1인 연 1,000만원, 총사업비 5% 이내이며 평가근거가 있는가","[서식23]"],
+  ["i4","전문가 활용비가 단가표와 동일인 연 1,000만원 한도 이내인가","건당 200만원 초과는 위탁계약"],
+  ["i5","회의비가 1인당 한도(내부 3만·외부 5만원) 이내이고 주류가 없는가","회의록 자필서명"],
+  ["i6","시상금 1등 상한 250만원 이내이고 수령확인증을 받았는가","[서식18]"],
+  ["i7","장학금이 재학생·등록금 범위·재단 중복 확인 요건을 충족하는가",""],
+  ["i8","국외출장을 사전보고하고 시스템에 등록했는가","서울앵커센터 사전보고"]]],
+ ["변경·이월·정산",[
+  ["m1","사업비 항목 간 변경이 필요한 경우 운영위원회 심의·의결 절차를 밟았는가","성과급·간접비는 상한 초과 증액 불가"],
+  ["m2","회계연도·사업연도를 넘기는 집행은 e나라도움 이월 승인이 있는가","사업종료 30일 전까지 이월 승인 신청, 10% 이내"],
+  ["m3","종료 후 2개월 이내 정산보고서를 e나라도움으로 제출할 준비가 되어 있는가","1억 이상은 외부 검증"]]]
+];
+function renderCL(){
+  var tot=0,done=0,h="";
+  CHK.forEach(function(g){
+    h+="<div class='cat'>"+g[0]+"</div>";
+    g[1].forEach(function(x){tot++;var on=!!CL[x[0]];if(on)done++;
+      h+="<label class='doc'><input type='checkbox' data-k='"+x[0]+"'"+(on?" checked":"")+"><span><b style='font-weight:500'>"+x[1]+"</b>"+(x[2]?"<br><small class='hint'>"+x[2]+"</small>":"")+"</span></label>"});
+  });
+  $("#cl").innerHTML=h;
+  $("#pgbar").style.width=(tot?Math.round(done/tot*100):0)+"%";
+  $("#pgtxt").textContent=done+" / "+tot+" 항목 확인";
+  $$("#cl [data-k]").forEach(function(el){el.addEventListener("change",function(){CL[el.dataset.k]=el.checked;save();renderCL()})});
+}
+$("#clReset").addEventListener("click",function(){CL={};save();renderCL()});
+
+/* ───── 적발·제한 사례 ───── */
+var CASES=[
+ ["인건비","사업을 전담하지 않는 교·직원(대학본부 포함)에 대한 급여·직무교육비·연수비","전담 조직으로 발령했어도 실제 사업과 무관한 업무를 병행하면 집행 불가"],
+ ["인건비","타 부서 겸직자의 인건비 대체·지급",""],
+ ["인건비","전담 교·직원의 통상 업무(보고서 작성·위원회 참석·자체평가·정규강의·전산개발) 수당",""],
+ ["인건비","자체평가 기준·결과 없이 성과급 균등 배분(나눠먹기)","[서식23] 체크리스트 5년 보존"],
+ ["인건비","타 사업과 동일 성과로 중복 지급한 보직수당·성과급",""],
+ ["인건비","당해 연도 사업기간에 포함되지 않는 근무기간의 퇴직금 적립",""],
+ ["장학금","본 사업에 참여하지 않는 학생에 대한 장학금",""],
+ ["장학금","학자금이 아닌 생활비 보조 성격의 장학금(근로장학금 제외)",""],
+ ["장학금","한국장학재단이 정한 이중 지원 범위를 초과하는 장학금",""],
+ ["프로그램","내부 교·직원의 본 업무범위 활동(정규강의·연구·학생지도)에 대한 수당",""],
+ ["프로그램","중복·이중지원 성격 경비(예: 기존 교재 원고료)",""],
+ ["프로그램","교·직원 개인 연구활동비, 학원 수강료, 단순 어학·컴퓨터 자격시험 응시료",""],
+ ["프로그램","외유성이거나 목적이 불분명한 해외 연수비",""],
+ ["프로그램","어학교육원 등 대학 부속·부설기관 운영비성 경비",""],
+ ["프로그램","통상적으로 진행하는 교직원 연수비·워크숍 비용",""],
+ ["프로그램","프로그램 참여 독려·참여 기업에 지급하는 대가성 비용(상품권 등)",""],
+ ["프로그램","성과물·실질 활동 결과가 확인되지 않는 형식적 참여에 대한 현금성 지원",""],
+ ["운영","사업과 무관한 일회성 행사비 및 외유성 출장비",""],
+ ["운영","사업관리 내부 규정을 지키지 않은 회의비, 주류 구입 비용",""],
+ ["운영","사업 목적에 맞지 않는 도서 구입·교육훈련비",""],
+ ["장비","서울앵커센터·중앙앵커센터 사전 승인 없이 3천만 원 이상 장비·기자재 구입",""],
+ ["장비","사업과 무관한 기자재(서버 포함)·소프트웨어, 개인연구용 장비","관리번호·재원 표기 누락도 지적 대상"],
+ ["공통","시행품의·원인행위 없이 지출 / 사후 품의","결재 완료 기안문이 없으면 집행 불허"],
+ ["공통","간이영수증, 개인카드 결제, 사용제한 업종 결제",""],
+ ["공통","사업계획서에 없는 사업비 집행, 사업 목적과 무관한 집행","환수·협약 해지 등 제재 가능"],
+ ["공통","국고지원금 유용·횡령 등 중대한 법령 위반","지원금 일부·전액 회수·삭감"]
+];
+var caseCat="전체";
+function renderCases(){
+  var cats=["전체"].concat(CASES.map(function(c){return c[0]}).filter(function(v,i,a){return a.indexOf(v)===i}));
+  $("#caseFlt").innerHTML=cats.map(function(c){return "<button type='button' class='"+(c===caseCat?"on":"")+"' data-c='"+c+"'>"+c+"</button>"}).join("");
+  $$("#caseFlt button").forEach(function(b){b.addEventListener("click",function(){caseCat=b.dataset.c;renderCases()})});
+  $("#caseList").innerHTML=CASES.filter(function(c){return caseCat==="전체"||c[0]===caseCat}).map(function(c){return "<div class='it bad'><div class='t'><b>"+c[1]+"</b><span class='chip bad'>"+c[0]+"</span></div>"+(c[2]?"<p>"+c[2]+"</p>":"")+"</div>"}).join("");
+}
+
+/* ───── 기준표 ───── */
+$("#refTbl").innerHTML="<tr><th>구분</th><th>기준</th></tr>"+[
+ ["사업연도 / 회계연도","3.1~다음해 2월 말 / 1.1~12.31 (회계연도 넘기려면 e나라도움 이월)"],
+ ["시행품의·청구서 결재선","500만 이하 센터장 전결 · 500만 초과~1억 이하 사업부단장 전결 · 1억 초과 사업단장"],
+ ["물품(일반수용비·재료비·자산)","500만 미만 개별구매(견적서) · 500만~2천만 미만 비교견적(1천만 이상 계약서) · 2천만 이상 입찰+이행보증"],
+ ["용역·라이선스","1천만 미만 개별(견적+비교견적) · 1천만~2천만 미만 용역계약 · 2천만 이상 입찰+이행보증"],
+ ["일용임금 시급","학부 12,000 · 석사 18,000 · 박사 20,000 · 일반 최저시급 / 1일 최대 8시간"],
+ ["인재지원금 월 한도","학부 130만 · 석사 230만 · 박사 300만 (시급은 일용임금과 동일)"],
+ ["보직수당+성과급","연 1인 1,000만원 · 사업비 총액의 5%"],
+ ["전문가 활용비","동일인 연 1,000만원 · 자문 A 20만/시간·60만/일, B 15만/시간·45만/일 · 강연 50만/회 · 회의수당 10만/건 · 건당 200만 초과는 위탁계약"],
+ ["번역·원고·통역·속기","한→영·일·중 5만/A4 · 영·불→한 2.5만 · 일→한 2만 · 중→한 3만 · 국문 일반 원고 1만 / 통역 30만 · 속기 30~40만/시간"],
+ ["온라인 강의료(주차당)","내부 25분 미만 20만 / 50분 미만 25만 / 75분 미만 30만 / 이상 35만 · 외부 25만 / 30만 / 35만 / 40만"],
+ ["회의·행사 식비","내부만 1인 3만 · 외부 참여 1인 5만 / 연구개발비 야근식대 1인 2만"],
+ ["시상금","1등 상한 250만원"],
+ ["장비·기자재","3천만 이상 자체 심의+서울앵커센터 사전승인 · 1억 이상 중앙앵커센터 승인 · 사업연도 종료 2개월 전까지 도입"],
+ ["이월","사업연도 보조금의 10% 이내 · 사업종료 30일 전까지 신청"],
+ ["정산","종료 후 2개월 이내 e나라도움 정산보고서 · 1억 이상 외부 검증"]
+].map(function(r){return "<tr><td style='white-space:nowrap'><b>"+r[0]+"</b></td><td>"+r[1]+"</td></tr>"}).join("");
+$("#formTbl").innerHTML="<tr><th>번호</th><th>서식</th><th>번호</th><th>서식</th></tr>"+(function(){
+  var F=["원인행위 결재문서","개인정보 수집·이용 동의서","근로확인서","일용근무자 출근부","활동 보고서","회의록","출장보고서","전문가 활용계획서","전문가 활용비 지급 신청서","보직수당 지급내역서","업체지정 사유서","조교 신청(추천)서","조교 복무협약서","조교 복무 서약서","조교 출근부","조교 활동보고서","인재지원금 신청자 명부","시상금 수령확인증","학생연구자 연구참여확약서","연구과제 계획서","연구개발과제 협약서","납품 확인 및 검수조서","인센티브 집행 체크리스트","사업추진 결과보고서","추가근무일지","추가근무 상황표"],h="";
+  for(var i=0;i<13;i++){h+="<tr><td>[서식"+(i+1)+"]</td><td>"+F[i]+"</td><td>[서식"+(i+14)+"]</td><td>"+F[i+13]+"</td></tr>"}return h})();
+
+/* ───── 탭 · 메뉴 · 테마 ───── */
+var TABS=[["check","점검"],["form","서식 미리보기"],["list","체크리스트"],["cases","적발 사례"],["ref","기준표"],["search","검색"]];
+var NAV=TABS.slice(0,5);
+function show(id,noScroll){
+  if(!TABS.some(function(t){return t[0]===id}))id="check";
+  TABS.forEach(function(t){$("#p-"+t[0]).hidden=t[0]!==id});
+  $$("#gn a").forEach(function(a){if(a.dataset.t===id)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  try{history.replaceState(null,"","#"+id)}catch(e){}
+  if(!noScroll)window.scrollTo(0,0);
+  if(id==="search")setTimeout(function(){$("#q").focus()},0);
+}
+$("#gn").innerHTML=NAV.map(function(t){return "<a href='#"+t[0]+"' data-t='"+t[0]+"'>"+t[1]+"</a>"}).join("");
+$$("#gn a,[data-go]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();show(a.dataset.t||a.dataset.go)})});
+window.addEventListener("hashchange",function(){show((location.hash||"").slice(1),true)});
+$("#searchBtn").addEventListener("click",function(){show("search")});
+$("#themeBtn").addEventListener("click",function(){
+  var r=document.documentElement,cur=r.getAttribute("data-theme");
+  var dark=cur?cur==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;
+  r.setAttribute("data-theme",dark?"light":"dark");
+});
+/* 점검 옵션 */
+$("#optChk").checked=OPT.chk!==false;$("#optOk").checked=OPT.ok!==false;
+$("#optChk").addEventListener("change",function(e){OPT.chk=e.target.checked;LS.set("jbg.opt",JSON.stringify(OPT));renderItems()});
+$("#optOk").addEventListener("change",function(e){OPT.ok=e.target.checked;LS.set("jbg.opt",JSON.stringify(OPT));renderItems()});
+/* 드롭다운(details) 바깥 클릭 시 닫기 */
+document.addEventListener("click",function(e){$$("details.mn[open]").forEach(function(d){if(!d.contains(e.target))d.removeAttribute("open")})});
+/* 복사 메뉴 */
+function listFor(sts){return res.R.filter(function(r){return sts.indexOf(r.st)>=0})}
+function cp(txt){copyText(txt);var d=$("#expMenu");d.removeAttribute("open")}
+$("#cpAll").addEventListener("click",function(){cp(plain())});
+$("#cpFix").addEventListener("click",function(){var L=listFor(["bad","warn"]);cp("[보완 필요 사항] "+typeLabel()+" / "+(amt()?fmt(amt())+"원":"금액 미입력")+"\n"+(L.length?L.map(function(r,i){return (i+1)+". ["+ST[r.st]+"] "+r.title+" — "+r.msg+(r.fix?" → "+r.fix:"")}).join("\n"):"해당 없음"))});
+$("#cpChk").addEventListener("click",function(){var L=listFor(["chk"]);cp("[직접 확인 점검사항] "+typeLabel()+"\n"+(L.length?L.map(function(r,i){return (i+1)+". "+r.title+(r.msg?" — "+r.msg:"")}).join("\n"):"해당 없음"))});
+$("#cpDoc").addEventListener("click",function(){cp("[제출서류] "+typeLabel()+"\n"+res.docs.map(function(d,i){return (C.docs[C.type+":"+i]?"[구비] ":"[미구비] ")+d}).join("\n"))});
+$("#cpGo").addEventListener("click",function(){$("#expMenu").removeAttribute("open");show("form")});
+/* Teams 채팅 */
+$("#tmBtn").addEventListener("click",function(e){e.stopPropagation();var p=$("#tmPop");p.hidden=!p.hidden;this.setAttribute("aria-expanded",String(!p.hidden))});
+document.addEventListener("click",function(e){var p=$("#tmPop");if(!p.hidden&&!p.contains(e.target)&&!$("#tmBtn").contains(e.target)){p.hidden=true;$("#tmBtn").setAttribute("aria-expanded","false")}});
+$("#tmCopy").addEventListener("click",function(){copyText("[지출김군 · "+$("#tmType").value+"] "+$("#tmMsg").value+"\n(화면: "+(location.hash||"#check")+")")});
+/* 전체 메뉴 */
+var KR="https://coolzet-ai.github.io/kurule/";
+var DR=[["지출김군",[["지출 점검(점검)","check"],["서식 미리보기","form"],["지출 전 체크리스트","list"],["적발 사례","cases"],["한도·단가 기준표","ref"],["통합 검색","search"]]],
+ ["상위 규정",[["운영규정(교육부훈령)","operating-regulation-guide.html"],["앵커 사업비 지침(4차)","anchor-budget-guide.html"],["서울 앵커 기준(3차)","seoul-anchor-guide.html"],["산학연 매뉴얼(5차)","sancoop-manual-guide.html"]]],
+ ["건국대 규정",[["사업단 사업비 관리 지침","konkuk-main-budget-guide.html"],["산단 내규(4차)","konkuk-research-fund-guide.html"],["구매계약업무요강","konkuk-purchase-guide.html"],["검수요강","konkuk-inspection-guide.html"]]],
+ ["캠퍼스타운",[["캠퍼스타운 사업비 지침","campus-town-guide.html"],["캠퍼스타운 운영 매뉴얼","campus-town-manual-guide.html"]]],
+ ["규정김군 · 견적김군",[["규정 통합 대시보드",""],["실무 교육자료","anchor-training-materials.html"],["회계감사 대비 체크리스트(보호)","audit-checklist.html"],["KU 견적김군","https://coolzet-ai.github.io/kuestimate/"]]]];
+$("#drNav").innerHTML=DR.map(function(g,gi){return "<div role='group' aria-label='"+g[0]+"'><h3>"+g[0]+"</h3>"+g[1].map(function(x){
+  if(gi===0)return "<button type='button' data-t='"+x[1]+"'><span>"+x[0]+"</span></button>";
+  var href=/^https?:/.test(x[1])?x[1]:KR+x[1];
+  return "<a href='"+href+"' target='_blank' rel='noopener'><span>"+x[0]+"</span><span class='lk'>↗</span></a>"}).join("")+"</div>"}).join("");
+function drawer(o){$("#drawer").hidden=!o}
+$("#allBtn").addEventListener("click",function(){drawer(true)});
+$$("#drawer [data-close]").forEach(function(b){b.addEventListener("click",function(){drawer(false)})});
+$$("#drNav button[data-t]").forEach(function(b){b.addEventListener("click",function(){drawer(false);show(b.dataset.t)})});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){drawer(false);$("#tmPop").hidden=true}});
+/* 통합 검색 */
+var IDX=[];
+function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function buildIdx(){
+  IDX=[];
+  CHK.forEach(function(g){g[1].forEach(function(x){IDX.push({src:"체크리스트 · "+g[0],t:x[1],d:x[2]||"",go:"list"})})});
+  CASES.forEach(function(c){IDX.push({src:"적발 사례 · "+c[0],t:c[1],d:c[2]||"",go:"cases"})});
+  $$("#refTbl tr").forEach(function(tr,i){if(i){var td=tr.querySelectorAll("td");IDX.push({src:"기준표",t:td[0].textContent,d:td[1].textContent,go:"ref"})}});
+  $$("#formTbl tr").forEach(function(tr,i){if(i){var td=tr.querySelectorAll("td");IDX.push({src:"서식",t:td[0].textContent+" "+td[1].textContent,d:td[2].textContent+" "+td[3].textContent,go:"ref"})}});
+}
+function runSearch(){
+  var q=$("#q").value.trim().toLowerCase();
+  if(!q){$("#qc").textContent="검색어를 입력하세요.";$("#qr").innerHTML="";return}
+  var toks=q.split(/\s+/);
+  var hit=IDX.filter(function(x){var h=(x.t+" "+x.d+" "+x.src).toLowerCase();return toks.every(function(t){return h.indexOf(t)>=0})});
+  $("#qc").textContent=hit.length+"건";
+  var re=new RegExp("("+toks.map(function(t){return t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}).join("|")+")","gi");
+  var mk=function(x){return esc(x).replace(re,"<mark>$1</mark>")};
+  $("#qr").innerHTML=hit.slice(0,60).map(function(x){return "<div class='it chk' style='cursor:pointer' data-go='"+x.go+"'><div class='t'><b>"+mk(x.t)+"</b><span class='chip chk'>"+esc(x.src)+"</span></div>"+(x.d?"<p>"+mk(x.d)+"</p>":"")+"</div>"}).join("");
+  $$("#qr [data-go]").forEach(function(el){el.addEventListener("click",function(){show(el.dataset.go)})});
+}
+$("#q").addEventListener("input",runSearch);
+
+
+/* ═════════ 서류 업로드 · 캡처 · 압축파일 ═════════ */
+var FILES=[],OTHERS=[],fid=0,AIX={items:[],summary:"",flags:[],seen:[]};
+var ROLES=[["req","시행품의·결재문서"],["est","견적서"],["inv","세금계산서·영수증"],["ctr","계약서"],["insp","검수조서·납품확인"],["bank","통장·신분증"],["hr","근로·출근부·활동보고"],["mtg","회의록·출장보고"],["etc","기타 증빙"]];
+function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function guessRole(n){
+  if(/견적/.test(n))return "est";if(/세금\s*계산서|계산서|영수|매출|전표|카드/.test(n))return "inv";if(/계약/.test(n))return "ctr";
+  if(/검수|납품|서식\s*22/.test(n))return "insp";if(/통장|신분증|계좌/.test(n))return "bank";if(/근로|출근|활동|일용/.test(n))return "hr";
+  if(/회의록|출장|서식\s*[67]\b/.test(n))return "mtg";if(/결재|기안|품의|결의|원인행위|서식\s*1\b/.test(n))return "req";return "etc";
+}
+var pdfReady=null;
+function loadScript(src){return new Promise(function(res,rej){var el=document.createElement("script");el.src=src;el.onload=res;el.onerror=function(){rej(new Error("load"))};document.head.appendChild(el)})}
+function loadPdf(){
+  if(!pdfReady)pdfReady=(async function(){var B="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";await loadScript(B+"pdf.worker.min.js");await loadScript(B+"pdf.min.js");window.pdfjsLib.GlobalWorkerOptions.workerSrc=B+"pdf.worker.min.js";return window.pdfjsLib})();
+  return pdfReady;
+}
+var zipReady=null;
+function loadZip(){if(!zipReady)zipReady=loadScript("https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js").then(function(){return window.JSZip});return zipReady}
+var MAXIMG=24;
+function shrink(blob){
+  return new Promise(function(resolve){
+    var url=URL.createObjectURL(blob),img=new Image();
+    img.onload=function(){var m=1600,sc=Math.min(1,m/Math.max(img.width,img.height));
+      if(sc===1&&blob.size<1500000&&/jpeg|png|webp/.test(blob.type)){URL.revokeObjectURL(url);resolve(blob);return}
+      var c=document.createElement("canvas");c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+      var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
+      c.toBlob(function(b){resolve(b||blob)},"image/jpeg",.86)};
+    img.onerror=function(){URL.revokeObjectURL(url);resolve(blob)};img.src=url;
+  });
+}
+function addImage(blob,name,src){
+  if(FILES.length>=MAXIMG){toast("이미지는 "+MAXIMG+"장까지 올릴 수 있습니다.");return false}
+  FILES.push({id:++fid,name:name,role:guessRole(name),blob:blob,src:src,url:URL.createObjectURL(blob)});return true;
+}
+async function addPdf(buf,name){
+  var lib=await loadPdf();var doc=await lib.getDocument({data:buf}).promise;var n=Math.min(doc.numPages,4);
+  for(var pg=1;pg<=n;pg++){
+    var page=await doc.getPage(pg),v0=page.getViewport({scale:1}),sc=Math.min(2,1600/Math.max(v0.width,v0.height)),vp=page.getViewport({scale:sc});
+    var c=document.createElement("canvas");c.width=vp.width;c.height=vp.height;var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);
+    await page.render({canvasContext:x,viewport:vp}).promise;
+    var b=await new Promise(function(r){c.toBlob(r,"image/jpeg",.85)});
+    if(!addImage(b,name+(doc.numPages>1?" ("+pg+"쪽)":""),"pdf"))break;
+  }
+  if(doc.numPages>4)toast(name+": 앞 4쪽만 읽었습니다.");
+}
+function dec(bytes){var u=new Uint8Array(bytes);try{return new TextDecoder("utf-8",{fatal:true}).decode(u)}catch(e){try{return new TextDecoder("euc-kr").decode(u)}catch(e2){return String.fromCharCode.apply(null,Array.prototype.slice.call(u))}}}
+var IMGEXT={jpg:"image/jpeg",jpeg:"image/jpeg",png:"image/png",webp:"image/webp",gif:"image/gif"};
+async function addZip(file){
+  var Z=await loadZip();var z=await Z.loadAsync(await file.arrayBuffer(),{decodeFileName:dec});
+  var names=Object.keys(z.files).filter(function(k){var e=z.files[k];return !e.dir&&!/(^|\/)(__MACOSX|\.DS_Store|Thumbs\.db)/i.test(k)&&!/(^|\/)\./.test(k)});
+  var nImg=0,nTxt=0,nOth=0;
+  for(var i=0;i<names.length;i++){
+    var k=names[i],e=z.files[k],base=k.split("/").pop(),ext=(base.split(".").pop()||"").toLowerCase();
+    setIn("압축파일 읽는 중… "+(i+1)+" / "+names.length);
+    try{
+      if(IMGEXT[ext]){var ab=await e.async("arraybuffer");if(addImage(await shrink(new Blob([ab],{type:IMGEXT[ext]})),k,"zip"))nImg++}
+      else if(ext==="pdf"){await addPdf(await e.async("arraybuffer"),k);nImg++}
+      else if(/^(txt|csv|md|json)$/.test(ext)){var tx=dec(await e.async("arraybuffer")).slice(0,20000);$("#pasteIn").value=($("#pasteIn").value?$("#pasteIn").value+"\n\n":"")+"["+k+"]\n"+tx;nTxt++}
+      else{OTHERS.push({name:k});nOth++}
+    }catch(err){OTHERS.push({name:k+" (읽지 못함)"});nOth++}
+  }
+  toast(file.name+": 이미지·PDF "+nImg+"건, 글 "+nTxt+"건, 파일명만 반영 "+nOth+"건");
+}
+function setIn(m){var el=$("#inMsg");if(el)el.textContent=m||""}
+async function takeFiles(list){
+  var arr=Array.prototype.slice.call(list);if(!arr.length)return;
+  for(var i=0;i<arr.length;i++){
+    var f=arr[i],n=f.name||"";
+    try{
+      setIn("파일을 읽는 중… "+n);
+      if(/\.zip$/i.test(n)||/zip/.test(f.type))await addZip(f);
+      else if(f.type==="application/pdf"||/\.pdf$/i.test(n))await addPdf(await f.arrayBuffer(),n);
+      else if(/^image\//.test(f.type))addImage(await shrink(f),n,"upload");
+      else if(/\.(txt|csv|md|json)$/i.test(n)){$("#pasteIn").value=($("#pasteIn").value?$("#pasteIn").value+"\n\n":"")+"["+n+"]\n"+dec(await f.arrayBuffer()).slice(0,20000)}
+      else{OTHERS.push({name:n});toast(n+": 이 형식은 파일명만 반영합니다. 화면 캡처나 PDF로 올리면 내용을 읽습니다.")}
+    }catch(err){toast(n+"을(를) 읽지 못했습니다. 이미지로 캡처해 올려 보세요.")}
+  }
+  setIn("");renderFiles();guessDocs(true);
+}
+function renderFiles(){
+  $("#tray").innerHTML=FILES.map(function(f){return "<div class='th'><img src='"+f.url+"' alt='' data-z='"+f.id+"'><button class='x' type='button' data-rm='"+f.id+"' aria-label='삭제'>×</button><select data-role='"+f.id+"' aria-label='서류 종류'>"+ROLES.map(function(r){return "<option value='"+r[0]+"'"+(r[0]===f.role?" selected":"")+">"+r[1]+"</option>"}).join("")+"</select><div class='fn' title='"+esc(f.name)+"'>"+esc(f.name)+"</div></div>"}).join("");
+  $("#others").innerHTML=OTHERS.length?"그 밖의 파일(파일명만 반영·내용은 읽지 않음) "+OTHERS.length+"건: "+OTHERS.slice(0,30).map(function(o){return "<code>"+esc(o.name)+"</code>"}).join("")+(OTHERS.length>30?" 외 "+(OTHERS.length-30)+"건":"")+" <button type='button' class='btn g s' id='othClr'>비우기</button>":"";
+  $$("#tray [data-rm]").forEach(function(b){b.onclick=function(){var i=FILES.findIndex(function(f){return f.id==b.dataset.rm});if(i>=0){URL.revokeObjectURL(FILES[i].url);FILES.splice(i,1)}renderFiles();draftSave()}});
+  $$("#tray [data-role]").forEach(function(sel){sel.onchange=function(){var f=FILES.find(function(x){return x.id==sel.dataset.role});if(f)f.role=sel.value}});
+  $$("#tray [data-z]").forEach(function(im){im.onclick=function(){var f=FILES.find(function(x){return x.id==im.dataset.z});if(f)openModal({title:f.name,wide:true,body:"<img src='"+f.url+"' alt='' style='max-width:100%;height:auto'>",foot:[{label:"닫기",primary:true,onclick:function(c){c()}}]})}});
+  var oc=$("#othClr");if(oc)oc.onclick=function(){OTHERS=[];renderFiles();draftSave()};
+}
+$("#upBtn").onclick=function(){$("#upFile").click()};
+$("#upFile").onchange=function(e){takeFiles(e.target.files);e.target.value=""};
+var dz=$("#dropZone");
+["dragenter","dragover"].forEach(function(t){dz.addEventListener(t,function(e){e.preventDefault();dz.classList.add("drop")})});
+["dragleave","drop"].forEach(function(t){dz.addEventListener(t,function(e){e.preventDefault();dz.classList.remove("drop")})});
+dz.addEventListener("drop",function(e){takeFiles(e.dataTransfer.files)});
+document.addEventListener("paste",async function(e){
+  var t=e.target&&e.target.tagName;if(t==="TEXTAREA"||t==="INPUT")return;
+  var items=Array.prototype.slice.call((e.clipboardData&&e.clipboardData.items)||[]).filter(function(i){return /^image\//.test(i.type)});
+  if(!items.length)return;e.preventDefault();
+  for(var i=0;i<items.length;i++){var b=items[i].getAsFile();if(b)addImage(await shrink(b),"스크린샷 "+(fid+1),"paste")}
+  renderFiles();toast("스크린샷을 추가했습니다.");
+});
+var sz=$("#shotZone");
+sz.addEventListener("focus",function(){sz.classList.add("focus")});sz.addEventListener("blur",function(){sz.classList.remove("focus")});
+sz.addEventListener("click",async function(){sz.focus();
+  try{if(navigator.clipboard&&navigator.clipboard.read){var its=await navigator.clipboard.read(),got=0;for(var i=0;i<its.length;i++){var ty=its[i].types.find(function(x){return /^image\//.test(x)});if(ty){addImage(await shrink(await its[i].getType(ty)),"스크린샷 "+(fid+1),"paste");got++}}if(got){renderFiles();toast("스크린샷을 추가했습니다.");return}}}catch(e){}
+  toast("캡처한 뒤 Ctrl+V(Mac은 ⌘+V)를 누르세요.");
+});
+$("#capBtn").onclick=async function(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){toast("이 화면에서는 직접 캡처를 쓸 수 없습니다. Win+Shift+S로 캡처한 뒤 붙여넣기 하세요.");return}
+  var stream=null;
+  try{stream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:false})}catch(e){toast(e&&e.name==="NotAllowedError"?"화면 캡처가 허용되지 않았습니다. Win+Shift+S로 캡처한 뒤 붙여넣기 하세요.":"이 화면에서는 직접 캡처가 막혀 있습니다. Win+Shift+S로 캡처한 뒤 붙여넣기 하세요.");return}
+  var close0=function(){if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}};
+  openModal({title:"화면 캡처",body:"<p class='mdl-note'>공유한 화면에 서류가 보이면 ‘이 화면 캡처’를 누르세요. 여러 장을 연달아 찍을 수 있습니다.</p><div class='cam'><video id='camV' autoplay muted playsinline></video></div>",foot:[{label:"이 화면 캡처",primary:true,onclick:async function(){var v=document.getElementById("camV");if(!v||!v.videoWidth)return;var c=document.createElement("canvas");c.width=v.videoWidth;c.height=v.videoHeight;c.getContext("2d").drawImage(v,0,0);var b=await new Promise(function(r){c.toBlob(r,"image/jpeg",.9)});addImage(await shrink(b),"화면 캡처 "+(fid+1),"capture");renderFiles();toast("캡처했습니다. 다른 장면도 찍을 수 있습니다.")}},{label:"닫기",onclick:function(c){close0();c()}}],onOpen:function(w){var v=w.querySelector("#camV");v.srcObject=stream;stream.getVideoTracks()[0].addEventListener("ended",function(){close0()})}});
+};
+
+/* ═════════ 파일명·판독 결과로 구비 서류 추정 ═════════ */
+var TERMS=[["지출결의",/결의/],["견적",/견적/],["세금계산서",/세금\s*계산서|계산서/],["검수",/검수|서식\s*22/],["사업자등록",/사업자/],["통장",/통장|계좌/],["신분증",/신분증/],["계약서",/계약서|계약/],["근로확인",/근로\s*확인|서식\s*3\b/],["출근부",/출근/],["활동보고",/활동\s*보고|서식\s*5\b/],["회의록",/회의록|서식\s*6\b/],["출장",/출장/],["지급신청",/지급\s*신청|서식\s*9\b/],["이력서",/이력/],["동의서",/동의서|서식\s*2\b/],["이체",/이체/],["영수증",/영수증|매출|전표|카드/],["결재",/결재|기안|품의|원인행위|서식\s*1\b/],["재학증명",/재학/],["추천서",/추천/],["계획서",/계획서/],["거래명세",/거래\s*명세|거래내역/],["수령확인",/수령/],["보증보험",/보증/],["입찰",/입찰/],["사유서",/사유서|서식\s*11/],["명부",/명부/],["원천징수",/원천/],["성과평가",/평가/],["체크리스트",/체크리스트|서식\s*23/],["결과보고서",/결과\s*보고/]];
+function seenNames(){return FILES.map(function(f){return f.name}).concat(OTHERS.map(function(o){return o.name})).concat(AIX.seen||[])}
+function guessDocs(quiet){
+  if(!res&&typeof check==="function")res=check();
+  var docs=docList(),names=seenNames(),hit=0;
+  if(!names.length)return;
+  docs.forEach(function(d,i){
+    var key=C.type+":"+i;if(C.docs[key])return;
+    var ts=TERMS.filter(function(t){return d.indexOf(t[0])>=0});
+    if(!ts.length)return;
+    var ok=ts.every(function(t){return names.some(function(n){return t[1].test(n)})});
+    if(ok){C.docs[key]=true;hit++}
+  });
+  if(hit){update();if(!quiet||hit)toast("제출서류 "+hit+"건을 구비로 표시했습니다(파일명·판독 기준). 내용은 직접 확인하세요.")}
+  else update();
+}
+
+/* ═════════ 모달 · 다운로드 ═════════ */
+function openModal(o){
+  var wrap=document.createElement("div");wrap.className="te-wrap";
+  wrap.innerHTML="<div class='te' role='dialog' aria-modal='true' aria-label='"+esc(o.title)+"' style='width:min("+(o.wide?960:640)+"px,100%)'><div class='te-h'><h3>"+esc(o.title)+"</h3><button class='link' data-x type='button' aria-label='닫기'>✕ 닫기</button></div><div class='mdl-body'></div><div class='te-f'></div></div>";
+  var bodyEl=wrap.querySelector(".mdl-body");if(typeof o.body==="string")bodyEl.innerHTML=o.body;else bodyEl.appendChild(o.body);
+  var f=wrap.querySelector(".te-f");
+  (o.foot||[]).forEach(function(b){var el=document.createElement("button");el.type="button";el.textContent=b.label;if(b.primary)el.className="primary";el.onclick=function(){b.onclick&&b.onclick(close)};f.appendChild(el)});
+  var last=document.activeElement;
+  var kd=function(e){if(e.key==="Escape")close()};
+  function close(){document.removeEventListener("keydown",kd);wrap.remove();try{last&&last.focus&&last.focus()}catch(e){}}
+  document.addEventListener("keydown",kd);
+  wrap.addEventListener("mousedown",function(e){if(e.target===wrap)close()});
+  wrap.querySelector("[data-x]").onclick=close;
+  document.body.appendChild(wrap);
+  if(o.onOpen)o.onOpen(wrap,close);
+  var first=wrap.querySelector("input:not([disabled]),select,textarea,.te-f button.primary")||wrap.querySelector("[data-x]");try{first.focus()}catch(e){}
+  return close;
+}
+var IN_ART=!!(window.claude&&window.claude.use);
+function download(name,data,type){
+  if(IN_ART){
+    claude.use("downloads").then(function(d){
+      if(!d){toast("이 화면에서는 파일 저장을 쓸 수 없습니다.");return}
+      d.save({filename:name,data:data instanceof Blob?data:new Blob([data],{type:type||"text/plain"})}).catch(function(e){if(!e||e.code!=="declined")toast("저장하지 못했습니다.")});
+    }).catch(function(){toast("이 화면에서는 파일 저장을 쓸 수 없습니다.")});return;
+  }
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:type||"text/plain"}));a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
+}
+var fmtTs=function(t){var d=new Date(t),p=function(n){return ("0"+n).slice(-2)};return d.getFullYear()+". "+p(d.getMonth()+1)+". "+p(d.getDate())+". "+p(d.getHours())+":"+p(d.getMinutes())};
+
+/* ═════════ 연결 방식 (본인 Claude 계정 · 채팅창 · API 키 · 기본 규칙) ═════════ */
+var ART_URL="https://claude.ai/artifact/Gax5WaBLDCgsni7zwPjYJU";
+var MODELS=[["claude-sonnet-5-5","Sonnet 5.5 · 균형"],["claude-haiku-5-5","Haiku 5.5 · 빠름"],["claude-opus-5-5","Opus 5.5 · 정밀"]];
+var MODE_LABEL={account:"본인 Claude 계정",chat:"Claude 채팅창",apikey:"Claude API 키",rules:"AI 없이 기본 규칙"};
+var BASIS=[["사업비 관리 지침(수정안)","2026. 10. 28."],["앵커 사업비 지침","4차 개정"],["서울 앵커 기준","3차 개정"],["산학연 매뉴얼","5차 개정"],["산단 내규","4차 개정"],["구매계약업무요강","28차 개정"],["검수요강","23차 개정"]];
+var sampleFn=null,imgLimits=null,ctl=null,acctReady=null,acctWhy=null;
+var mode=LS.get("jbg.mode")||null,apiModel=LS.get("jbg.model")||MODELS[0][0],apiKey=LS.get("jbg.key")||"";
+function renderBasis(){$("#basisList").innerHTML=BASIS.map(function(b){return "<li><span>"+esc(b[0])+"</span><b>"+esc(b[1])+"</b></li>"}).join("")}
+function renderConn(){
+  var m=mode||"rules",pill=$("#modePill"),label=MODE_LABEL[m],cls="ai-pill",tip="",off=false;
+  if(m==="account"){
+    if(acctReady===null)label="확인 중";
+    else if(acctReady){cls+=" on";tip="본인 Claude 계정으로 지출서류 이미지·PDF를 읽습니다. 사용량은 본인 한도에서 차감됩니다."+(imgLimits?"":" 이 화면에서는 이미지를 보낼 수 없어 글로 붙여 넣은 내용만 읽습니다.")}
+    else{cls+=" off";off=true;label="본인 계정 연결 안 됨";tip={nofile:"내려받은 HTML 파일로 열려 본인 계정 연결을 쓸 수 없습니다. ‘다른 연결 방식’에서 채팅창이나 API 키를 고르세요.",denied:"이 페이지의 Claude 사용이 거부되어 있습니다. ‘연결 세부 설정’에서 권한을 여세요.",unavail:"Claude를 쓸 수 없습니다. claude.ai에 로그인한 뒤 새로 고침하거나 다른 연결 방식을 고르세요."}[acctWhy]||"본인 계정으로 연결할 수 없습니다."}
+  }else if(m==="apikey"){
+    if(apiKey){cls+=" on";label="API 키 · "+((MODELS.filter(function(x){return x[0]===apiModel})[0]||[0,apiModel])[1].split(" ·")[0]);tip="이 브라우저에서 Anthropic으로 직접 보냅니다. 요금은 키 소유자 계정에 부과됩니다."}
+    else{cls+=" off";off=true;label="API 키 입력 필요";tip="‘연결 세부 설정’에서 API 키를 입력하세요."}
+  }else if(m==="chat"){cls+=" on";tip="‘서류 점검하기’를 누르면 요청문을 복사해 claude.ai 채팅창에 붙여 넣는 창이 열립니다. 서류 파일은 채팅창에 직접 첨부하세요."}
+  else tip="AI 없이 입력값과 파일명으로 규칙 점검만 합니다. 서류 이미지는 읽지 않습니다.";
+  pill.textContent=label;pill.className=cls;$("#aiTip").textContent=tip;
+  $$("#qm [data-m]").forEach(function(b){b.setAttribute("aria-checked",String(b.dataset.m===m));b.classList.toggle("dis",b.dataset.m==="account"&&acctReady!==true)});
+  var T={account:["본인 Claude 계정 연결됨","claude.ai 계정으로 지출서류를 읽습니다"],chat:["Claude 채팅창 이용 중","요청문을 claude.ai 채팅에 붙여 넣는 방식"],apikey:["Claude API 키 이용 중","이 브라우저에서 Anthropic으로 직접 보냅니다"],rules:["AI 없이 기본 규칙 사용 중","입력값·파일명으로 규칙 점검만 합니다"]}[m];
+  var ti=T[0],su=T[1];
+  if(m==="account"&&acctReady!==true){ti=acctReady===null?"연결 확인 중":"본인 계정 연결 안 됨";su=acctReady===null?"":"claude.ai 링크로 열어야 쓸 수 있습니다"}
+  if(m==="apikey"&&!apiKey){ti="API 키 입력 필요";su="‘연결 세부 설정’에서 키를 입력하세요"}
+  $("#ccTitle").textContent=ti;$("#ccSub").textContent=su;$("#connCard").classList.toggle("off",off);$("#ccOpen").hidden=IN_ART;
+}
+$("#aiChip").addEventListener("click",function(e){e.stopPropagation();var p=$("#aiPop");p.hidden=!p.hidden;this.setAttribute("aria-expanded",String(!p.hidden))});
+document.addEventListener("click",function(e){var p=$("#aiPop");if(!p.hidden&&!p.contains(e.target)&&!$("#aiChip").contains(e.target)){p.hidden=true;$("#aiChip").setAttribute("aria-expanded","false")}});
+$$("#qm [data-m]").forEach(function(b){b.addEventListener("click",async function(){
+  var v=b.dataset.m;
+  if(v==="apikey"&&!apiKey){openConn();return}
+  if(v==="account"&&acctReady!==true){toast(acctWhy==="nofile"?"이 화면(내려받은 파일 등)에서는 쓸 수 없습니다. claude.ai 링크로 열어야 합니다.":"권한이 필요합니다. ‘연결 세부 설정’에서 권한을 여세요.");return}
+  mode=v;LS.set("jbg.mode",v);renderConn();toast("연결 방식: "+MODE_LABEL[v]);
+})});
+function openConn(){
+  var cur=mode||"rules";
+  var body="<p class='mdl-note'>현재 방식: <b>"+MODE_LABEL[cur]+"</b>. 본인 Claude 계정은 claude.ai 링크로 열면 자동 연결됩니다. 내려받은 HTML 파일에서는 API 키를 쓰세요.</p>"+
+   "<h4>Claude API 키</h4><input type='password' id='cmKey' placeholder='sk-ant-… (API 키)' autocomplete='off' value='"+esc(apiKey)+"'>"+
+   "<label class='mdl-note'>모델 <select id='cmModel'>"+MODELS.map(function(m){return "<option value='"+m[0]+"'"+(m[0]===apiModel?" selected":"")+">"+m[1]+"</option>"}).join("")+"</select></label>"+
+   "<label class='chk2'><input type='checkbox' id='cmRem'"+(LS.get("jbg.key")?" checked":"")+"> 이 기기에 키 기억 (공용 PC에서는 끄세요)</label>"+
+   "<p class='mdl-note'>키는 이 브라우저에서 Anthropic으로만 전송됩니다. API 요금은 별도입니다.</p>"+
+   (IN_ART?"<h4>본인 Claude 계정 권한</h4><div class='mdl-row'><button type='button' id='cmPerm'>권한 설정 열기</button></div>":"");
+  openModal({title:"연결 세부 설정",body:body,foot:[
+    {label:"API 키 사용으로 적용",primary:true,onclick:function(close){var w=document.querySelector(".te-wrap");var k=(w.querySelector("#cmKey").value||"").trim();if(!k){toast("API 키를 입력하세요.");return}apiKey=k;apiModel=w.querySelector("#cmModel").value;LS.set("jbg.model",apiModel);if(w.querySelector("#cmRem").checked)LS.set("jbg.key",k);else{try{localStorage.removeItem("jbg.key")}catch(e){}}mode="apikey";LS.set("jbg.mode",mode);renderConn();close();toast("연결 방식: Claude API 키")}},
+    {label:"닫기",onclick:function(c){c()}}],
+   onOpen:function(w){var pb=w.querySelector("#cmPerm");if(pb)pb.onclick=async function(){var pm=null;try{pm=await claude.use("permissions")}catch(e){}if(!pm){toast("이 화면에서는 권한 설정을 열 수 없습니다. 페이지 메뉴의 ‘권한(Permissions)’을 확인하세요.");return}try{await pm.manage()}catch(e){toast("권한 창을 열지 못했습니다.");return}toast("권한이 바뀌었다면 페이지를 새로 고침하세요.")}}});
+}
+$("#modeBtn").onclick=openConn;
+if(IN_ART){
+  claude.use("sample").then(async function(sm){
+    sampleFn=sm;
+    if(sm){var lim=await sm.limits().catch(function(){return null});imgLimits=(lim&&lim.images)||null;acctReady=true}
+    else{acctReady=false;var st=null;try{var pm=await claude.use("permissions");st=pm?await pm.state("sample"):null}catch(e){}acctWhy=st==="denied"?"denied":"unavail"}
+    if(!mode)mode=acctReady?"account":"rules";renderConn();
+  }).catch(function(){acctReady=false;acctWhy="unavail";if(!mode)mode="rules";renderConn()});
+}else{acctReady=false;acctWhy="nofile";if(!mode)mode="rules"}
+
+/* ═════════ 요청문 · 판독 · 결과 적용 ═════════ */
+function maskPII(t){
+  var map=[],n=0;
+  var rep=function(re,tag){t=t.replace(re,function(m){var k="«"+tag+(++n)+"»";map.push([k,m]);return k})};
+  rep(/\b\d{6}-?[1-4]\d{6}\b/g,"주민");rep(/\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b/g,"카드");rep(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g,"메일");
+  return {text:t,restore:function(s){map.forEach(function(p){s=String(s).split(p[0]).join(p[1])});return s}};
+}
+function maskedText(){var t=$("#pasteIn").value||"";return $("#maskOn").checked?maskPII(t):{text:t,restore:function(s){return s}}}
+function polite(t){
+  var M={"이다":"입니다","한다":"합니다","된다":"됩니다","있다":"있습니다","없다":"없습니다","않다":"않습니다","같다":"같습니다","높다":"높습니다","낮다":"낮습니다","많다":"많습니다","적다":"적습니다","크다":"큽니다","필요하다":"필요합니다","부족하다":"부족합니다","누락됐다":"누락되었습니다"};
+  return String(t||"").replace(/(필요하다|부족하다|누락됐다|이다|한다|된다|있다|없다|않다|같다|높다|낮다|많다|적다|크다)(?=[.!)\]]|\s*$|\n)/g,function(m,a){return M[a]||m});
+}
+function typeIds(){return TYPES.map(function(t){return t[0]+": "+t[1]}).join("\n")}
+function specGuide(){var L=SPEC[C.type]||[];return L.length?L.map(function(f){return f[0]+"("+f[1]+(f[1]==="sel"?":"+f[3].map(function(o){return o[0]}).join("|"):"")+") = "+f[2]}).join("\n"):"(없음)"}
+function buildPrompt(masker,forChat){
+  var roles=FILES.map(function(f,i){return "이미지 "+(i+1)+": "+(ROLES.filter(function(r){return r[0]===f.role})[0]||["","기타"])[1]+" ("+f.name+")"}).join("\n")||"(이미지 없음)";
+  var oth=OTHERS.length?OTHERS.slice(0,60).map(function(o){return o.name}).join("\n"):"(없음)";
+  var info={집행항목:typeLabel(),금액:amt()||"미입력",지급방식:(PAYS.filter(function(p){return p[0]===C.pay})[0]||[])[1],시행품의결재일:C.dProp||"미입력",수행계약일:C.dStart||"미입력",납품완료일:C.dDeliv||"미입력",검수일:C.dInsp||"미입력",지출일:C.dPay||"미입력",거래처:C.payee||"미입력"};
+  var docs=docList().map(function(d,i){return i+". "+d}).join("\n");
+  return "당신은 교육부·서울시 보조금 회계감사를 오래 맡아 온 최고 수준의 점검관입니다. 건국대학교 ANCHOR사업단 담당자가 제출한 지출서류를 감사관의 눈으로 점검합니다.\n\n"+
+"[제출 파일]\n"+(forChat?"(채팅창에 첨부한 파일을 순서대로 이미지 1, 2, … 로 보고 아래 구분을 따르세요)\n":"")+roles+"\n\n[압축파일·기타 파일 이름]\n"+oth+"\n\n[담당자가 입력한 정보]\n"+JSON.stringify(info,null,1)+"\n\n[붙여 넣은 텍스트]\n"+(masker.text.trim()||"(없음)")+"\n\n"+
+"[집행 항목 선택지]\n"+typeIds()+"\n\n[선택된 항목의 제출서류 목록(번호)]\n"+docs+"\n\n[선택된 항목의 세부 입력 키]\n"+specGuide()+"\n\n"+
+"[핵심 기준 — 건국대 ANCHOR 사업비 관리 지침(2026.10.)]\n- 시행품의 결재 후 사업 수행, 지출 원인행위와 거래는 같은 사업연도(3.1~2월 말) 안에. 결재선: 500만 이하 센터장 / 500만 초과~1억 이하 사업부단장 / 1억 초과 사업단장.\n- 지급: e나라도움 전용카드·세금계산서 기반 계좌이체. 개인 지급 경비는 수혜자 직접 이체. 간이영수증·개인카드 불인정. 사용제한 업종(유흥·위생·레저·사행) 불가.\n- 물품 500만 미만 견적서 / 500만~2천만 비교견적(1천만 이상 계약서) / 2천만 이상 입찰·보증보험. 용역·라이선스 1천만·2천만 기준. 검수조서 [서식22] 후 지급. 3천만 원 이상 장비는 서울앵커센터 사전승인.\n- 일용임금 시급 학부 12,000·석사 18,000·박사 20,000, 1일 8시간. 인재지원금 월 130만·230만·300만. 전문가 활용비 동일인 연 1,000만, 회의 식대 내부 3만·외부 5만, 시상금 1등 250만.\n\n"+
+"[할 일]\n1. 서류에서 값을 읽어 fields에 넣으세요. 보이지 않는 값은 지어내지 말고 null로 두세요. 금액은 숫자(원), 날짜는 YYYY-MM-DD. type은 위 선택지의 id, pay는 enara|transfer|corp|cash|personal|simple, appr는 0(센터장)|1(사업부단장)|2(사업단장) 중 결재선이 보이면.\n2. docsSeen: 이미지·텍스트·파일명에서 실제로 확인되는 서류의 종류 이름을 문자열 배열로(예: \"견적서\",\"세금계산서\",\"검수조서\",\"통장 사본\").\n3. observations: 감사에서 지적될 만한 서류상의 문제를 최대 12개. 금액·부가세·합계 불일치, 날짜 선후 이상, 직인·서명 누락, 간이영수증, 제한업종 가맹점, 거래처·품명 불일치, 들러리 견적 신호, 분할 발주 의심 등. s는 bad|warn|chk, cat은 \"서류 판독(AI)\", r은 문서에서 본 구체적 근거 한 문장, fix는 보완 방법 한 문장.\n4. summary: 총평 2~3문장. flags: 감사 지적 가능성이 큰 사항(최대 6개).\n\n"+
+"[문체] 모든 문장은 ‘합니다체’로 통일하세요(~입니다/~합니다). 금액은 ‘1,234,000원’, 날짜는 ‘2026. 10. 1.’ 형식으로 씁니다.\n\n"+
+"[출력] 다른 말 없이 JSON 하나만:\n{\"fields\":{\"type\":\"\",\"amount\":0,\"pay\":\"\",\"payee\":\"\",\"appr\":null,\"dates\":{\"prop\":\"\",\"start\":\"\",\"deliv\":\"\",\"insp\":\"\",\"pay\":\"\"},\"spec\":{}},\"docsSeen\":[],\"observations\":[{\"cat\":\"서류 판독(AI)\",\"s\":\"bad\",\"title\":\"\",\"r\":\"\",\"fix\":\"\"}],\"summary\":\"\",\"flags\":[]}";
+}
+function parseJson(t){
+  var a=t.indexOf("{"),b=t.lastIndexOf("}");var bad=function(){var e=new Error("json");e.code="invalid_json";return e};
+  if(a<0||b<=a)throw bad();try{return JSON.parse(t.slice(a,b+1))}catch(e){throw bad()}
+}
+function normDate(x){x=String(x||"").trim();var m=x.match(/^(\d{4})[-.\/ ]+(\d{1,2})[-.\/ ]+(\d{1,2})/);return m?m[1]+"-"+("0"+m[2]).slice(-2)+"-"+("0"+m[3]).slice(-2):""}
+function applyAi(out,restore){
+  var R0=restore||function(x){return x},R=function(x){return polite(R0(String(x||"")))};
+  var f=(out&&out.fields)||out||{};
+  if(f.type&&TYPES.some(function(t){return t[0]===f.type})&&f.type!==C.type){C.type=f.type;C.s={}}
+  var A=Math.round(+f.amount);if(A>0)C.amount=String(A);
+  if(PAYS.some(function(p){return p[0]===f.pay}))C.pay=f.pay;
+  if(f.payee)C.payee=R0(String(f.payee)).slice(0,60);
+  var d=f.dates||{};[["prop","dProp"],["start","dStart"],["deliv","dDeliv"],["insp","dInsp"],["pay","dPay"]].forEach(function(k){var v=normDate(d[k[0]]);if(v)C[k[1]]=v});
+  if(f.appr!==null&&f.appr!==undefined&&f.appr!==""&&[0,1,2].indexOf(+f.appr)>=0)C.appr=String(+f.appr);
+  var sp=f.spec||{};(SPEC[C.type]||[]).forEach(function(fd){var v=sp[fd[0]];if(v===undefined||v===null||v==="")return;
+    if(fd[1]==="num"){var n=parseFloat(String(v).replace(/[^0-9.]/g,""));if(n)C.s[fd[0]]=String(n)}
+    else if(fd[1]==="sel"){if(fd[3].some(function(o){return o[0]===v}))C.s[fd[0]]=v}
+    else if(typeof v==="boolean")C.s[fd[0]]=v});
+  AIX={items:(Array.isArray(out.observations)?out.observations:[]).slice(0,12).filter(function(o){return o&&["bad","warn","chk","ok"].indexOf(o.s)>=0&&o.title}).map(function(o){return {s:o.s,title:R(o.title).slice(0,80),r:R(o.r),fix:R(o.fix)}}),
+    summary:R(out.summary),flags:(Array.isArray(out.flags)?out.flags:[]).slice(0,6).map(R),seen:(Array.isArray(out.docsSeen)?out.docsSeen:[]).map(function(x){return String(x)}).slice(0,60)};
+  fillForm();guessDocs(true);
+}
+async function blobB64(b){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(",")[1])};r.onerror=rej;r.readAsDataURL(b)})}
+async function apiCall(prompt,imgs,signal){
+  var content=[];for(var i=0;i<imgs.length;i++)content.push({type:"image",source:{type:"base64",media_type:imgs[i].type||"image/jpeg",data:await blobB64(imgs[i])}});
+  content.push({type:"text",text:prompt});
+  var r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",signal:signal,headers:{"content-type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:apiModel,max_tokens:8000,messages:[{role:"user",content:content}]})});
+  if(!r.ok){var e=new Error("api");e.code=r.status===401||r.status===403?"bad_key":r.status===429?"rate_limited":r.status===413?"prompt_too_large":"api_error";throw e}
+  var j=await r.json();return parseJson((j.content||[]).filter(function(c){return c.type==="text"}).map(function(c){return c.text}).join(""));
+}
+function openChatFlow(title){
+  var masker=maskedText(),prompt=buildPrompt(masker,true),other=/다른 AI/.test(title);
+  var names=FILES.map(function(f,i){return (i+1)+". "+esc(f.name)}).join(" · ");
+  var body="<ol class='cf-steps'><li><b>요청문 복사</b>를 누르고 "+(other?"사용할 AI 채팅창":"Claude 채팅창(claude.ai)")+"을 엽니다.</li><li>채팅창에 붙여 넣어 보냅니다. 서류 이미지·PDF는 요청문에 담기지 않으니 <b>채팅창에 직접 첨부</b>하세요"+(FILES.length?" (지금 올린 파일: "+names+")":"")+".</li><li>"+(other?"AI":"Claude")+"의 답(JSON)을 전부 복사해 아래 칸에 붙여 넣고 <b>결과 적용</b>을 누릅니다.</li></ol>"+
+   "<div class='mdl-row'><button class='primary' id='chCopy' type='button' style='background:var(--btn);color:#fff;border-color:var(--btn);font-weight:700'>① 요청문 복사</button><span class='mdl-note'>"+prompt.length.toLocaleString("ko-KR")+"자</span><a class='btn g s' href='https://claude.ai/new' target='_blank' rel='noopener'>Claude 새 채팅 열기 ↗</a></div>"+
+   "<details><summary style='cursor:pointer;color:var(--brand);font-weight:700'>요청문 보기</summary><textarea readonly style='min-height:160px;width:100%'>"+esc(prompt)+"</textarea></details>"+
+   "<h4>② "+(other?"AI":"Claude")+" 답 붙여넣기</h4><textarea id='chIn' placeholder='{\"fields\":{…}} 형태의 답을 그대로 붙여 넣으세요. 앞뒤 설명이나 json 코드 표시가 있어도 됩니다.'></textarea>"+
+   "<p class='mdl-note'>"+(other?"다른 AI는 학교 계정 보안·개인정보 처리 기준이 다를 수 있습니다. 민감한 서류는 개인정보 가림을 켜고, ":"")+"결과는 반드시 직접 확인하세요. 답이 끊기면 ‘계속’이라고 보내거나 나누어 요청하세요.</p>";
+  openModal({title:title,body:body,wide:true,foot:[{label:"취소",onclick:function(c){c()}},{label:"③ 결과 적용",primary:true,onclick:function(close){var w=document.querySelector(".te-wrap");try{var out=parseJson(w.querySelector("#chIn").value);applyAi(out,masker.restore);logRun("chat");close();toast("결과를 적용했습니다.")}catch(e){toast("JSON 형식이 아닙니다. AI의 답 전체를 붙여 넣었는지 확인하세요.")}}}],
+   onOpen:function(w){w.querySelector("#chCopy").onclick=function(){copyText(prompt)}}});
+}
+$("#otherAiBtn").onclick=function(){$("#aiPop").hidden=true;openChatFlow("다른 AI용 프롬프트")};
+var busyT=0;
+async function runCheck(){
+  var m=mode||"rules",btn=$("#runBtn"),hasInput=FILES.length||($("#pasteIn").value||"").trim()||OTHERS.length;
+  if(!hasInput){toast("지출서류를 올리거나 내용을 붙여 넣으세요. 규칙 점검은 입력만으로도 이미 표시됩니다.");update();return}
+  if(m==="rules"){guessDocs();setIn("AI 없이 입력값·파일명으로만 점검했습니다. 서류를 읽게 하려면 상단 AI 연결에서 방식을 고르세요.");logRun("rules");return}
+  if(m==="chat"){openChatFlow("Claude 채팅창으로 점검");return}
+  if(m==="account"&&!sampleFn){toast("본인 Claude 계정은 claude.ai 링크로 열 때만 쓸 수 있습니다. 연결 방식을 바꿔 주세요.");$("#aiPop").hidden=false;return}
+  if(m==="apikey"&&!apiKey){toast("API 키를 입력하세요.");openConn();return}
+  var imgs=FILES.map(function(f){return f.blob});
+  if(m==="account"&&imgs.length&&!imgLimits){setIn("이 화면에서는 이미지를 보낼 수 없습니다. 내용을 글로 붙여 넣어 주세요.");return}
+  if(m==="account"&&imgLimits&&imgs.length>imgLimits.maxCount){toast("이미지는 한 번에 "+imgLimits.maxCount+"장까지 보낼 수 있습니다. 일부를 삭제하거나 나누어 점검하세요.");return}
+  var masker=maskedText(),prompt=buildPrompt(masker,false);
+  ctl=new AbortController();btn.disabled=true;$("#stopBtn").hidden=false;
+  var t0=Date.now();clearInterval(busyT);busyT=setInterval(function(){setIn("서류를 읽는 중… "+Math.round((Date.now()-t0)/1000)+"초");$("#inMsg").className="hint spin"},500);
+  try{
+    var out=m==="account"?await sampleFn.json(prompt,{images:imgs.length?imgs:undefined,signal:ctl.signal,modelTier:"default"}):await apiCall(prompt,imgs,ctl.signal);
+    applyAi(out,masker.restore);logRun(m);
+    setIn("서류 판독을 마쳤습니다. 입력 칸 값과 결과를 원본 서류와 대조해 주세요.");
+  }catch(e){
+    var msg={cancelled:"점검을 중지했습니다.",rate_limited:"요청이 많습니다. 잠시 후 다시 시도하세요.",invalid_json:"결과 형식이 올바르지 않습니다. 다시 시도하세요.",refused:"이 내용은 점검할 수 없습니다.",session_expired:"다시 로그인한 뒤 시도하세요.",prompt_too_large:"서류가 너무 깁니다. 나누어 점검하세요.",image_rejected:"읽을 수 없는 이미지가 있습니다. 다른 파일로 바꿔 주세요.",bad_key:"API 키가 맞지 않습니다. 연결 세부 설정에서 키를 확인하세요.",api_error:"API 호출에 실패했습니다. 잠시 후 다시 시도하세요."}[e&&e.code];
+    if(e&&e.name==="AbortError")setIn("점검을 중지했습니다.");
+    else if(["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].indexOf(e&&e.code)>=0){sampleFn=null;acctReady=false;acctWhy=e.code==="not_granted"?"denied":"unavail";renderConn();setIn("Claude를 쓸 수 없어 입력값·파일명으로 기본 점검만 했습니다.")}
+    else setIn(msg||"점검 중 오류가 났습니다. 다시 시도하세요.");
+  }finally{clearInterval(busyT);$("#inMsg").className="hint";btn.disabled=false;$("#stopBtn").hidden=true}
+}
+$("#runBtn").onclick=runCheck;
+$("#stopBtn").onclick=function(){ctl&&ctl.abort()};
+document.addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&e.key==="Enter"&&!$("#p-check").hidden){e.preventDefault();$("#runBtn").click()}});
+
+/* ═════════ 점검 이력 · 도움말 ═════════ */
+function logRun(m){
+  var h=[];try{h=JSON.parse(LS.get("jbg.hist")||"[]")}catch(e){}
+  h.unshift({ts:Date.now(),mode:m,type:typeLabel(),files:FILES.length,issues:res?res.R.filter(function(r){return r.st==="bad"||r.st==="warn"}).length:0});
+  LS.set("jbg.hist",JSON.stringify(h.slice(0,100)));
+}
+$("#histBtn").onclick=function(){
+  $("#aiPop").hidden=true;var h=[];try{h=JSON.parse(LS.get("jbg.hist")||"[]")}catch(e){}
+  var body="<p class='mdl-note'>이 기록은 이 브라우저에만 남습니다. 서류와 입력 내용은 저장하지 않습니다.</p>"+(h.length?"<div class='mdl-scroll'><table class='mdl-t'><thead><tr><th>시각</th><th>방식</th><th>집행 항목</th><th>파일</th><th>지적</th></tr></thead><tbody>"+h.map(function(r){return "<tr><td class='n'>"+fmtTs(r.ts)+"</td><td>"+esc(MODE_LABEL[r.mode]||r.mode)+"</td><td>"+esc(r.type)+"</td><td class='n'>"+r.files+"</td><td class='n'>"+r.issues+"</td></tr>"}).join("")+"</tbody></table></div>":"<p>아직 점검 이력이 없습니다.</p>");
+  openModal({title:"점검 이력",body:body,wide:true,foot:[{label:"이력 지우기",onclick:function(c){try{localStorage.removeItem("jbg.hist")}catch(e){}c();toast("점검 이력을 지웠습니다.")}},{label:"닫기",primary:true,onclick:function(c){c()}}]});
+};
+$("#helpBtn").onclick=function(){
+  $("#aiPop").hidden=true;
+  openModal({title:"도움말",body:"<ol class='cf-steps'><li><b>지출서류 올리기</b> — 압축파일(.zip)·이미지·PDF를 올리거나 화면 캡처·스크린샷 붙여넣기로 추가합니다.</li><li><b>지출 건 입력</b> — 집행 항목·금액·지급 방식·일정을 입력하면 규칙 점검이 바로 표시됩니다. AI 연결 시 ‘서류 점검하기’가 서류에서 값을 읽어 채웁니다.</li><li><b>점검 결과</b> — 보완 필요·확인 필요·직접 확인·적합으로 구분됩니다.</li><li><b>제출서류 확인</b> — 파일명·판독으로 구비 서류를 추정해 표시합니다. 틀리면 체크를 직접 고치세요.</li><li><b>새 지출 세션</b> — 작업 메뉴의 ‘새 지출 세션’으로 다른 지출 건을 시작하면 지금 작업은 보관함에 남습니다.</li></ol><p class='mdl-note'>AI 판독 결과는 참고용 제안입니다. 최종 확인 책임은 담당자·결재권자에게 있습니다.</p>",foot:[{label:"닫기",primary:true,onclick:function(c){c()}}]});
+};
+
+/* ═════════ 지출 세션 · 보관함 ═════════ */
+var SESS_MAX=30;
+var newId=function(){return "j"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
+var curId=LS.get("jbg.cur")||newId(),manualTitle=null,loadedMeta=[],lastSnap="";
+function blankCase(t){return {type:t||"goods",amount:"",pay:"enara",appr:"0",payee:"",dProp:"",dStart:"",dDeliv:"",dInsp:"",dPay:"",s:{},c:{},docs:{}}}
+function snap(){return {C:C,AIX:AIX,paste:$("#pasteIn").value||"",files:FILES.map(function(f){return {name:f.name,role:f.role}}).concat(loadedMeta),others:OTHERS}}
+function applySnap(d){
+  C=Object.assign(blankCase(),d.C||{});C.s=C.s||{};C.c=C.c||{};C.docs=C.docs||{};
+  AIX=d.AIX||{items:[],summary:"",flags:[],seen:[]};
+  FILES.forEach(function(f){try{URL.revokeObjectURL(f.url)}catch(e){}});FILES=[];
+  loadedMeta=(d.files||[]).map(function(f){return {name:f.name+" (이전 세션 · 원본 미보관)",old:1}});
+  OTHERS=(d.others||[]).concat(loadedMeta.map(function(m){return {name:m.name}}));loadedMeta=[];
+  $("#pasteIn").value=d.paste||"";
+  renderFiles();fillForm();res=check();renderScope();renderItems();renderDocs();paper();
+}
+function vaultList(){try{return JSON.parse(LS.get("jbg.vault")||"[]")}catch(e){return []}}
+function defaultTitle(){return C.payee?C.payee+" · "+typeLabel():(typeLabel()+(amt()?" "+fmt(amt())+"원":""))}
+function vaultSave(){
+  var empty=!amt()&&!C.payee&&!FILES.length&&!OTHERS.length&&!($("#pasteIn").value||"").trim()&&!Object.keys(C.s).length&&!C.dProp&&!C.dStart&&!C.dPay;
+  if(empty)return;
+  var list=vaultList(),prev=list.filter(function(x){return x.id===curId})[0];
+  var title=manualTitle||(prev&&prev.manual?prev.title:defaultTitle());
+  list=list.filter(function(x){return x.id!==curId});
+  list.unshift({id:curId,ts:Date.now(),title:title,type:typeLabel(),amount:amt(),manual:!!(manualTitle||(prev&&prev.manual)),state:snap()});
+  LS.set("jbg.vault",JSON.stringify(list.slice(0,SESS_MAX)));updateVaultCnt();
+}
+var dsT=0;
+function draftSave(){
+  try{LS.set("jbg.draft",JSON.stringify(snap()))}catch(e){}
+  LS.set("jbg.cur",curId);clearTimeout(dsT);dsT=setTimeout(function(){vaultSave();renderSess()},500);
+}
+function updateVaultCnt(){var n=vaultList().length;var a=$("#vaultCnt"),b=$("#sessCnt");if(a)a.textContent=n;if(b)b.textContent=n}
+function renderSess(){
+  var l=vaultList();updateVaultCnt();
+  var nm=$("#sessName");if(nm&&document.activeElement!==nm)nm.value=manualTitle||((l.filter(function(x){return x.id===curId})[0]||{}).title)||defaultTitle();
+  $("#sessList").innerHTML=l.slice(0,6).map(function(x){return "<button type='button' data-ld='"+esc(x.id)+"'><span style='flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+esc(x.title)+(x.id===curId?" <b style='color:var(--ok)'>· 현재</b>":"")+"</span><small>"+fmtTs(x.ts)+"</small></button>"}).join("")||"<small style='padding:2px 10px;color:var(--mut)'>아직 보관된 작업이 없습니다.</small>";
+  $$("#sessList [data-ld]").forEach(function(b){b.onclick=function(){loadSession(b.dataset.ld);$("#workMenu").removeAttribute("open")}});
+}
+function loadSession(id){
+  var x=vaultList().filter(function(y){return y.id===id})[0];if(!x)return;
+  vaultSave();curId=x.id;LS.set("jbg.cur",curId);manualTitle=x.manual?x.title:null;applySnap(x.state);renderSess();toast("작업을 불러왔습니다.");
+}
+function newSession(){
+  vaultSave();curId=newId();LS.set("jbg.cur",curId);manualTitle=null;
+  applySnap({C:blankCase(C.type),AIX:{items:[],summary:"",flags:[],seen:[]},paste:"",files:[],others:[]});
+  setIn("");renderSess();toast("새 지출 세션을 시작했습니다. 이전 작업은 보관함에 있습니다.");
+}
+$("#sessNew").onclick=function(){$("#workMenu").removeAttribute("open");newSession()};
+$("#resetBtn").onclick=function(){$("#workMenu").removeAttribute("open");applySnap({C:blankCase(C.type),AIX:{items:[],summary:"",flags:[],seen:[]},paste:"",files:[],others:[]});toast("입력을 지웠습니다.")};
+$("#sampleBtn").onclick=function(){
+  $("#workMenu").removeAttribute("open");
+  applySnap({C:{type:"goods",amount:"7800000",pay:"personal",appr:"0",payee:"○○기획",dProp:"2026-09-10",dStart:"2026-09-05",dDeliv:"2026-12-20",dInsp:"2026-12-22",dPay:"2026-12-18",s:{method:"q",split:true},c:{},docs:{}},AIX:{items:[],summary:"",flags:[],seen:[]},paste:"",files:[],others:[{name:"견적서_○○기획.pdf"},{name:"세금계산서.jpg"}]});
+  guessDocs(true);toast("예시를 불러왔습니다");
+};
+$("#sessKeep").onclick=function(){var v=$("#sessName").value.trim();manualTitle=v||null;vaultSave();renderSess();toast("작업을 보관했습니다.")};
+function importJobs(text){
+  var d;try{d=JSON.parse(text)}catch(e){return 0}
+  var arr=Array.isArray(d)?d:[d],n=0,list=vaultList();
+  arr.forEach(function(j){var st=j&&(j.state||j);if(!st||!st.C)return;list.unshift({id:newId(),ts:j.ts||Date.now(),title:j.title||"가져온 작업",type:"",amount:0,manual:true,state:st});n++});
+  LS.set("jbg.vault",JSON.stringify(list.slice(0,SESS_MAX)));updateVaultCnt();renderSess();return n;
+}
+function openVault(){
+  $("#aiPop").hidden=true;$("#workMenu").removeAttribute("open");
+  var draw=function(){var l=vaultList();return "<p class='mdl-note'>작업(입력 내용·판독 결과·서류 구비 상태)은 입력하는 대로 이 브라우저에 자동 보관됩니다. 최근 "+SESS_MAX+"개까지 보관하며 다른 기기와는 공유되지 않습니다. 서류 이미지·PDF 원본은 보관하지 않습니다.</p>"+
+   (l.length?"<div class='mdl-scroll'><table class='mdl-t'><thead><tr><th>작업</th><th>저장 시각</th><th>금액</th><th></th></tr></thead><tbody>"+l.map(function(x){return "<tr><td>"+esc(x.title)+(x.id===curId?" <span class='chip ok'>현재</span>":"")+"</td><td class='n'>"+fmtTs(x.ts)+"</td><td class='n'>"+(x.amount?fmt(x.amount):"-")+"</td><td style='white-space:nowrap'><button data-ld='"+esc(x.id)+"'>불러오기</button> <button data-dl='"+esc(x.id)+"'>삭제</button></td></tr>"}).join("")+"</tbody></table></div>":"<p>아직 보관된 작업이 없습니다.</p>")+
+   "<h4>가져오기</h4><div class='mdl-row'><button id='vImpF' type='button'>작업 파일(JSON) 가져오기</button><span class='mdl-note'>‘작업 파일(JSON)로 저장’으로 내려받은 파일</span></div><input type='file' id='vImpIn' accept='application/json,.json' hidden>"};
+  openModal({title:"보관함",body:draw(),wide:true,foot:[{label:"새 지출 세션 시작",onclick:function(c){c();newSession()}},{label:"모두 지우기",onclick:function(c){LS.set("jbg.vault","[]");updateVaultCnt();renderSess();c();toast("보관함을 비웠습니다.")}},{label:"닫기",primary:true,onclick:function(c){c()}}],
+   onOpen:function(w,close){var body=w.querySelector(".mdl-body");
+    var wire=function(){
+      $$("[data-ld]",body).forEach(function(b){b.onclick=function(){loadSession(b.dataset.ld);close()}});
+      $$("[data-dl]",body).forEach(function(b){b.onclick=function(){LS.set("jbg.vault",JSON.stringify(vaultList().filter(function(y){return y.id!==b.dataset.dl})));updateVaultCnt();renderSess();body.innerHTML=draw();wire()}});
+      body.querySelector("#vImpF").onclick=function(){body.querySelector("#vImpIn").click()};
+      body.querySelector("#vImpIn").onchange=async function(e){var f=e.target.files[0];if(!f)return;var n=importJobs(await f.text());toast(n?n+"개 작업을 가져왔습니다.":"읽을 수 있는 작업 파일이 아닙니다.");body.innerHTML=draw();wire()};
+    };wire()}});
+}
+$("#vaultBtn").onclick=openVault;$("#sessAll").onclick=openVault;
+$("#saveJsonBtn").onclick=function(){$("#expMenu").removeAttribute("open");download("지출김군_작업_"+new Date().toISOString().slice(0,10)+".json",JSON.stringify({app:"jichul",ts:Date.now(),title:defaultTitle(),state:snap()},null,1),"application/json");toast("작업 파일 저장을 요청했습니다.")};
+$("#saveTxtBtn").onclick=function(){$("#expMenu").removeAttribute("open");download("지출김군_점검결과_"+new Date().toISOString().slice(0,10)+".txt",plain());toast("텍스트 파일 저장을 요청했습니다.")};
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".mn-list button");if(b){var d=b.closest("details");if(d)d.removeAttribute("open")}});
+renderBasis();renderConn();
+(function(){var d=null;try{d=JSON.parse(LS.get("jbg.draft")||"null")}catch(e){}if(d&&d.C){C=Object.assign(blankCase(),d.C);AIX=d.AIX||AIX;OTHERS=(d.others||[]).concat((d.files||[]).map(function(f){return {name:f.name+" (이전 세션 · 원본 미보관)"}}));$("#pasteIn").value=d.paste||""}})();
+renderFiles();renderSess();
+
+fillForm();update();renderCL();renderCases();
+buildIdx();runSearch();
+show((location.hash||"").slice(1),true);
+})();
+</script>
+
+</body></html>
