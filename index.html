@@ -164,7 +164,7 @@ nav.gn a{white-space:nowrap;color:var(--fg);font-weight:700;font-size:14px;paddi
 nav.gn a:hover{color:var(--brand)}
 nav.gn a[aria-current=page]{color:var(--brand);border-bottom-color:var(--brand)}
 nav.gn a:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
-@media (max-width:900px){.ku-gnb{flex-wrap:wrap;row-gap:0;padding-bottom:0}nav.gn{order:10;flex:1 1 100%;margin:0;overflow-x:auto;max-width:100%}nav.gn a{padding:9px 12px}}
+@media (max-width:1180px){.ku-gnb{flex-wrap:wrap;row-gap:0;padding-bottom:0}nav.gn{order:10;flex:1 1 100%;margin:0;overflow-x:auto;max-width:100%}nav.gn a{padding:9px 12px}}
 .optbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px;padding:7px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
 .optbar .ob-t{font-weight:700;font-size:13px;color:var(--brand)}
 .optbar .tog{display:inline-flex;gap:6px;align-items:center;font-size:13px;cursor:pointer}
@@ -295,6 +295,68 @@ p,li,td,label,.lead,.hint,.fix,.it p,.paper p,.mdl-note,.prog small{line-height:
 .cam video{width:100%;max-height:60vh;background:#000;border-radius:4px}
 .chk2{display:flex;gap:8px;align-items:flex-start;font-size:13px}
 .sugg{margin-top:10px;padding:10px 14px;border-left:4px solid var(--warn);background:var(--warnbg);border-radius:0 8px 8px 0;font-size:13.5px}.sugg small{display:block;color:var(--mut);margin-top:2px;line-height:1.6}
+h2.sec small{margin-left:10px}
+.vis{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.vis{grid-template-columns:minmax(0,1fr)}}
+.vl{min-width:0}.vr{min-width:0;display:grid;gap:8px}
+.vstrip{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px}
+.vth{position:relative;flex:0 0 auto;width:64px;height:64px;border:2px solid var(--line);border-radius:6px;padding:0;background:var(--card);cursor:pointer;overflow:hidden}
+.vth.on{border-color:var(--brand)}.vth img{width:100%;height:100%;object-fit:cover;display:block}
+.vth b{position:absolute;right:2px;top:2px;min-width:18px;height:18px;border-radius:9px;background:#d92d20;color:#fff;font-size:11px;display:grid;place-items:center;padding:0 4px}
+.vname{font-size:12.5px;color:var(--mut);margin-bottom:6px}
+.vimg{position:relative;display:block;max-width:100%;line-height:0}
+.vimg img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+.vbox{position:absolute;border:3px solid #d92d20;border-radius:4px;box-shadow:0 0 0 2px rgba(255,255,255,.85);cursor:pointer;background:rgba(217,45,32,.08)}
+.vbox.warn{border-color:#e08a00;background:rgba(224,138,0,.1)}.vbox.chk{border-color:#2f6fd6;background:rgba(47,111,214,.1)}.vbox.ok{border-color:#1d8a4f;background:rgba(29,138,79,.1)}
+.vbox b{position:absolute;left:-3px;top:-24px;min-width:22px;height:22px;border-radius:11px;background:#d92d20;color:#fff;font-size:12px;line-height:22px;text-align:center;padding:0 5px}
+.vbox.warn b{background:#e08a00}.vbox.chk b{background:#2f6fd6}.vbox.ok b{background:#1d8a4f}
+.vbox.hl{box-shadow:0 0 0 3px var(--card),0 0 0 6px #d92d20;animation:vp 1s ease-in-out 2}
+@keyframes vp{50%{background:rgba(217,45,32,.3)}}
+@media (prefers-reduced-motion:reduce){.vbox.hl{animation:none}}
+.vnum{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:10px;background:#d92d20;color:#fff;font-size:11px;margin-right:4px;padding:0 4px}
+.vnum.warn{background:#e08a00}.vnum.chk{background:#2f6fd6}.vnum.ok{background:#1d8a4f}
+.vr .it{cursor:pointer}.vr .it.on{outline:2px solid var(--brand)}
+.kv{background:rgba(255,200,0,.38);color:inherit;border-radius:3px;padding:0 2px;font-weight:700}
+.kw{color:var(--bad);font-weight:700;background:none}
+.keybox{border:1px solid var(--line);border-left:5px solid var(--bad);background:var(--badbg);border-radius:9px;padding:10px 12px;margin:0 0 12px}
+.keybox>b{display:block;margin-bottom:6px;font-size:14px}
+.keybox ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.keybox button{all:unset;box-sizing:border-box;display:block;width:100%;cursor:pointer;font-size:13px;line-height:1.65;padding:6px 8px;border-radius:7px;background:var(--card);border:1px solid var(--line)}
+.keybox button:hover,.keybox button:focus-visible{outline:2px solid var(--brand)}
+.keybox .chip{margin-right:6px}.keybox button b{margin-right:4px}.keybox button span.m{color:var(--mut)}
+@keyframes flash{0%,60%{box-shadow:0 0 0 3px var(--brand)}100%{box-shadow:0 0 0 0 transparent}}
+.it.flash{animation:flash 1.6s ease-out}
+@media (max-width:1400px) and (min-width:1181px){.ku-who span{display:none}nav.gn a{padding-left:10px;padding-right:10px}.ku-gnb{gap:8px}}
+.dock{position:fixed}
+.dkbar{position:absolute;left:0;right:0;top:-3px;height:3px;background:transparent;overflow:hidden}
+.dkbar i{display:block;height:100%;width:0;background:var(--brand);transition:width .35s ease}
+.dkbar.bad i{background:var(--bad)}
+.dkbar.ind i{width:30%!important;animation:ind 1.1s ease-in-out infinite alternate}
+.dkp{font-size:12.5px;font-weight:700;color:var(--brand);min-width:0;max-width:46ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.dkp.bad{color:var(--bad)}.dkp.ok{color:var(--ok)}
+.dkp.spin::before{width:10px;height:10px;border-width:2px;margin-right:6px}
+.sx{border:1px solid var(--line);border-radius:9px;margin:10px 0 0;background:var(--card)}
+.sx>summary{cursor:pointer;list-style:none;padding:9px 12px;font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:8px}
+.sx>summary::-webkit-details-marker{display:none}
+.sx>summary::before{content:"▸";color:var(--mut);font-size:11px;transition:transform .15s}
+.sx[open]>summary::before{transform:rotate(90deg)}
+.sx>summary small{margin-left:auto;font-weight:400;color:var(--mut);font-size:12px}
+.sx[open]>summary{border-bottom:1px solid var(--line)}
+.sx>.f,.sx>#common{padding:10px 12px}
+.flow{border:1px solid var(--line);border-radius:10px;padding:10px 12px 4px;margin:0 0 12px;background:var(--card)}
+.flow-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:8px}
+.flow-h b{font-size:14px}.flow-h small{color:var(--mut);font-size:12px}
+.fl{list-style:none;margin:0;padding:0}
+.fl li{position:relative;display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:4px 10px;padding:0 0 12px}
+.fl li:not(:last-child)::before{content:"";position:absolute;left:13px;top:28px;bottom:2px;width:2px;background:var(--line)}
+.fl .no{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;background:var(--nabg);color:var(--na);border:2px solid var(--na)}
+.fl .ok .no{background:var(--okbg);color:var(--ok);border-color:var(--ok)}
+.fl .bad .no{background:var(--badbg);color:var(--bad);border-color:var(--bad)}
+.fl .chk .no{background:var(--chkbg);color:var(--chk);border-color:var(--chk)}
+.fl .tt{font-weight:700;font-size:13.5px}.fl .tt small{font-weight:400;color:var(--mut);margin-left:6px;font-family:var(--mono);font-size:12px}
+.fl .ms{font-size:12.8px;line-height:1.65;color:var(--fg);margin-top:2px;text-wrap:pretty}
+.fl .dc{font-size:12px;color:var(--mut);margin-top:2px;line-height:1.6}
+.fl .chip{align-self:start}
 .prog{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:12px 14px;margin-top:10px}
 .prog-h{display:flex;align-items:center;gap:10px;font-weight:700;font-size:13.5px}
 .prog-h .sp{flex:1}
@@ -385,7 +447,10 @@ footer{margin-top:22px;color:var(--mut);font-size:11.5px;line-height:1.6}
     <details class="mn" id="scopeMenu"><summary>점검 항목 ▾</summary><div class="mn-list" id="scopeList"></div></details>
     <a class="lnk" href="https://coolzet-ai.github.io/kurule/konkuk-main-budget-guide.html" target="_blank" rel="noopener">규정김군에서 근거 보기 ↗</a>
   </div>
-  <section class="kcard" id="inPane" style="margin-bottom:16px">
+
+  <div class="grid">
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+  <section class="kcard" id="inPane">
     <header><span class="kstep">00</span><h2>지출서류 올리기</h2><span class="sub">압축파일(.zip) · 이미지 · PDF · 화면 캡처 · 붙여넣기</span></header>
     <div class="kbody">
       <div class="drop-zone" id="dropZone">
@@ -399,9 +464,11 @@ footer{margin-top:22px;color:var(--mut);font-size:11.5px;line-height:1.6}
       </div>
       <div class="shot-zone" id="shotZone" tabindex="0" role="button" aria-label="스크린샷 붙여넣기">스크린샷을 찍은 뒤 여기를 누르고 <b>Ctrl+V</b>(Mac은 ⌘+V)로 붙여 넣으세요. 페이지 어디서든 붙여넣기됩니다.</div>
       <div class="tray" id="tray"></div>
+      <div class="hint" id="txtList" style="margin-top:6px"></div>
       <div class="others" id="others"></div>
       <details class="more" style="margin-top:10px"><summary style="cursor:pointer;font-weight:700;color:var(--brand);font-size:13.5px">서류 내용을 글로 붙여 넣기 (선택)</summary>
-        <label class="l" style="margin-top:8px"><textarea id="pasteIn" rows="4" placeholder="결재 문서, 세금계산서, 이체 내역 등의 글을 붙여 넣으세요."></textarea></label>
+        <label class="l" style="margin-top:8px"><textarea id="pasteIn" rows="4" placeholder="지출결의서(지출 요구 결의서), 결재 문서, 세금계산서, 이체 내역 등의 글을 붙여 넣으세요."></textarea></label>
+        <div class="row" style="margin-top:6px"><button type="button" class="btn g s" id="resFill">지출결의서 내용으로 지출 건 입력 채우기</button><small class="hint">금액·거래처·지급 방식·결재선·지출일·예산과목을 읽어 비어 있는 칸만 채웁니다.</small></div>
         <label class="chkrow"><input type="checkbox" id="maskOn" checked><span>개인정보 가림 — 글로 붙여 넣은 내용의 주민등록번호·이메일·카드번호를 가려서 보냅니다(이미지·PDF는 가려지지 않습니다)</span></label>
       </details>
       <div class="prog" id="prog" hidden aria-live="polite"></div>
@@ -409,7 +476,6 @@ footer{margin-top:22px;color:var(--mut);font-size:11.5px;line-height:1.6}
       <div class="hint" id="inMsg" role="status" style="margin-top:8px"></div>
     </div>
   </section>
-  <div class="grid">
     <section class="kcard">
       <header><span class="kstep">01</span><h2>지출 건 입력</h2><span class="sub">입력할수록 점검이 정교해집니다</span></header>
       <div class="kbody">
@@ -417,26 +483,26 @@ footer{margin-top:22px;color:var(--mut);font-size:11.5px;line-height:1.6}
         <label class="l full">집행 항목(세목)<select id="type"></select></label>
         <label class="l">지출 금액(원, VAT 포함)<input id="amount" class="num" inputmode="numeric" placeholder="0"></label>
         <label class="l">지급 방식<select id="pay"></select></label>
+      </div>
+      <details class="sx" id="sxAd"><summary>결재·거래처·일정 <small id="sxA"></small></summary>
+      <div class="f">
         <label class="l">시행품의 결재 단계<select id="appr"></select></label>
         <label class="l">거래처·수령인(메모)<input id="payee" placeholder="예) ○○기획 / 홍길동"></label>
-      </div>
-      <h3>일정</h3>
-      <div class="f">
         <label class="l">시행품의 결재일<input type="date" id="dProp"></label>
         <label class="l">사업 수행·계약·발주일<input type="date" id="dStart"></label>
         <label class="l">납품·용역완료·행사일<input type="date" id="dDeliv"></label>
         <label class="l">검수 완료일<input type="date" id="dInsp"></label>
         <label class="l">지출(결제·이체)일<input type="date" id="dPay"></label>
-      </div>
+      </div></details>
       <div id="spec"></div>
-      <h3>공통 확인</h3>
-      <div id="common"></div>
+      <details class="sx" id="sxCm"><summary>공통 확인 <small id="sxC"></small></summary><div id="common"></div></details>
       </div>
     </section>
+    </div>
     <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
       <section class="kcard" id="resCard">
         <header><span class="kstep">02</span><h2>점검 결과</h2><span class="sub">보완해야 할 내용 · 점검사항</span></header>
-        <div class="kbody"><div id="aiSum" class="ai-sum"></div><div id="verdict"></div><div class="sum" id="sum"></div><div id="items"></div></div>
+        <div class="kbody"><div id="flow"></div><div id="aiSum" class="ai-sum"></div><div id="verdict"></div><div class="sum" id="sum"></div><div id="items"></div></div>
       </section>
       <section class="kcard">
         <header><span class="kstep">03</span><h2>제출서류 확인</h2><span class="sub">갖춘 서류는 체크</span></header>
@@ -445,6 +511,7 @@ footer{margin-top:22px;color:var(--mut);font-size:11.5px;line-height:1.6}
     </div>
   </div>
   <div class="dock" role="toolbar" aria-label="점검 작업">
+    <div class="dkbar" id="dkBar" hidden><i></i></div>
     <div class="dock-in">
       <details class="mn up" id="workMenu"><summary>작업 ▾</summary><div class="mn-list">
         <button id="sessNew" type="button" class="btn primary" style="background:var(--btn);color:#fff;font-weight:700">＋ 새 지출 세션<small style="color:#e6f3ec">지금 작업은 보관함에 남습니다</small></button>
@@ -460,6 +527,7 @@ footer{margin-top:22px;color:var(--mut);font-size:11.5px;line-height:1.6}
       </div></details>
       <button type="button" class="btn run" id="runBtn">서류 점검하기</button>
       <button type="button" class="btn g" id="stopBtn" hidden>중지</button>
+      <span class="dkp" id="dkp" hidden role="status"></span>
       <span class="status" id="dockStatus"></span>
       <span class="sp"></span>
       <details class="mn up r" id="expMenu"><summary class="primary">확정하고 복사 ▾</summary><div class="mn-list">
@@ -474,6 +542,12 @@ footer{margin-top:22px;color:var(--mut);font-size:11.5px;line-height:1.6}
       </div></details>
     </div>
   </div>
+</section>
+
+<section id="p-vis" hidden>
+  <h2 class="sec">서류 오류 보기 <small>AI가 오류로 본 부분을 서류 이미지에 표시합니다</small></h2>
+  <p class="lead">‘서류 점검하기’로 읽은 결과 중 서류에서 위치를 찾은 의견을 이미지 위에 번호 상자로 보여 줍니다. 표시 위치는 AI의 추정이라 실제와 조금 다를 수 있으니 원본과 대조해 주세요.</p>
+  <div id="visBody"></div>
 </section>
 
 <section id="p-form" hidden>
@@ -565,7 +639,7 @@ var TYPES=[
 ];
 var PERSONAL={ilyong:1,sangyong:1,bojik:1,seonggwa:1,janghak:1,jaeji:1,sisang:1,expert:1};
 var PAYS=[["enara","e나라도움 사업비 전용카드"],["transfer","계좌이체(세금계산서 근거 업체·수혜자 직접)"],["corp","산학협력단 법인카드"],["cash","현금(카드·이체 불가 사유)"],["personal","개인카드·개인 선결제 후 정산"],["simple","간이영수증만 있음"]];
-var APPR=[["0","센터장 전결"],["1","사업부단장 전결"],["2","총괄부단장 경유 → 사업단장"]];
+var APPR=[["0","센터장 전결"],["1","사업부단장(산학협력단장) 전결"],["2","총괄부단장 경유 → 사업단장"]];
 
 var COMMON=[
  ["related","사업계획서(단위과제) 내용과 직접 관련된 지출"],
@@ -605,7 +679,7 @@ var SPEC={
   ["heads","num","참석 인원(명)"],["ext","chk","외부 인원이 참석했다"],["liquor","chk","주류가 포함되어 있다"],["minutes","chk","회의록[서식6]에 참석자 자필서명이 있다"],["time","chk","행사·회의 일시·장소·안건이 회의록에 명확하다"]
  ],
  goods:[["method","sel","구매 방식",[["q","견적서(1부)"],["c","비교견적"],["b","입찰"],["s","수의계약(업체지정)"]]],["split","chk","동일 물품·용도를 나누어 발주(쪼개기)했다"]],
- service:[["method","sel","계약 방식",[["q","견적서(1부)"],["c","비교견적"],["b","입찰"],["s","수의계약(업체지정)"]]],["split","chk","동일 용역을 나누어 발주(쪼개기)했다"],["rep","chk","용역 결과보고서를 받았다"],["adv","sel","선급금(선금) 지급",[["n","지급 안 함(완료·검수 후 지급)"],["y","선급금 지급 예정"]]],["advAmt","num","선급금액(원)"],["advTerm","chk","계약서에 선급금 지급 조건·정산 방법이 명시되어 있다"],["advGuar","chk","선급금 보증서(보증보험증권)를 받았다"],["advPlan","chk","선급금 사용계획서와 계약 전용계좌를 받았다"],["advElig","chk","선급 가능 경비 항목임을 산학협력단에 확인했다(국고금 관리법 시행령 제40조)"]],
+ service:[["method","sel","계약 방식",[["q","견적서(1부)"],["c","비교견적"],["b","입찰"],["s","수의계약(업체지정)"]]],["split","chk","동일 용역을 나누어 발주(쪼개기)했다"],["rep","chk","용역 결과보고서를 받았다"],["adv","sel","선급금(선금)",[["n","지급 안 함(완료·검수 후 지급)"],["y","선급금 지급 예정"]]],["advAmt","num","선급금액(원)"],["advTerm","chk","계약서에 선급금 지급 조건·정산 방법 명시"],["advGuar","chk","선급금 보증서(보증보험증권) 수령"],["advPlan","chk","선급금 사용계획서·계약 전용계좌 수령"],["advElig","chk","선급 가능 경비 항목 산학협력단 확인(국고금 관리법 시행령 제40조)"]],
  material:[["method","sel","구매 방식",[["q","견적서(1부)"],["c","비교견적"],["b","입찰"],["s","수의계약(업체지정)"]]],["split","chk","나누어 발주(쪼개기)했다"]],
  asset:[
   ["method","sel","구매 방식",[["q","견적서(1부)"],["c","비교견적"],["b","입찰"],["s","수의계약(업체지정)"]]],
@@ -692,14 +766,14 @@ function docList(){
 /* ───── 점검 엔진 ───── */
 function check(){
   var R=[],t=C.type,a=amt();
-  var P=function(cat,st,title,msg,fix){R.push({cat:cat,st:st,title:title,msg:msg||"",fix:fix||""})};
+  var P=function(cat,st,title,msg,fix,ref){R.push({cat:cat,st:st,title:title,msg:msg||"",fix:fix||"",ref:ref})};
 
   if(!a)P("기본","chk","금액 미입력","지출 금액을 입력하면 구간별 계약·결재·서류 기준이 자동 적용됩니다.","");
 
   /* 1 결재·원인행위 */
   var need=a>100000000?2:a>5000000?1:0;
   if(a){
-    var names=["센터장 전결","사업부단장 전결","사업단장(총괄부단장 경유)"];
+    var names=["센터장 전결","사업부단장(산학협력단장) 전결","사업단장(총괄부단장 경유)"];
     if(+C.appr<need)P("결재·원인행위","bad","시행품의 결재선 부족","금액 "+fmt(a)+"원은 ‘"+names[need]+"’ 이상 결재가 필요합니다(500만원 이하 센터장 전결 / 500만원 초과~1억원 이하 사업부단장 전결 / 1억원 초과 사업단장).","상위 결재선으로 시행품의를 다시 상신하거나 결재선을 보완해야 합니다.");
     else P("결재·원인행위","ok","결재선 적정",names[+C.appr]+"로 금액 구간에 맞습니다.");
   }
@@ -913,7 +987,7 @@ function check(){
   });
 
   /* AI 서류 판독 결과 */
-  if(AIX&&AIX.items)AIX.items.forEach(function(o){P("서류 판독(AI)",o.s,o.title,o.r,o.fix)});
+  if(AIX&&AIX.items)AIX.items.forEach(function(o,i){P("서류 판독(AI)",o.s,esc(o.title),esc(o.r),esc(o.fix),i)});
   /* 서류 */
   var docs=docList(),miss=0;
   docs.forEach(function(d,i){if(!C.docs[C.type+":"+i])miss++});
@@ -926,16 +1000,18 @@ function check(){
 var ST={bad:"보완 필요",warn:"확인 필요",chk:"직접 확인",ok:"적합",na:"해당 없음"};
 var res;
 function typeLabel(){return (TYPES.filter(function(x){return x[0]===C.type})[0]||[])[1]}
+var SPECOPEN=false;
 function renderSpec(){
   var h="",L=SPEC[C.type]||[];
-  if(L.length){h+="<h3>"+typeLabel()+" 세부 입력</h3><div class='f'>";
+  if(L.length){h+="<details class='sx' id='specDet'"+(SPECOPEN?" open":"")+"><summary>"+typeLabel()+" 세부 입력 <small id='sxS'></small></summary><div class='f'>";
     L.forEach(function(f){
       if(f[1]==="num")h+="<label class='l'>"+f[2]+"<input class='num' data-s='"+f[0]+"' inputmode='decimal' value='"+(C.s[f[0]]||"")+"'></label>";
       else if(f[1]==="sel"){h+="<label class='l'>"+f[2]+"<select data-s='"+f[0]+"'>"+f[3].map(function(o){return "<option value='"+o[0]+"'"+((C.s[f[0]]||f[3][0][0])===o[0]?" selected":"")+">"+o[1]+"</option>"}).join("")+"</select></label>"}
       else h+="<label class='chkrow full'><input type='checkbox' data-s='"+f[0]+"'"+(C.s[f[0]]?" checked":"")+"><span>"+f[2]+"</span></label>";
     });
-    h+="</div>";}
+    h+="</div></details>";}
   $("#spec").innerHTML=h;
+  var sd=$("#specDet");if(sd)sd.addEventListener("toggle",function(){SPECOPEN=sd.open});
   $$("#spec [data-s]").forEach(function(el){
     var ev=el.type==="checkbox"?"change":(el.tagName==="SELECT"?"change":"input");
     el.addEventListener(ev,function(){var k=el.dataset.s;C.s[k]=el.type==="checkbox"?el.checked:el.value;update()});
@@ -954,11 +1030,71 @@ function renderScope(){
   $("#scopeList").innerHTML="<h4>표시할 점검 분류</h4>"+cats.map(function(c){return "<label><input type='checkbox' data-cat='"+c+"'"+(OPT.hid[c]?"":" checked")+"><span>"+c+"</span></label>"}).join("");
   $$("#scopeList [data-cat]").forEach(function(el){el.addEventListener("change",function(){if(el.checked)delete OPT.hid[el.dataset.cat];else OPT.hid[el.dataset.cat]=1;LS.set("jbg.opt",JSON.stringify(OPT));renderItems()})});
 }
+function hl(x){return String(x||"").replace(/(\d[\d,.]*\s*(?:만원|천원|억원|원|%|건|일|시간|개월|장|명|회)(?:\/[가-힣]+)?|20\d{2}\.\s?\d{1,2}\.\s?\d{1,2}\.)|(집행 불가|집행할 수 없|불허|초과|미달|불인정|금지|필수|제한 항목)/g,function(m,a,b){return a?"<mark class='kv'>"+m+"</mark>":"<mark class='kw'>"+m+"</mark>"})}
+function firstSent(m){m=String(m||"");var x=m.match(/^.*?(?:니다|입니다)\./);return x?x[0]:(m.length>90?m.slice(0,90)+"…":m)}
+var FLOWS={
+  P:["시행품의(기본계획)","사업·활동 수행","활동·결과 보고","지출 원인행위 기안(지출결의)","청구·수혜자 직접 지급"],
+  G:["시행품의(기본계획)","발주·계약","납품·설치(결과)","검수·지출 원인행위 기안","청구서(세금계산서)·지급"],
+  S:["시행품의(기본계획)","용역 수행·계약","결과보고서","검수·지출 원인행위 기안","청구서·지급"],
+  R:["시행품의(기본계획)","임차 계약","사용·이용 확인","지출 원인행위 기안","청구서·지급"],
+  M:["시행품의(기본계획)","회의·행사 수행","회의록·결과보고","지출 원인행위 기안","카드결제·지급"],
+  T:["시행품의(기본계획)","출장 수행","출장 결과보고","지출 원인행위 기안","여비 청구·지급"],
+  O:["시행품의(기본계획)","사업 수행","결과보고","지출 원인행위 기안","청구서·지급"]
+};
+var FLDOC=[/시행품의|결재 완료|\[서식1\]/,/견적서|계약서|근로계약|근로확인|추천서|복무|계획서|사업자등록|신청서/,/결과보고|납품|활동 ?보고|회의록|출근부|수령확인|강의|자문/,/검수|지출결의|결재문서|총괄표|지급내역서|체크리스트/,/세금계산서|이체|영수증|전표|거래명세|통장|청구/];
+function flowStages(){
+  var t=C.type,a=amt(),g=PERSONAL[t]?"P":(t==="goods"||t==="material"||t==="asset")?"G":t==="service"?"S":t==="rental"?"R":t==="meeting"?"M":t==="travel"?"T":"O",L=FLOWS[g],insp=g==="G"||g==="S";
+  var d=function(x){return x?new Date(x+"T00:00:00"):null},dp=d(C.dProp),ds=d(C.dStart),dv=d(C.dDeliv),di=d(C.dInsp),dy=d(C.dPay),fyy=function(x){return x.getMonth()>=2?x.getFullYear():x.getFullYear()-1};
+  var K=[["dProp",dp],["dStart",ds],["dDeliv",dv],["dInsp",di],["dPay",dy]];
+  var docs=docList(),byS=[[],[],[],[],[]];
+  docs.forEach(function(x,i){for(var k=0;k<5;k++){if(FLDOC[k].test(x)){byS[k].push({n:x,ok:!!C.docs[C.type+":"+i]});break}}});
+  var need=a>100000000?2:a>5000000?1:0,AN=["센터장 전결","사업부단장(산학협력단장) 전결","사업단장 전결"],out=[];
+  var push=function(i,st,msg){out.push({no:i+1,t:L[i],date:K[i][1]?kd(C[K[i][0]]):"",st:st,msg:msg,docs:byS[i]})};
+  /* 1 */
+  if(!dp)push(0,"wait","시행품의 결재일을 입력하면 확인합니다.");
+  else if(a&&+C.appr<need)push(0,"bad","금액 "+fmt(a)+"원은 ‘"+AN[need]+"’ 이상 결재가 필요한데 현재 ‘"+AN[+C.appr]+"’로 입력되어 있습니다.");
+  else push(0,"ok",a?"결재선 ‘"+AN[+C.appr]+"’이 금액 구간에 맞습니다.":"결재일이 입력되어 있습니다.");
+  /* 2 */
+  if(!ds)push(1,"wait","수행·계약일을 입력하면 시행품의 이후에 수행했는지 확인합니다.");
+  else if(!dp)push(1,"chk","시행품의 결재일이 없어 순서를 확인할 수 없습니다.");
+  else if(ds<dp)push(1,"bad","수행·계약일이 시행품의 결재일보다 빠릅니다. 사후 품의는 지출할 수 없습니다.");
+  else push(1,"ok","시행품의 결재 후에 수행되어 순서가 정상입니다.");
+  /* 3 */
+  if(!dv)push(2,"wait","납품·완료(결과)일을 입력하면 확인합니다.");
+  else if(ds&&dv<ds)push(2,"bad","결과·납품일이 수행·계약일보다 빠릅니다.");
+  else if(t==="service"&&!sv("rep"))push(2,"chk","수행 후 결과보고서가 수령되었는지 확인해야 합니다.");
+  else push(2,"ok","수행 이후에 결과가 보고되어 순서가 정상입니다.");
+  /* 4 */
+  if(!di){if(insp)push(3,"wait","검수 완료일을 입력하면 검수·원인행위 순서를 확인합니다.");else push(3,"na","별도 검수 단계가 없는 항목입니다. 지출결의 기안일은 서류로 확인합니다.")}
+  else if(dv&&di<dv)push(3,"bad","검수 완료일이 납품·완료일보다 빠릅니다.");
+  else if(ds&&dv&&fyy(ds)!==fyy(dv))push(3,"bad","원인행위와 거래가 서로 다른 사업연도입니다(3.1~다음해 2월 말 기준).");
+  else push(3,"ok","결과 확인 이후에 검수·원인행위가 기안되어 순서가 정상입니다.");
+  /* 5 */
+  var prev=[dp,ds,dv,di].filter(Boolean).sort(function(x,y){return y-x})[0],pm=C.pay;
+  if(!dy)push(4,"wait","지출일을 입력하면 검수 후 지급 여부를 확인합니다.");
+  else if(PERSONAL[t]&&pm!=="transfer")push(4,"bad","개인에게 지급하는 경비는 수혜자 계좌이체여야 합니다.");
+  else if(pm==="personal"||pm==="simple")push(4,"bad","개인카드·간이영수증은 증빙으로 인정되지 않습니다.");
+  else if(ds&&fyy(dy)!==fyy(ds))push(4,"bad","지출일이 원인행위 사업연도를 벗어났습니다.");
+  else if(prev&&dy<prev){if(t==="service"&&sv("adv")==="y")push(4,"chk","선급금 지급 예정으로 입력되어 있습니다. 검수 전 지급은 선급금 한도(계약금액의 70%) 안에서만 가능합니다.");else push(4,"bad","지출일이 앞 단계 일자보다 빠릅니다. "+(insp?"검수 후 지급이 원칙입니다.":"결재·수행 이후에 지출해야 합니다."))}
+  else push(4,"ok","앞 단계 이후에 지급되어 순서가 정상입니다.");
+  out.forEach(function(o){var tot=o.docs.length,ok=o.docs.filter(function(x){return x.ok}).length;o.dn=ok;o.dt=tot;if(o.st==="ok"&&tot&&ok<tot){o.st="chk";o.msg+=" 다만 관련 서류가 "+ok+" / "+tot+"건만 구비 표시되어 있어 나머지를 확인해야 합니다."}});
+  return out;
+}
+function renderFlow(){
+  var el=$("#flow");if(!el)return;var S=flowStages(),NM={ok:"정상",bad:"오류",chk:"확인 필요",wait:"입력 대기",na:"해당 없음"},ic={ok:"✓",bad:"!",chk:"?",wait:"",na:"–"};
+  var cnt={ok:0,bad:0,chk:0};S.forEach(function(x){if(cnt[x.st]!==undefined)cnt[x.st]++});
+  el.className="flow";
+  el.innerHTML="<div class='flow-h'><b>단계별 진행 점검</b><small>"+esc(typeLabel())+" · 정상 "+cnt.ok+" · 확인 필요 "+cnt.chk+" · 오류 "+cnt.bad+" / 5단계</small></div><ol class='fl'>"+S.map(function(x){
+    var miss=x.docs.filter(function(d){return !d.ok}).map(function(d){return d.n});
+    return "<li class='"+x.st+"'><span class='no'>"+(ic[x.st]||x.no)+"</span><div><div class='tt'>"+x.no+". "+esc(x.t)+(x.date?"<small>"+x.date+"</small>":"")+"</div><div class='ms'>"+hl(esc(x.msg))+"</div>"+(x.dt?"<div class='dc'>관련 서류 "+x.dn+" / "+x.dt+"건 구비"+(miss.length?" · 미구비: "+esc(miss.slice(0,3).join(" / "))+(miss.length>3?" 외 "+(miss.length-3)+"건":""):"")+"</div>":"")+"</div><span class='chip "+(x.st==="wait"||x.st==="na"?"na":x.st)+"'>"+NM[x.st]+"</span></li>"}).join("")+"</ol>";
+}
 function renderItems(){
   var cnt={bad:0,warn:0,chk:0,ok:0},VR=visible();
+  VR.forEach(function(r,i){r._id="it"+i});
   VR.forEach(function(r){cnt[r.st]=(cnt[r.st]||0)+1});
   var sm="";
   if(AIX&&(AIX.summary||(AIX.flags&&AIX.flags.length))){sm="<b>AI 서류 판독 총평</b> "+esc(AIX.summary||"")+((AIX.flags&&AIX.flags.length)?"<ul>"+AIX.flags.map(function(f){return "<li>"+esc(f)+"</li>"}).join("")+"</ul>":"")}
+  if(AIX&&AIX.fills&&AIX.fills.length)sm+=(sm?"<br>":"")+"<b>지출 건 입력에 자동 반영한 항목</b><ul>"+AIX.fills.map(function(x){return "<li>"+esc(x)+"</li>"}).join("")+"</ul>";
   if(AIX&&AIX.dates&&AIX.dates.length)sm+=(sm?"<br>":"")+"<b>증빙에서 반영한 일자</b><ul>"+AIX.dates.map(function(x){return "<li>"+esc(x)+"</li>"}).join("")+"</ul>";
   $("#aiSum").innerHTML=sm;
   var v,cls;
@@ -966,7 +1102,9 @@ function renderItems(){
   else if(cnt.warn){v="확인 필요 "+cnt.warn+"건이 있어 증빙·사유를 보강해야 합니다";cls="s-warn"}
   else if(cnt.chk){v="직접 확인 "+cnt.chk+"건이 남아 있어 확인 후 지출해야 합니다";cls="s-chk"}
   else{v="입력 범위에서는 지적 사항이 없습니다";cls="s-ok"}
-  $("#verdict").innerHTML="<div class='verdict "+cls+"'>"+v+"</div>";
+  var KO={bad:0,warn:1},key=VR.filter(function(r){return r.st==="bad"||r.st==="warn"}).sort(function(a,b){return KO[a.st]-KO[b.st]}).slice(0,5);
+  $("#verdict").innerHTML="<div class='verdict "+cls+"'>"+v+"</div>"+(key.length?"<div class='keybox'><b>핵심 점검 사항 "+key.length+"건"+((cnt.bad||0)+(cnt.warn||0)>key.length?" (전체 "+((cnt.bad||0)+(cnt.warn||0))+"건 중)":"")+"</b><ol>"+key.map(function(r){return "<li><button type='button' data-jump='"+r._id+"'><span class='chip "+r.st+"'>"+ST[r.st]+"</span><b>"+r.title+"</b><span class='m'>"+hl(firstSent(r.msg))+"</span></button></li>"}).join("")+"</ol></div>":"");
+  $$("#verdict [data-jump]").forEach(function(b){b.onclick=function(){var t=document.getElementById(b.dataset.jump);if(t){t.scrollIntoView({block:"center",behavior:"smooth"});t.classList.remove("flash");void t.offsetWidth;t.classList.add("flash")}}});
   $("#sum").innerHTML=[["bad","보완 필요"],["warn","확인 필요"],["chk","직접 확인"],["ok","적합"]].map(function(x){return "<div class='s-"+x[0]+"'><b>"+(cnt[x[0]]||0)+"</b><span>"+x[1]+"</span></div>"}).join("");
   var order={bad:0,warn:1,chk:2,ok:3},by={},cats=[];
   $("#dockStatus").innerHTML="보완 <b>"+(cnt.bad||0)+"</b> · 확인 <b>"+(cnt.warn||0)+"</b> · 직접 확인 <b>"+(cnt.chk||0)+"</b> · 적합 <b>"+(cnt.ok||0)+"</b>";
@@ -975,10 +1113,12 @@ function renderItems(){
   cats.forEach(function(c){
     h+="<div class='cat'>"+c+"</div>";
     by[c].sort(function(a,b){return order[a.st]-order[b.st]}).forEach(function(r){
-      h+="<div class='it "+r.st+"'><div class='t'><b>"+r.title+"</b><span class='chip "+r.st+"'>"+ST[r.st]+"</span></div>"+(r.msg?"<p>"+r.msg+"</p>":"")+(r.fix?"<p class='fix'>"+r.fix+"</p>":"")+"</div>";
+      h+="<div class='it "+r.st+"' id='"+r._id+"'><div class='t'><b>"+r.title+"</b><span class='chip "+r.st+"'>"+ST[r.st]+"</span></div>"+(r.msg?"<p>"+hl(r.msg)+"</p>":"")+(r.fix?"<p class='fix'>"+hl(r.fix)+"</p>":"")+(r.ref!==undefined&&AIX.items[r.ref]&&AIX.items[r.ref].box?"<p><button type='button' class='btn g s' data-vis='"+r.ref+"'>서류에서 위치 보기</button></p>":"")+"</div>";
     });
   });
   $("#items").innerHTML=h;
+  $$("#items [data-vis]").forEach(function(b){b.onclick=function(){openVis(+b.dataset.vis)}});
+  renderVis();renderFlow();
 }
 function paper(){
   var a=amt(),pl=res.R.filter(function(r){return r.st==="bad"||r.st==="warn"}),ck=res.R.filter(function(r){return r.st==="chk"});
@@ -1018,8 +1158,8 @@ function fillForm(){
   renderSpec();
 }
 $("#type").addEventListener("change",function(e){C.type=e.target.value;C.s={};renderSpec();update()});
-$("#pay").addEventListener("change",function(e){C.pay=e.target.value;update()});
-$("#appr").addEventListener("change",function(e){C.appr=e.target.value;update()});
+$("#pay").addEventListener("change",function(e){C.pay=e.target.value;C.payT=1;update()});
+$("#appr").addEventListener("change",function(e){C.appr=e.target.value;C.apprT=1;update()});
 $("#amount").addEventListener("input",function(e){var n=e.target.value.replace(/[^0-9]/g,"");C.amount=n;e.target.value=n?fmt(+n):"";update()});
 $("#payee").addEventListener("input",function(e){C.payee=e.target.value;update()});
 ["dProp","dStart","dDeliv","dInsp","dPay"].forEach(function(k){$("#"+k).addEventListener("change",function(e){C[k]=e.target.value;update()})});
@@ -1029,7 +1169,7 @@ $("#copyForm").addEventListener("click",function(){copyText(plain())});
 var CHK=[
  ["결재·절차",[
   ["c1","시행품의(기본계획) 결재 완료 후 사업을 수행했는가","결재 완료된 시행품의 기안문이 증빙에 첨부되어야 하며, 사후 품의는 불가"],
-  ["c2","금액별 결재선을 지켰는가","500만 이하 센터장 / 500만 초과~1억 이하 사업부단장 / 1억 초과 사업단장"],
+  ["c2","금액별 결재선을 지켰는가","500만 이하 센터장 / 500만 초과~1억 이하 사업부단장(산학협력단장 겸임) / 1억 초과 사업단장"],
   ["c3","사업결과보고 → 지출 원인행위 기안 → 청구서 순서를 지켰는가","청구서(ERP)도 동일 금액 구간 결재선 적용"],
   ["c4","원인행위와 지출(거래)이 같은 사업연도 안에 있는가","사업연도 3.1~다음해 2월 말, 회계연도 1.1~12.31"]]],
  ["지급 방식·증빙",[
@@ -1117,7 +1257,7 @@ function renderCases(){
 /* ───── 기준표 ───── */
 $("#refTbl").innerHTML="<tr><th>구분</th><th>기준</th></tr>"+[
  ["사업연도 / 회계연도","3.1~다음해 2월 말 / 1.1~12.31 (회계연도 넘기려면 e나라도움 이월)"],
- ["시행품의·청구서 결재선","500만 이하 센터장 전결 · 500만 초과~1억 이하 사업부단장 전결 · 1억 초과 사업단장"],
+ ["시행품의·청구서 결재선","500만 이하 센터장 전결 · 500만 초과~1억 이하 사업부단장(산학협력단장 겸임, 현 고문주 교수) 전결 · 1억 초과 사업단장"],
  ["물품(일반수용비·재료비·자산)","500만 미만 개별구매(견적서) · 500만~2천만 미만 비교견적(1천만 이상 계약서) · 2천만 이상 입찰+이행보증"],
  ["용역·라이선스","1천만 미만 개별(견적+비교견적) · 1천만~2천만 미만 용역계약 · 2천만 이상 입찰+이행보증"],
  ["일용임금 시급","학부 12,000 · 석사 18,000 · 박사 20,000 · 일반 최저시급 / 1일 최대 8시간"],
@@ -1137,11 +1277,12 @@ $("#formTbl").innerHTML="<tr><th>번호</th><th>서식</th><th>번호</th><th>�
   for(var i=0;i<13;i++){h+="<tr><td>[서식"+(i+1)+"]</td><td>"+F[i]+"</td><td>[서식"+(i+14)+"]</td><td>"+F[i+13]+"</td></tr>"}return h})();
 
 /* ───── 탭 · 메뉴 · 테마 ───── */
-var TABS=[["check","점검"],["form","서식 미리보기"],["list","체크리스트"],["cases","적발 사례"],["ref","기준표"],["search","검색"]];
-var NAV=TABS.slice(0,5);
+var TABS=[["check","점검"],["vis","오류 보기"],["form","서식 미리보기"],["list","체크리스트"],["cases","적발 사례"],["ref","기준표"],["search","검색"]];
+var NAV=TABS.slice(0,6);
 function show(id,noScroll){
   if(!TABS.some(function(t){return t[0]===id}))id="check";
   TABS.forEach(function(t){$("#p-"+t[0]).hidden=t[0]!==id});
+  if(id==="vis")renderVis();
   $$("#gn a").forEach(function(a){if(a.dataset.t===id)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   try{history.replaceState(null,"","#"+id)}catch(e){}
   if(!noScroll)window.scrollTo(0,0);
@@ -1216,10 +1357,11 @@ $("#q").addEventListener("input",runSearch);
 
 /* ═════════ 서류 업로드 · 캡처 · 압축파일 ═════════ */
 var SG={ai:null,dis:{}},lastOut=null,lastRestore=null;
-var FILES=[],OTHERS=[],fid=0,AIX={items:[],summary:"",flags:[],seen:[]};
-var ROLES=[["req","시행품의·결재문서"],["est","견적서"],["inv","세금계산서·영수증"],["ctr","계약서"],["insp","검수조서·납품확인"],["bank","통장·신분증"],["hr","근로·출근부·활동보고"],["mtg","회의록·출장보고"],["etc","기타 증빙"]];
+var TXT=[],FILES=[],OTHERS=[],fid=0,AIX={items:[],summary:"",flags:[],seen:[]};
+var ROLES=[["res","지출결의서(지출 요구 결의서)"],["req","시행품의·결재문서"],["est","견적서"],["inv","세금계산서·영수증"],["ctr","계약서"],["insp","검수조서·납품확인"],["bank","통장·신분증"],["hr","근로·출근부·활동보고"],["mtg","회의록·출장보고"],["etc","기타 증빙"]];
 function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function guessRole(n){
+  if(/지출\s*(요구\s*)?결의|결의서/.test(n))return "res";
   if(/견적/.test(n))return "est";if(/세금\s*계산서|계산서|영수|매출|전표|카드/.test(n))return "inv";if(/계약/.test(n))return "ctr";
   if(/검수|납품|서식\s*22/.test(n))return "insp";if(/통장|신분증|계좌/.test(n))return "bank";if(/근로|출근|활동|일용/.test(n))return "hr";
   if(/회의록|출장|서식\s*[67]\b/.test(n))return "mtg";if(/결재|기안|품의|결의|원인행위|서식\s*1\b/.test(n))return "req";return "etc";
@@ -1232,7 +1374,7 @@ function loadPdf(){
 }
 var zipReady=null;
 function loadZip(){if(!zipReady)zipReady=loadScript("https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js").then(function(){return window.JSZip});return zipReady}
-var MAXIMG=24;
+var MAXIMG=80,batchTxt="";
 function shrink(blob){
   return new Promise(function(resolve){
     var url=URL.createObjectURL(blob),img=new Image();
@@ -1248,8 +1390,35 @@ function addImage(blob,name,src){
   if(FILES.length>=MAXIMG){toast("이미지는 "+MAXIMG+"장까지 올릴 수 있습니다.");return false}
   FILES.push({id:++fid,name:name,role:guessRole(name),blob:blob,src:src,url:URL.createObjectURL(blob)});return true;
 }
+function addText(name,text,how){
+  text=String(text||"").replace(/\u0000/g,"").replace(/[ \t]+/g," ").trim();if(text.replace(/\s/g,"").length<8)return false;
+  TXT=TXT.filter(function(t){return t.name!==name});TXT.push({id:++fid,name:name,role:guessRole(name),text:text.slice(0,30000),how:how||""});return true;
+}
+async function extractOffice(buf,ext){
+  var Z=await loadZip(),z=await Z.loadAsync(buf),parts=Object.keys(z.files).filter(function(k){
+    if(ext==="docx")return /^word\/(document|header\d*|footer\d*)\.xml$/.test(k);
+    if(ext==="hwpx")return /^Contents\/section\d+\.xml$/.test(k);
+    if(ext==="xlsx")return /^xl\/(sharedStrings|worksheets\/sheet\d+)\.xml$/.test(k);
+    if(ext==="pptx")return /^ppt\/slides\/slide\d+\.xml$/.test(k);return false}).sort(),out="";
+  for(var i=0;i<parts.length;i++){
+    var x=await z.files[parts[i]].async("string");
+    x=x.replace(/<\/(?:w:p|hp:p|a:p|row|si)>/g,"\n").replace(/<\/(?:w:tc|hp:tc|c)>/g," \t ").replace(/<(?:w:tab|w:br|hp:lineBreak)[^>]*\/>/g," ").replace(/<[^>]+>/g,"").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&apos;/g,"'");
+    out+=x+"\n";
+  }
+  return out;
+}
+async function pdfText(doc){
+  var tx="",n=Math.min(doc.numPages,8);
+  for(var pg=1;pg<=n;pg++){
+    var page=await doc.getPage(pg),tc=await page.getTextContent(),last=null,line="";
+    tc.items.forEach(function(it){var y=it.transform?it.transform[5]:0;if(last!==null&&Math.abs(y-last)>3){tx+=line+"\n";line=""}line+=it.str+(it.hasEOL?"\n":" ");last=y});
+    tx+=line+"\n";
+  }
+  return tx;
+}
 async function addPdf(buf,name){
   var lib=await loadPdf();var doc=await lib.getDocument({data:buf}).promise;var n=Math.min(doc.numPages,4);
+  try{addText(name,await pdfText(doc),"pdf")}catch(e){}
   for(var pg=1;pg<=n;pg++){
     var page=await doc.getPage(pg),v0=page.getViewport({scale:1}),sc=Math.min(2,1600/Math.max(v0.width,v0.height)),vp=page.getViewport({scale:sc});
     var c=document.createElement("canvas");c.width=vp.width;c.height=vp.height;var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);
@@ -1271,7 +1440,9 @@ async function addZip(file){
     try{
       if(IMGEXT[ext]){var ab=await e.async("arraybuffer");if(addImage(await shrink(new Blob([ab],{type:IMGEXT[ext]})),k,"zip"))nImg++}
       else if(ext==="pdf"){await addPdf(await e.async("arraybuffer"),k);nImg++}
-      else if(/^(txt|csv|md|json)$/.test(ext)){var tx=dec(await e.async("arraybuffer")).slice(0,20000);$("#pasteIn").value=($("#pasteIn").value?$("#pasteIn").value+"\n\n":"")+"["+k+"]\n"+tx;nTxt++}
+      else if(/^(txt|csv|md|json)$/.test(ext)){if(addText(k,dec(await e.async("arraybuffer")),"txt"))nTxt++}
+      else if(/^(docx|hwpx|xlsx|pptx)$/.test(ext)){if(addText(k,await extractOffice(await e.async("arraybuffer"),ext),ext))nTxt++;else{OTHERS.push({name:k+" (글 없음)"});nOth++}}
+      else if(ext==="hwp"){OTHERS.push({name:k+" (hwp는 읽지 못함 — PDF·hwpx로 저장 필요)"});nOth++}
       else{OTHERS.push({name:k});nOth++}
     }catch(err){OTHERS.push({name:k+" (읽지 못함)"});nOth++}
   }
@@ -1279,16 +1450,17 @@ async function addZip(file){
 }
 var PG={steps:[],pct:null,cur:-1,hide:0};
 function pgDraw(){
-  var el=$("#prog");if(!el)return;
-  if(!PG.steps.length){el.hidden=true;el.innerHTML="";return}
-  var n=PG.steps.length,d=PG.steps.filter(function(x){return x.st==="done"}).length,act=PG.steps.some(function(x){return x.st==="on"}),fail=PG.steps.some(function(x){return x.st==="fail"});
-  var pc=PG.pct!==null?Math.round(((d+PG.pct)/n)*100):Math.round(d/n*100);
-  var ind=act&&PG.pct===null&&PG.indet;
-  el.hidden=false;
-  el.innerHTML="<div class='prog-h'><span>"+(fail?"점검을 마치지 못했습니다":d===n?"점검 완료":"진행 현황")+"</span><small style='font-weight:400;color:var(--mut)'>"+d+" / "+n+"단계</small><span class='sp'></span><button type='button' id='pgX' aria-label='진행 현황 닫기'>닫기 ✕</button></div>"+
-   "<div class='prog-bar"+(ind?" ind":"")+"' role='progressbar' aria-valuemin='0' aria-valuemax='100' aria-valuenow='"+pc+"'><i style='width:"+pc+"%'></i></div><ol>"+
-   PG.steps.map(function(x,i){return "<li class='"+x.st+"'><span class='ic'>"+(x.st==="done"?"✓":x.st==="fail"?"!":x.st==="on"?"":i+1)+"</span><span>"+esc(x.t)+(x.d?"<small>"+esc(x.d)+"</small>":"")+"</span></li>"}).join("")+"</ol>";
-  var xb=$("#pgX");if(xb)xb.onclick=pgClear;
+  var bar=$("#dkBar"),lb=$("#dkp"),st=$("#dockStatus"),pn=$("#prog");if(pn)pn.hidden=true;if(!bar||!lb)return;
+  if(!PG.steps.length){bar.hidden=true;lb.hidden=true;if(st)st.hidden=false;return}
+  var n=PG.steps.length,d=PG.steps.filter(function(x){return x.st==="done"}).length,cur=PG.steps.filter(function(x){return x.st==="on"})[0],bad=PG.steps.filter(function(x){return x.st==="fail"})[0];
+  var pc=PG.pct!==null?Math.round(((d+PG.pct)/n)*100):Math.round(d/n*100),ind=!!cur&&PG.pct===null&&PG.indet;
+  var det=cur?String(cur.d||"").replace("Claude가 서류를 읽는 중입니다","").replace(/^\s*·\s*/,"").trim():"";
+  var txt=bad?"점검 중단 · "+bad.t+(bad.d?" ("+bad.d+")":""):d===n?"점검 완료 · "+(PG.steps[n-1].d||""):(cur?cur.t:"대기")+" "+(d+1)+"/"+n+(det?" · "+det:"");
+  lb.hidden=false;lb.textContent=txt;lb.className="dkp"+(bad?" bad":d===n?" ok":" spin");
+  lb.title=PG.steps.map(function(x,i){return (x.st==="done"?"✓ ":x.st==="fail"?"! ":x.st==="on"?"▶ ":"· ")+x.t+(x.d?" — "+x.d:"")}).join("\n")+(bad||d===n?"\n(눌러서 닫기)":"");
+  bar.hidden=false;bar.className="dkbar"+(ind?" ind":"")+(bad?" bad":"");bar.firstChild.style.width=(bad?100:pc)+"%";
+  if(st)st.hidden=!(d===n||bad)?true:true;
+  if(d===n&&!bad){clearTimeout(PG.hide);PG.hide=setTimeout(pgClear,6000)}
 }
 function pgStart(list,indet){clearTimeout(PG.hide);PG.steps=list.map(function(t){return {t:t,st:"wait",d:""}});PG.pct=null;PG.cur=-1;PG.indet=!!indet;pgDraw()}
 function pgSet(i,st,d,pct){var x=PG.steps[i];if(!x)return;x.st=st;if(d!==undefined)x.d=d;if(st==="on")PG.cur=i;PG.pct=(st==="on"&&pct!==undefined)?pct:null;pgDraw()}
@@ -1299,7 +1471,7 @@ function issueTxt(){var r=(res&&res.R)||[],c=function(k){return r.filter(functio
 function setIn(m){var el=$("#inMsg");if(el)el.textContent=m||""}
 async function takeFiles(list){
   var arr=Array.prototype.slice.call(list);if(!arr.length)return;
-  pgStart(["서류 파일 읽기","제출서류 구비 대조"]);pgSet(0,"on","0 / "+arr.length+"개 파일",0);var nb=FILES.length;
+  pgStart(["서류 파일 읽기","제출서류 구비 대조"]);pgSet(0,"on","0 / "+arr.length+"개 파일",0);var nb=FILES.length,nt=TXT.length;
   for(var i=0;i<arr.length;i++){
     var f=arr[i],n=f.name||"";
     try{
@@ -1307,11 +1479,13 @@ async function takeFiles(list){
       if(/\.zip$/i.test(n)||/zip/.test(f.type))await addZip(f);
       else if(f.type==="application/pdf"||/\.pdf$/i.test(n))await addPdf(await f.arrayBuffer(),n);
       else if(/^image\//.test(f.type))addImage(await shrink(f),n,"upload");
-      else if(/\.(txt|csv|md|json)$/i.test(n)){$("#pasteIn").value=($("#pasteIn").value?$("#pasteIn").value+"\n\n":"")+"["+n+"]\n"+dec(await f.arrayBuffer()).slice(0,20000)}
+      else if(/\.(txt|csv|md|json)$/i.test(n)){if(!addText(n,dec(await f.arrayBuffer()),"txt"))toast(n+": 읽을 수 있는 글이 없습니다.")}
+      else if(/\.(docx|hwpx|xlsx|pptx)$/i.test(n)){var ex=n.split(".").pop().toLowerCase();if(!addText(n,await extractOffice(await f.arrayBuffer(),ex),ex)){OTHERS.push({name:n+" (글 없음)"});toast(n+": 읽을 수 있는 글이 없습니다.")}}
+      else if(/\.hwp$/i.test(n)){OTHERS.push({name:n+" (hwp는 읽지 못함 — PDF·hwpx로 저장 필요)"});toast(n+": 한글(.hwp) 원본은 내용을 읽지 못합니다. PDF나 hwpx로 저장해 올려 주세요.")}
       else{OTHERS.push({name:n});toast(n+": 이 형식은 파일명만 반영합니다. 화면 캡처나 PDF로 올리면 내용을 읽습니다.")}
     }catch(err){toast(n+"을(를) 읽지 못했습니다. 이미지로 캡처해 올려 보세요.")}
   }
-  setIn("");renderFiles();pgSet(0,"done","이미지·PDF "+(FILES.length-nb)+"장 추가, 전체 "+FILES.length+"장");pgSet(1,"on");guessDates();guessDocs(true);pgSet(1,"done",(Object.keys(C.docs).filter(function(k){return C.docs[k]}).length)+"건 구비 표시");pgAutoHide(7000);
+  setIn("");renderFiles();pgSet(0,"done","이미지·PDF "+(FILES.length-nb)+"장 추가, 글 "+(TXT.length-nt)+"건 추출");if(FILES.length>nb&&TXT.length===nt&&(mode||"rules")==="rules")setIn("이미지·스캔 서류는 AI 연결 없이는 내용을 읽지 못합니다. 상단 AI 연결에서 방식을 고르고 ‘서류 점검하기’를 누르세요.");pgSet(1,"on");guessDates();parseTexts(true);parseResolution(true);guessDocs(true);pgSet(1,"done",(Object.keys(C.docs).filter(function(k){return C.docs[k]}).length)+"건 구비 표시");pgAutoHide(7000);
 }
 function renderFiles(){
   $("#tray").innerHTML=FILES.map(function(f){return "<div class='th'><img src='"+f.url+"' alt='' data-z='"+f.id+"'><button class='x' type='button' data-rm='"+f.id+"' aria-label='삭제'>×</button><select data-role='"+f.id+"' aria-label='서류 종류'>"+ROLES.map(function(r){return "<option value='"+r[0]+"'"+(r[0]===f.role?" selected":"")+">"+r[1]+"</option>"}).join("")+"</select><div class='fn' title='"+esc(f.name)+"'>"+esc(f.name)+"</div></div>"}).join("");
@@ -1319,6 +1493,8 @@ function renderFiles(){
   $$("#tray [data-rm]").forEach(function(b){b.onclick=function(){var i=FILES.findIndex(function(f){return f.id==b.dataset.rm});if(i>=0){URL.revokeObjectURL(FILES[i].url);FILES.splice(i,1)}renderFiles();draftSave()}});
   $$("#tray [data-role]").forEach(function(sel){sel.onchange=function(){var f=FILES.find(function(x){return x.id==sel.dataset.role});if(f)f.role=sel.value}});
   $$("#tray [data-z]").forEach(function(im){im.onclick=function(){var f=FILES.find(function(x){return x.id==im.dataset.z});if(f)openModal({title:f.name,wide:true,body:"<img src='"+f.url+"' alt='' style='max-width:100%;height:auto'>",foot:[{label:"닫기",primary:true,onclick:function(c){c()}}]})}});
+  var tx=$("#txtList");if(tx){tx.innerHTML=TXT.length?"서류에서 읽은 글 "+TXT.length+"건: "+TXT.map(function(x){return "<code title='"+esc(x.name)+"'>"+esc(x.name.split("/").pop())+" · "+x.text.length.toLocaleString("ko-KR")+"자</code> <button type='button' class='btn g s' data-tx='"+x.id+"' aria-label='삭제'>×</button>"}).join(" "):"";
+    $$("#txtList [data-tx]").forEach(function(b){b.onclick=function(){TXT=TXT.filter(function(y){return y.id!=b.dataset.tx});renderFiles();draftSave()}})}
   var oc=$("#othClr");if(oc)oc.onclick=function(){OTHERS=[];renderFiles();draftSave()};
 }
 $("#upBtn").onclick=function(){$("#upFile").click()};
@@ -1354,7 +1530,7 @@ function seenNames(){return FILES.map(function(f){return f.name}).concat(OTHERS.
 function kd(v){var m=String(v).split("-");return m.length===3?m[0]+". "+(+m[1])+". "+(+m[2])+".":String(v)}
 var TKEY=[["ilyong",/일용|근로확인|출근부|근로계약/],["sangyong",/상용|퇴직금|4대보험|급여대장/],["bojik",/보직수당/],["seonggwa",/성과급|인센티브|성과평가/],["janghak",/장학|재학증명|장학생/],["jaeji",/인재지원금|조교|복무협약|복무서약/],["sisang",/시상|경진대회|수상|상금/],["expert",/자문|강연|원고료|번역|통역|속기|전문가|이력서/],["meeting",/회의록|회의비|식대|다과|간담/],["goods",/소모품|인쇄|홍보물|물품|구매|구입/],["service",/용역|라이선스|라이센스|개발|제작|설계|컨설팅|결과보고서|선금|선급금/],["material",/시약|실험|재료비/],["asset",/장비|기자재|자산취득|비품/],["rental",/임차|렌탈|유지보수/],["travel",/출장|여비|항공|숙박/],["other",/공공요금|보험료|통신비/]];
 function suggestType(){
-  var txt=seenNames().join("\n")+"\n"+($("#pasteIn").value||"")+"\n"+(C.payee||""),best=null;
+  var txt=seenNames().join("\n")+"\n"+allText(false)+"\n"+(C.payee||""),best=null;
   TKEY.forEach(function(k){var g=new RegExp(k[1].source,"g"),hits=txt.match(g)||[];if(hits.length&&(!best||hits.length>best.n))best={type:k[0],n:hits.length,hits:hits.filter(function(x,i,a){return a.indexOf(x)===i})}});
   return best;
 }
@@ -1371,6 +1547,84 @@ function renderSugg(){
   };
   $("#sgNo").onclick=function(){SG.dis[cand.type]=1;renderSugg()};
 }
+function detectPay(t){
+  var seg=t.match(/(?:지급\s*(?:방법|방식|구분)|결제\s*(?:방법|수단|구분)|집행\s*방법)\s*[:：]?\s*([^\n]{0,90})/),src=seg?seg[1]:"";
+  var ck=src.match(/[☑✔✓■▣√]\s*([^☐□\[\]▢☑✔✓■▣√]{1,14})/);
+  var pick=function(x,strict){
+    if(/간이\s*영수증/.test(x))return "simple";
+    if(/개인\s*(?:신용|체크)?\s*카드|선결제|사비/.test(x))return "personal";
+    if(/(?:사업비|전용)\s*카드|e\s*나라도움/.test(x))return "enara";
+    if(/법인\s*카드/.test(x))return "corp";
+    if(/계좌\s*이체|이체|송금|무통장/.test(x))return "transfer";
+    if(/현금/.test(x))return "cash";
+    if(!strict&&/카드/.test(x))return "enara";
+    return null;
+  };
+  return (ck&&pick(ck[1]))||pick(src)||pick(t,true);
+}
+function korToNum(x){
+  var D={"영":0,"공":0,"일":1,"이":2,"삼":3,"사":4,"오":5,"육":6,"칠":7,"팔":8,"구":9},U={"십":10,"백":100,"천":1000},B={"만":1e4,"억":1e8,"조":1e12},tot=0,sec=0,cur=0;
+  x=String(x).replace(/\s/g,"");
+  for(var i=0;i<x.length;i++){var c=x[i];
+    if(D[c]!==undefined)cur=D[c];
+    else if(U[c]){sec+=(cur||1)*U[c];cur=0}
+    else if(B[c]){sec+=cur;tot+=(sec||1)*B[c];sec=0;cur=0}
+    else if(/\d/.test(c)){cur=cur*10+(+c)}
+  }
+  return tot+sec+cur;
+}
+function normBox(b){
+  if(!Array.isArray(b)||b.length<4)return null;var v=b.slice(0,4).map(Number);if(v.some(function(n){return !isFinite(n)}))return null;
+  if(v.some(function(n){return n>1.5}))v=v.map(function(n){return n/100});
+  var x=Math.max(0,Math.min(1,v[0])),y=Math.max(0,Math.min(1,v[1])),w=Math.min(1-x,v[2]),h=Math.min(1-y,v[3]);
+  return (w>0.005&&h>0.005)?[x,y,w,h]:null;
+}
+function mapImg(out,idx){(out&&out.observations||[]).forEach(function(ob){var k=+ob.img;ob.fid=(k>=1&&idx[k-1]!==undefined&&FILES[idx[k-1]])?FILES[idx[k-1]].id:null})}
+var DT="(20\\d{2})\\s*[-./년]\\s*(\\d{1,2})\\s*[-./월]\\s*(\\d{1,2})";
+function pd(m){return m[1]+"-"+("0"+m[2]).slice(-2)+"-"+("0"+m[3]).slice(-2)}
+function labDate(t,lab){var m=t.match(new RegExp("(?:"+lab+")\\s*[:：]?\\s*(?:\\(.*?\\))?\\s*"+DT));return m?pd(m.slice(-3).length===3?[0].concat(m.slice(-3)):m):""}
+function parseTexts(quiet){
+  if(!TXT.length)return 0;var old=JSON.parse(JSON.stringify(C)),dl=[],set=function(k,v,lab,nm){if(v&&!C[k]){C[k]=v;dl.push(lab+" "+kd(v)+" ← ‘"+nm.split("/").pop()+"’ 글에서 읽음")}};
+  var AMT=/(?:총\s*계약\s*금액|계약\s*총\s*(?:액|금액)|총\s*계약액|계약\s*금액|계약\s*대금|합\s*계\s*금액|합\s*계|총\s*액)\s*(?:\(\s*(?:VAT|부가세)[^)]*\))?\s*[:：]?\s*(?:일금\s*)?(?:₩\s*)?([\d,]{5,})/;
+  TXT.forEach(function(x){
+    var t=x.text,r=x.role;
+    if(r==="ctr"||/계약서|계약\s*일반\s*조건|용역\s*계약/.test(t.slice(0,400))){
+      if(!C.amount){var m=t.match(AMT);if(m)C.amount=m[1].replace(/,/g,"");else{var km=t.match(/일금\s*([가-힣\s]+?)\s*원\s*정?/);if(km){var kv=korToNum(km[1]);if(kv>0)C.amount=String(kv)}}}
+      set("dStart",labDate(t,"계약\\s*일자|계약\\s*체결\\s*일|체결\\s*일자|계약\\s*일"),"수행·계약일",x.name);
+    }
+    if(r==="req"||/시행\s*품의|품의서|기안\s*문/.test(t.slice(0,400))){
+      if(r!=="res")set("dProp",labDate(t,"기안\\s*일자|기안\\s*일|결재\\s*일자|결재\\s*일|시행\\s*일자|시행\\s*일|품의\\s*일자|품의\\s*일"),"시행품의 결재일",x.name);
+    }
+    set("dInsp",labDate(t,"검수\\s*완료\\s*일자?|검수\\s*일자?"),"검수 완료일",x.name);
+    set("dDeliv",labDate(t,"납품\\s*완료\\s*일|납품\\s*일자?|준공\\s*일자?"),"납품·완료일",x.name);
+  });
+  var fl=diffFills(old,C);
+  if(fl.length||dl.length){AIX.fills=(AIX.fills||[]).concat(fl);AIX.dates=(AIX.dates||[]).concat(dl);fillForm();update();if(!quiet)toast("서류 글에서 "+(fl.length+dl.length)+"건을 입력 칸에 반영했습니다.")}
+  return fl.length+dl.length;
+}
+function parseResolution(quiet){
+  var t=allText(false);if(!/결의|지출|청구|계약|품의/.test(t))return 0;
+  var old=JSON.parse(JSON.stringify(C)),m,dl=[];
+  if(!C.amount){
+    m=t.match(/(?:총\s*계약\s*금액|계약\s*총\s*(?:액|금액)|총\s*계약액|계약\s*금액|계약\s*대금|합\s*계|총\s*액|지출\s*(?:요구\s*)?금액|청구\s*금액|결의\s*금액|지급\s*액|금\s*액)\s*(?:\(\s*(?:VAT|부가세)[^)]*\))?\s*[:：]?\s*(?:일금\s*)?(?:₩\s*)?([\d,]{4,})/);
+    if(m)C.amount=m[1].replace(/,/g,"");
+    else{var km=t.match(/일금\s*([가-힣\s]+?)\s*원\s*정?/);if(km){var kv=korToNum(km[1]);if(kv>0)C.amount=String(kv)}}
+    if(!C.amount){var sm1=t.match(/공급\s*가액\s*[:：]?\s*(?:₩\s*)?([\d,]{4,})/),vm1=t.match(/(?:부가\s*(?:가치)?세|VAT)\s*[:：]?\s*(?:₩\s*)?([\d,]{3,})/);if(sm1&&vm1)C.amount=String(+sm1[1].replace(/,/g,"")+ +vm1[1].replace(/,/g,""))}
+  }
+  if(!C.payee){m=t.match(/(?:거래처|수령인|채주|지급처|업체명|상호)\s*[:：]?\s*([^\n\t,;|]{2,30})/);if(m)C.payee=m[1].trim()}
+  if(!C.payT){var dp=detectPay(t);if(dp)C.pay=dp}
+  if(!C.apprT){var am=t.match(/(센터장|사업부단장|산학협력단장|산단장|고문주|사업단장)\s*(?:교수)?\s*(?:전결|결재|승인)/g);if(am){var w=am[am.length-1];C.appr=/사업부단장|산학협력단장|산단장|고문주/.test(w)?"1":/사업단장/.test(w)?"2":"0"}}
+  if(!C.dPay){var DM=/(이체일|지급일|지출일|결의일|기안일|결재일)\s*[:：]?\s*(20\d{2})\s*[-.년\/]\s*(\d{1,2})\s*[-.월\/]\s*(\d{1,2})/g,best=null,pr={"이체일":0,"지급일":1,"지출일":2,"결의일":3,"기안일":4,"결재일":5},x;
+    while((x=DM.exec(t))){if(!best||pr[x[1]]<pr[best[1]])best=x}
+    if(best){C.dPay=best[2]+"-"+("0"+best[3]).slice(-2)+"-"+("0"+best[4]).slice(-2);dl.push("지출일 "+kd(C.dPay)+" ← 붙여 넣은 글의 ‘"+best[1]+"’")}}
+  m=t.match(/(?:건\s*명|제\s*목|적\s*요|사\s*업\s*명)\s*[:：]?\s*([^\n\t]{2,60})/);if(m&&!manualTitle)manualTitle=m[1].trim();
+  m=t.match(/(?:예산\s*과목|비\s*목|세\s*목|집행\s*항목)\s*[:：]?\s*([^\n\t]{2,40})/);
+  if(m){for(var i=0;i<TKEY.length;i++){if(TKEY[i][1].test(m[1])){if(TKEY[i][0]!==C.type)SG.ai={type:TKEY[i][0],reason:"지출결의서의 예산과목 ‘"+m[1].trim()+"’",conf:.8};break}}}
+  var fl=diffFills(old,C);
+  if(fl.length||dl.length){AIX.fills=(AIX.fills||[]).concat(fl);AIX.dates=(AIX.dates||[]).concat(dl);fillForm();update();if(!quiet)toast("지출결의서 내용 "+(fl.length+dl.length)+"건을 입력 칸에 반영했습니다. 원본과 대조해 주세요.")}
+  else{renderSugg();if(!quiet)toast("새로 채울 항목이 없습니다. 이미 입력된 칸은 바꾸지 않습니다.")}
+  return fl.length+dl.length;
+}
 function guessDates(){
   var K=[["dProp",/품의|기안|결재/,"시행품의 결재일"],["dStart",/계약서|계약/,"수행·계약일"],["dDeliv",/납품|거래명세|결과보고/,"납품·완료일"],["dInsp",/검수/,"검수 완료일"],["dPay",/이체|매출전표|카드전표|영수증/,"지출일"]],got=[];
   seenNames().forEach(function(n){var b=n.split("/").pop(),m=b.match(/(20\d{2})[-._]?(0[1-9]|1[0-2])[-._]?(0[1-9]|[12]\d|3[01])/);if(!m)return;var v=m[1]+"-"+m[2]+"-"+m[3];
@@ -1379,7 +1633,7 @@ function guessDates(){
 }
 function guessDocs(quiet){
   if(!res&&typeof check==="function")res=check();
-  var docs=docList(),names=seenNames(),hit=0;
+  var docs=docList(),names=seenNames().concat(TXT.map(function(x){return x.name+" "+x.text.slice(0,300)})),hit=0;
   if(!names.length)return;
   docs.forEach(function(d,i){
     var key=C.type+":"+i;if(C.docs[key])return;
@@ -1487,15 +1741,22 @@ function maskPII(t){
   rep(/\b\d{6}-?[1-4]\d{6}\b/g,"주민");rep(/\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b/g,"카드");rep(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g,"메일");
   return {text:t,restore:function(s){map.forEach(function(p){s=String(s).split(p[0]).join(p[1])});return s}};
 }
-function maskedText(){var t=$("#pasteIn").value||"";return $("#maskOn").checked?maskPII(t):{text:t,restore:function(s){return s}}}
+function allText(labeled){
+  var t=$("#pasteIn").value||"",parts=[];
+  if(t.trim())parts.push(labeled?"[붙여 넣은 글]\n"+t:t);
+  TXT.forEach(function(x){parts.push(labeled?"["+x.name+"]\n"+x.text:x.text)});
+  var o=parts.join("\n\n");return labeled?o.slice(0,40000):o;
+}
+function maskedText(){var t=allText(true);return $("#maskOn").checked?maskPII(t):{text:t,restore:function(s){return s}}}
 function polite(t){
   var M={"이다":"입니다","한다":"합니다","된다":"됩니다","있다":"있습니다","없다":"없습니다","않다":"않습니다","같다":"같습니다","높다":"높습니다","낮다":"낮습니다","많다":"많습니다","적다":"적습니다","크다":"큽니다","필요하다":"필요합니다","부족하다":"부족합니다","누락됐다":"누락되었습니다"};
   return String(t||"").replace(/(필요하다|부족하다|누락됐다|이다|한다|된다|있다|없다|않다|같다|높다|낮다|많다|적다|크다)(?=[.!)\]]|\s*$|\n)/g,function(m,a){return M[a]||m});
 }
 function typeIds(){return TYPES.map(function(t){return t[0]+": "+t[1]}).join("\n")}
 function specGuide(){var L=SPEC[C.type]||[];return L.length?L.map(function(f){return f[0]+"("+f[1]+(f[1]==="sel"?":"+f[3].map(function(o){return o[0]}).join("|"):"")+") = "+f[2]}).join("\n"):"(없음)"}
-function buildPrompt(masker,forChat){
-  var roles=FILES.map(function(f,i){return "이미지 "+(i+1)+": "+(ROLES.filter(function(r){return r[0]===f.role})[0]||["","기타"])[1]+" ("+f.name+")"}).join("\n")||"(이미지 없음)";
+function buildPrompt(masker,forChat,sub,bi,bn){
+  var list=sub||FILES.map(function(_,i){return i});
+  var roles=(list.map(function(ix,k){var f=FILES[ix];return "이미지 "+(k+1)+": "+(ROLES.filter(function(r){return r[0]===f.role})[0]||["","기타"])[1]+" ("+f.name+")"}).join("\n")||"(이미지 없음)")+(bn>1?"\n(전체 "+FILES.length+"장을 "+bn+"묶음으로 나누어 점검 중이며 이번은 "+bi+"번째 묶음입니다. 이 묶음에 없는 서류는 없다고 단정하지 마세요.)":"");
   var oth=OTHERS.length?OTHERS.slice(0,60).map(function(o){return o.name}).join("\n"):"(없음)";
   var info={집행항목:typeLabel(),금액:amt()||"미입력",지급방식:(PAYS.filter(function(p){return p[0]===C.pay})[0]||[])[1],시행품의결재일:C.dProp||"미입력",수행계약일:C.dStart||"미입력",납품완료일:C.dDeliv||"미입력",검수일:C.dInsp||"미입력",지출일:C.dPay||"미입력",거래처:C.payee||"미입력"};
   var docs=docList().map(function(d,i){return i+". "+d}).join("\n");
@@ -1503,23 +1764,39 @@ function buildPrompt(masker,forChat){
 "[제출 파일]\n"+(forChat?"(채팅창에 첨부한 파일을 순서대로 이미지 1, 2, … 로 보고 아래 구분을 따르세요)\n":"")+roles+"\n\n[압축파일·기타 파일 이름]\n"+oth+"\n\n[담당자가 입력한 정보]\n"+JSON.stringify(info,null,1)+"\n\n[붙여 넣은 텍스트]\n"+(masker.text.trim()||"(없음)")+"\n\n"+
 "[집행 항목 선택지]\n"+typeIds()+"\n\n[선택된 항목의 제출서류 목록(번호)]\n"+docs+"\n\n[선택된 항목의 세부 입력 키]\n"+specGuide()+"\n\n"+
 "[핵심 기준 — 건국대 ANCHOR 사업비 관리 지침(2026.10.)]\n- 시행품의 결재 후 사업 수행, 지출 원인행위와 거래는 같은 사업연도(3.1~2월 말) 안에. 결재선: 500만 이하 센터장 / 500만 초과~1억 이하 사업부단장 / 1억 초과 사업단장.\n- 지급: e나라도움 전용카드·세금계산서 기반 계좌이체. 개인 지급 경비는 수혜자 직접 이체. 간이영수증·개인카드 불인정. 사용제한 업종(유흥·위생·레저·사행) 불가.\n- 물품 500만 미만 견적서 / 500만~2천만 비교견적(1천만 이상 계약서) / 2천만 이상 입찰·보증보험. 용역·라이선스 1천만·2천만 기준. 검수조서 [서식22] 후 지급. 3천만 원 이상 장비는 서울앵커센터 사전승인.\n- 일용임금 시급 학부 12,000·석사 18,000·박사 20,000, 1일 8시간. 인재지원금 월 130만·230만·300만. 전문가 활용비 동일인 연 1,000만, 회의 식대 내부 3만·외부 5만, 시상금 1등 250만.\n\n"+
-"[할 일]\n1. 서류에서 값을 읽어 fields에 넣으세요. 보이지 않는 값은 지어내지 말고 null로 두세요. 금액은 숫자(원), 날짜는 YYYY-MM-DD. type은 위 선택지의 id, pay는 enara|transfer|corp|cash|personal|simple, appr는 0(센터장)|1(사업부단장)|2(사업단장) 중 결재선이 보이면.\n2. docsSeen: 이미지·텍스트·파일명에서 실제로 확인되는 서류의 종류 이름을 문자열 배열로(예: \"견적서\",\"세금계산서\",\"검수조서\",\"통장 사본\").\n3. observations: 감사에서 지적될 만한 서류상의 문제를 최대 12개. 금액·부가세·합계 불일치, 날짜 선후 이상, 직인·서명 누락, 간이영수증, 제한업종 가맹점, 거래처·품명 불일치, 들러리 견적 신호, 분할 발주 의심 등. s는 bad|warn|chk, cat은 \"서류 판독(AI)\", r은 문서에서 본 구체적 근거 한 문장, fix는 보완 방법 한 문장.\n4. dates 규칙: 시행품의 결재일(prop)은 품의문·기안문의 결재(전결)일, 수행·계약일(start)은 계약서 체결일(계약서가 없으면 사업 착수일), 납품·완료일(deliv)은 납품확인서·거래명세서·결과보고서의 일자, 검수 완료일(insp)은 검수조서 일자, 지출일(pay)은 이체확인증·카드 매출전표 일자입니다. 해당 서류가 없으면 null로 두고, 읽은 일자마다 dateSources에 근거 서류명을 적으세요.\n5. typeGuess: 서류 내용으로 집행 항목을 추정해 type(선택지 id), reason(근거 한 문장), confidence(0~1)를 적으세요. 용역이고 선급금이 보이면 spec의 adv를 y, advAmt를 선급금액으로 읽으세요.\n6. summary: 총평 2~3문장. flags: 감사 지적 가능성이 큰 사항(최대 6개).\n\n"+
+"[금액 읽는 법]\n- amount에는 ‘총 계약금액(계약 총액)’ 또는 지출 합계(VAT 포함)를 넣습니다. 공급가액과 부가세가 따로 있으면 둘을 더한 합계를 씁니다.\n- 회차별·분할 지급 금액, 선금, 잔금, 월 금액은 총액이 아니므로 amount에 넣지 않습니다. 계약서 표에 ‘천원·만원’ 단위가 있으면 원으로 환산합니다.\n- 한글 금액(일금 ○○원정)과 숫자가 다르면 amountNote에 불일치 내용을 적으세요. amountEvidence에는 근거 표기(원문 그대로 label·text), 공급가액 supply, 부가세 vat, VAT 포함 여부 vatIncluded를 적으세요.\n\n"+
+"[지출결의서(지출 요구 결의서) 읽는 법]\n지출결의서가 있으면 지출 건 입력의 가장 중요한 근거로 쓰세요.\n- 집행 항목: 예산과목·비목·세목·적요로 type을 정합니다(일반수용비·소모품·인쇄·홍보=goods, 일반용역비·용역·라이선스=service, 시약·실험재료=material, 장비·기자재=asset, 임차·유지보수=rental, 여비=travel, 회의·식대·다과=meeting, 전문가 자문·강연·원고=expert, 일용·보조인력=ilyong, 장학=janghak, 인재지원금·조교=jaeji, 시상=sisang, 성과급=seonggwa, 보직수당=bojik, 상용·퇴직금=sangyong, 공공요금·보험료=other).\n- 금액: 지출(청구) 합계금액(부가세 포함). 거래처: 채주·수령인·상호. 건명: 건명·제목·적요를 title에.\n- 지급 방법: 카드·계좌이체·현금 구분으로 pay를 정합니다. 결재선: 결재란의 최종 전결권자 직위로 appr를 정합니다(센터장 0, 사업부단장 1, 총괄부단장 경유 사업단장 2). 현재 사업부단장은 산학협력단장을 겸하는 고문주 교수이므로 결재란에 ‘산학협력단장’·‘산단장’·‘고문주’가 전결로 보이면 1입니다.\n- 일자: 결의(기안)일은 pay에 넣되 이체확인증·카드 매출전표 일자가 있으면 그 일자를 우선합니다. 시행품의 결재일(prop)은 시행품의 기안문에서만 읽습니다.\n\n"+
+"[할 일]\n1. 서류에서 값을 읽어 fields에 넣으세요. 보이지 않는 값은 지어내지 말고 null로 두세요. 금액은 숫자(원), 날짜는 YYYY-MM-DD. type은 위 선택지의 id, pay는 enara|transfer|corp|cash|personal|simple, appr는 0(센터장)|1(사업부단장=산학협력단장 고문주)|2(사업단장) 중 결재선이 보이면.\n2. docsSeen: 이미지·텍스트·파일명에서 실제로 확인되는 서류의 종류 이름을 문자열 배열로(예: \"견적서\",\"세금계산서\",\"검수조서\",\"통장 사본\").\n3. observations: 감사에서 지적될 만한 서류상의 문제를 최대 12개. 금액·부가세·합계 불일치, 날짜 선후 이상, 직인·서명 누락, 간이영수증, 제한업종 가맹점, 거래처·품명 불일치, 들러리 견적 신호, 분할 발주 의심 등. s는 bad|warn|chk, cat은 \"서류 판독(AI)\", r은 문서에서 본 구체적 근거 한 문장, fix는 보완 방법 한 문장. img는 문제가 보이는 이미지 번호(위 [제출 파일]의 번호), box는 그 이미지에서 문제 부위를 둘러싼 사각형 [x,y,w,h]로 이미지 전체 크기를 1로 본 비율입니다(왼쪽 위가 원점, 0~1). 위치를 확신할 수 없으면 box를 null로 두세요.\n4. dates 규칙: 시행품의 결재일(prop)은 품의문·기안문의 결재(전결)일, 수행·계약일(start)은 계약서 체결일(계약서가 없으면 사업 착수일), 납품·완료일(deliv)은 납품확인서·거래명세서·결과보고서의 일자, 검수 완료일(insp)은 검수조서 일자, 지출일(pay)은 이체확인증·카드 매출전표 일자입니다. 해당 서류가 없으면 null로 두고, 읽은 일자마다 dateSources에 근거 서류명을 적으세요.\n5. typeGuess: 서류 내용으로 집행 항목을 추정해 type(선택지 id), reason(근거 한 문장), confidence(0~1)를 적으세요. 용역이고 선급금이 보이면 spec의 adv를 y, advAmt를 선급금액으로 읽으세요.\n6. summary: 총평 2~3문장. flags: 감사 지적 가능성이 큰 사항(최대 6개).\n\n"+
 "[문체] 모든 문장은 ‘합니다체’로 통일하세요(~입니다/~합니다). 금액은 ‘1,234,000원’, 날짜는 ‘2026. 10. 1.’ 형식으로 씁니다.\n\n"+
-"[출력] 다른 말 없이 JSON 하나만:\n{\"fields\":{\"type\":\"\",\"amount\":0,\"pay\":\"\",\"payee\":\"\",\"appr\":null,\"dates\":{\"prop\":\"\",\"start\":\"\",\"deliv\":\"\",\"insp\":\"\",\"pay\":\"\"},\"spec\":{}},\"typeGuess\":{\"type\":\"\",\"reason\":\"\",\"confidence\":0},\"dateSources\":{\"prop\":\"\",\"start\":\"\",\"deliv\":\"\",\"insp\":\"\",\"pay\":\"\"},\"docsSeen\":[],\"observations\":[{\"cat\":\"서류 판독(AI)\",\"s\":\"bad\",\"title\":\"\",\"r\":\"\",\"fix\":\"\"}],\"summary\":\"\",\"flags\":[]}";
+"[출력] 다른 말 없이 JSON 하나만:\n{\"fields\":{\"title\":\"\",\"type\":\"\",\"amount\":0,\"pay\":\"\",\"payee\":\"\",\"appr\":null,\"dates\":{\"prop\":\"\",\"start\":\"\",\"deliv\":\"\",\"insp\":\"\",\"pay\":\"\"},\"spec\":{}},\"typeGuess\":{\"type\":\"\",\"reason\":\"\",\"confidence\":0},\"amountNote\":\"\",\"amountEvidence\":{\"label\":\"\",\"text\":\"\",\"supply\":0,\"vat\":0,\"vatIncluded\":true},\"dateSources\":{\"prop\":\"\",\"start\":\"\",\"deliv\":\"\",\"insp\":\"\",\"pay\":\"\"},\"docsSeen\":[],\"observations\":[{\"cat\":\"서류 판독(AI)\",\"s\":\"bad\",\"title\":\"\",\"r\":\"\",\"fix\":\"\",\"img\":1,\"box\":[0.1,0.2,0.3,0.05]}],\"summary\":\"\",\"flags\":[]}";
 }
 function parseJson(t){
   var a=t.indexOf("{"),b=t.lastIndexOf("}");var bad=function(){var e=new Error("json");e.code="invalid_json";return e};
   if(a<0||b<=a)throw bad();try{return JSON.parse(t.slice(a,b+1))}catch(e){throw bad()}
 }
 function normDate(x){x=String(x||"").trim();var m=x.match(/^(\d{4})[-.\/ ]+(\d{1,2})[-.\/ ]+(\d{1,2})/);return m?m[1]+"-"+("0"+m[2]).slice(-2)+"-"+("0"+m[3]).slice(-2):""}
+var APPN=["센터장 전결","사업부단장(산학협력단장) 전결","사업단장 전결"];
+function diffFills(a,b){
+  var o=[],tl=function(id){return (TYPES.filter(function(t){return t[0]===id})[0]||[0,id])[1]};
+  if(b.type!==a.type)o.push("집행 항목 "+tl(b.type));
+  if(b.amount&&b.amount!==a.amount)o.push("지출 금액 "+fmt(b.amount)+"원");
+  if(b.pay!==a.pay)o.push("지급 방식 "+((PAYS.filter(function(p){return p[0]===b.pay})[0]||[])[1]||b.pay));
+  if(b.appr!==a.appr)o.push("시행품의 결재 단계 "+APPN[+b.appr]);
+  if(b.payee&&b.payee!==a.payee)o.push("거래처·수령인 "+b.payee);
+  return o;
+}
 function applyAi(out,restore,force){
   var R0=restore||function(x){return x},R=function(x){return polite(R0(String(x||"")))};
   var f=(out&&out.fields)||out||{};
+  var _old=JSON.parse(JSON.stringify(C));
   lastOut=out;lastRestore=restore;
   var tg=out.typeGuess||{},gt=(tg&&tg.type)||f.type,okT=function(x){return x&&TYPES.some(function(t){return t[0]===x})};
   if(force&&okT(force)&&force!==C.type){C.type=force;C.s={}}
   SG.ai=(okT(gt)&&gt!==C.type)?{type:gt,reason:R(tg.reason||""),conf:+tg.confidence||0}:null;
-  var A=Math.round(+f.amount);if(A>0)C.amount=String(A);
+  var A=Math.round(+String(f.amount||0).replace(/[^0-9.]/g,"")),ev=out.amountEvidence||{},amtNote="",sup=Math.round(+ev.supply||0),vt=Math.round(+ev.vat||0);
+  if(sup>0&&vt>0&&Math.abs(A-(sup+vt))>1){amtNote="지출 금액 "+fmt(sup+vt)+"원 = 공급가액 "+fmt(sup)+"원 + 부가세 "+fmt(vt)+"원(판독한 값 "+fmt(A)+"원을 합계로 바로잡음)";A=sup+vt}
+  else if(A>0&&ev.vatIncluded===false&&!(vt>0)){amtNote="지출 금액 "+fmt(Math.round(A*1.1))+"원 = 부가세 별도 표기 "+fmt(A)+"원 + 부가세 10% (원본 확인 필요)";A=Math.round(A*1.1)}
+  if(A>0)C.amount=String(A);
   if(PAYS.some(function(p){return p[0]===f.pay}))C.pay=f.pay;
   if(f.payee)C.payee=R0(String(f.payee)).slice(0,60);
   var d=f.dates||{},ds=out.dateSources||{},dl=[],DN={prop:"시행품의 결재일",start:"수행·계약일",deliv:"납품·완료일",insp:"검수 완료일",pay:"지출일"};
@@ -1529,8 +1806,11 @@ function applyAi(out,restore,force){
     if(fd[1]==="num"){var n=parseFloat(String(v).replace(/[^0-9.]/g,""));if(n)C.s[fd[0]]=String(n)}
     else if(fd[1]==="sel"){if(fd[3].some(function(o){return o[0]===v}))C.s[fd[0]]=v}
     else if(typeof v==="boolean")C.s[fd[0]]=v});
-  AIX={items:(Array.isArray(out.observations)?out.observations:[]).slice(0,12).filter(function(o){return o&&["bad","warn","chk","ok"].indexOf(o.s)>=0&&o.title}).map(function(o){return {s:o.s,title:R(o.title).slice(0,80),r:R(o.r),fix:R(o.fix)}}),
+  AIX={items:(Array.isArray(out.observations)?out.observations:[]).slice(0,24).filter(function(o){return o&&["bad","warn","chk","ok"].indexOf(o.s)>=0&&o.title}).map(function(o){return {s:o.s,title:R(o.title).slice(0,80),r:R(o.r),fix:R(o.fix),fid:o.fid||null,box:normBox(o.box)}}),
     dates:dl,summary:R(out.summary),flags:(Array.isArray(out.flags)?out.flags:[]).slice(0,6).map(R),seen:(Array.isArray(out.docsSeen)?out.docsSeen:[]).map(function(x){return String(x)}).slice(0,60)};
+  if(f.title&&!manualTitle)manualTitle=R0(String(f.title)).slice(0,60);
+  AIX.fills=diffFills(_old,C);if(amtNote)AIX.fills.push(amtNote);
+  if(out.amountNote)AIX.items.unshift({s:"warn",title:"금액 표기 확인",r:R(out.amountNote),fix:"원본의 총 계약금액(숫자·한글 표기)을 직접 대조해야 합니다.",fid:null,box:null});
   fillForm();guessDocs(true);renderSugg();if(dl.length)toast("증빙에서 일자 "+dl.length+"건을 반영했습니다.");
 }
 async function blobB64(b){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(",")[1])};r.onerror=rej;r.readAsDataURL(b)})}
@@ -1541,6 +1821,21 @@ async function apiCall(prompt,imgs,signal){
   if(!r.ok){var e=new Error("api");e.code=r.status===401||r.status===403?"bad_key":r.status===429?"rate_limited":r.status===413?"prompt_too_large":"api_error";throw e}
   var j=await r.json();return parseJson((j.content||[]).filter(function(c){return c.type==="text"}).map(function(c){return c.text}).join(""));
 }
+function mergeOuts(a){
+  var o={fields:{dates:{},spec:{}},docsSeen:[],observations:[],flags:[],summary:"",dateSources:{},typeGuess:null},seen={};
+  a.forEach(function(x){
+    var f=(x&&x.fields)||{};
+    ["type","amount","pay","payee","appr"].forEach(function(k){var v=f[k];if((o.fields[k]===undefined||o.fields[k]===null||o.fields[k]===""||o.fields[k]===0)&&v!==undefined&&v!==null&&v!=="")o.fields[k]=v});
+    var d=f.dates||{},ds=x.dateSources||{};["prop","start","deliv","insp","pay"].forEach(function(k){if(!o.fields.dates[k]&&d[k]){o.fields.dates[k]=d[k];if(ds[k])o.dateSources[k]=ds[k]}});
+    var sp=f.spec||{};Object.keys(sp).forEach(function(k){if(o.fields.spec[k]===undefined||o.fields.spec[k]===null||o.fields.spec[k]==="")o.fields.spec[k]=sp[k]});
+    (x.docsSeen||[]).forEach(function(n){if(!seen[n]){seen[n]=1;o.docsSeen.push(n)}});
+    (x.observations||[]).forEach(function(ob){if(ob&&ob.title&&!o.observations.some(function(y){return y.title===ob.title}))o.observations.push(ob)});
+    (x.flags||[]).forEach(function(fl){if(o.flags.indexOf(fl)<0)o.flags.push(fl)});
+    if(x.summary)o.summary+=(o.summary?" ":"")+x.summary;
+    var tg=x.typeGuess;if(tg&&tg.type&&(!o.typeGuess||(+tg.confidence||0)>(+o.typeGuess.confidence||0)))o.typeGuess=tg;
+  });
+  return o;
+}
 function openChatFlow(title){
   var masker=maskedText(),prompt=buildPrompt(masker,true),other=/다른 AI/.test(title);
   var names=FILES.map(function(f,i){return (i+1)+". "+esc(f.name)}).join(" · ");
@@ -1550,29 +1845,38 @@ function openChatFlow(title){
    "<h4>② "+(other?"AI":"Claude")+" 답 붙여넣기</h4><textarea id='chIn' placeholder='{\"fields\":{…}} 형태의 답을 그대로 붙여 넣으세요. 앞뒤 설명이나 json 코드 표시가 있어도 됩니다.'></textarea>"+
    "<p class='mdl-note'>"+(other?"다른 AI는 학교 계정 보안·개인정보 처리 기준이 다를 수 있습니다. 민감한 서류는 개인정보 가림을 켜고, ":"")+"결과는 반드시 직접 확인하세요. 답이 끊기면 ‘계속’이라고 보내거나 나누어 요청하세요.</p>";
   pgStart(["요청문 작성","Claude 채팅에서 판독(직접 진행)","결과 반영","규칙 점검"]);pgSet(0,"done",prompt.length.toLocaleString("ko-KR")+"자");pgSet(1,"on","채팅창 답변을 붙여 넣기를 기다리는 중입니다");
-  openModal({title:title,body:body,wide:true,foot:[{label:"취소",onclick:function(c){pgClear();c()}},{label:"③ 결과 적용",primary:true,onclick:function(close){var w=document.querySelector(".te-wrap");try{var out=parseJson(w.querySelector("#chIn").value);pgSet(1,"done");pgSet(2,"on");applyAi(out,masker.restore);logRun("chat");pgSet(2,"done");pgSet(3,"done",issueTxt());close();toast("결과를 적용했습니다.")}catch(e){toast("JSON 형식이 아닙니다. AI의 답 전체를 붙여 넣었는지 확인하세요.")}}}],
+  openModal({title:title,body:body,wide:true,foot:[{label:"취소",onclick:function(c){pgClear();c()}},{label:"③ 결과 적용",primary:true,onclick:function(close){var w=document.querySelector(".te-wrap");try{var out=parseJson(w.querySelector("#chIn").value);mapImg(out,FILES.map(function(_,i){return i}));pgSet(1,"done");pgSet(2,"on");applyAi(out,masker.restore);logRun("chat");pgSet(2,"done");pgSet(3,"done",issueTxt());close();toast("결과를 적용했습니다.")}catch(e){toast("JSON 형식이 아닙니다. AI의 답 전체를 붙여 넣었는지 확인하세요.")}}}],
    onOpen:function(w){w.querySelector("#chCopy").onclick=function(){copyText(prompt)}}});
 }
 $("#otherAiBtn").onclick=function(){$("#aiPop").hidden=true;openChatFlow("다른 AI용 프롬프트")};
 var busyT=0;
 async function runCheck(){
-  var m=mode||"rules",btn=$("#runBtn"),hasInput=FILES.length||($("#pasteIn").value||"").trim()||OTHERS.length;
+  var m=mode||"rules",btn=$("#runBtn"),hasInput=FILES.length||($("#pasteIn").value||"").trim()||OTHERS.length||TXT.length;
   if(!hasInput){toast("지출서류를 올리거나 내용을 붙여 넣으세요. 규칙 점검은 입력만으로도 이미 표시됩니다.");update();return}
-  if(m==="rules"){pgStart(["입력 확인","파일명으로 제출서류 대조","규칙 점검"]);pgSet(0,"done","파일 "+FILES.length+"건 · 기타 "+OTHERS.length+"건");pgSet(1,"on");guessDates();guessDocs();pgSet(1,"done");pgSet(2,"done",issueTxt());setIn("AI 없이 입력값·파일명으로만 점검했습니다. 서류를 읽게 하려면 상단 AI 연결에서 방식을 고르세요.");logRun("rules");return}
+  if(m==="rules"){pgStart(["입력 확인","파일명으로 제출서류 대조","규칙 점검"]);pgSet(0,"done","파일 "+FILES.length+"건 · 기타 "+OTHERS.length+"건");pgSet(1,"on");guessDates();parseTexts(true);parseResolution(true);guessDocs();pgSet(1,"done");pgSet(2,"done",issueTxt());setIn("AI 없이 입력값·파일명으로만 점검했습니다. 서류를 읽게 하려면 상단 AI 연결에서 방식을 고르세요.");logRun("rules");return}
   if(m==="chat"){openChatFlow("Claude 채팅창으로 점검");return}
   if(m==="account"&&!sampleFn){toast("본인 Claude 계정은 claude.ai 링크로 열 때만 쓸 수 있습니다. 연결 방식을 바꿔 주세요.");$("#aiPop").hidden=false;return}
   if(m==="apikey"&&!apiKey){toast("API 키를 입력하세요.");openConn();return}
   var imgs=FILES.map(function(f){return f.blob});
   if(m==="account"&&imgs.length&&!imgLimits){setIn("이 화면에서는 이미지를 보낼 수 없습니다. 내용을 글로 붙여 넣어 주세요.");return}
-  if(m==="account"&&imgLimits&&imgs.length>imgLimits.maxCount){toast("이미지는 한 번에 "+imgLimits.maxCount+"장까지 보낼 수 있습니다. 일부를 삭제하거나 나누어 점검하세요.");return}
   pgStart(["서류 준비","개인정보 가림·요청문 구성","AI 서류 판독","결과 반영","규칙 점검"],true);
   pgSet(0,"done",imgs.length+"장 이미지 · 파일명 "+OTHERS.length+"건");pgSet(1,"on");
-  var masker=maskedText(),prompt=buildPrompt(masker,false);
-  pgSet(1,"done",(prompt.length).toLocaleString("ko-KR")+"자"+($("#maskOn").checked?" · 개인정보 가림":""));pgSet(2,"on","Claude가 서류를 읽는 중입니다");
+  var per=m==="account"?Math.max(1,(imgLimits&&imgLimits.maxCount)||4):20,batches=[];
+  for(var bi0=0;bi0<Math.max(1,Math.ceil(FILES.length/per));bi0++){batches.push(FILES.map(function(_,i){return i}).slice(bi0*per,(bi0+1)*per))}
+  var masker=maskedText(),prompt=buildPrompt(masker,false,batches[0],1,batches.length);
+  pgSet(1,"done",(prompt.length).toLocaleString("ko-KR")+"자"+($("#maskOn").checked?" · 개인정보 가림":"")+(batches.length>1?" · 이미지 "+FILES.length+"장을 "+batches.length+"묶음으로 나눔":""));pgSet(2,"on","Claude가 서류를 읽는 중입니다");
   ctl=new AbortController();btn.disabled=true;$("#stopBtn").hidden=false;
-  var t0=Date.now();clearInterval(busyT);busyT=setInterval(function(){var sec=Math.round((Date.now()-t0)/1000);setIn("서류를 읽는 중… "+sec+"초");if(PG.steps[2]&&PG.steps[2].st==="on"){PG.steps[2].d="Claude가 서류를 읽는 중입니다 · "+sec+"초 경과";pgDraw()}$("#inMsg").className="hint spin"},500);
+  var t0=Date.now();clearInterval(busyT);busyT=setInterval(function(){var sec=Math.round((Date.now()-t0)/1000);setIn("서류를 읽는 중… "+sec+"초");if(PG.steps[2]&&PG.steps[2].st==="on"){PG.steps[2].d="Claude가 서류를 읽는 중입니다"+batchTxt+" · "+sec+"초";pgDraw()}$("#inMsg").className="hint spin"},500);
   try{
-    var out=m==="account"?await sampleFn.json(prompt,{images:imgs.length?imgs:undefined,signal:ctl.signal,modelTier:"default"}):await apiCall(prompt,imgs,ctl.signal);
+    var outs=[];
+    for(var bi=0;bi<batches.length;bi++){
+      batchTxt=batches.length>1?" ("+(bi+1)+" / "+batches.length+"묶음)":"";
+      var bImgs=batches[bi].map(function(ix){return FILES[ix].blob}),bp=bi===0?prompt:buildPrompt(masker,false,batches[bi],bi+1,batches.length);
+      var o1=m==="account"?await sampleFn.json(bp,{images:bImgs.length?bImgs:undefined,signal:ctl.signal,modelTier:"default"}):await apiCall(bp,bImgs,ctl.signal);
+      mapImg(o1,batches[bi]);outs.push(o1);
+    }
+    batchTxt="";
+    var out=outs.length>1?mergeOuts(outs):outs[0];
     pgSet(2,"done",Math.round((Date.now()-t0)/1000)+"초 소요");pgSet(3,"on");
     applyAi(out,masker.restore);logRun(m);
     pgSet(3,"done",(AIX.items.length?"판독 의견 "+AIX.items.length+"건 · ":"")+"입력 칸·제출서류 반영");pgSet(4,"done",issueTxt());
@@ -1612,8 +1916,8 @@ function blankCase(t){return {type:t||"goods",amount:"",pay:"enara",appr:"0",pay
 function snap(){return {C:C,AIX:AIX,paste:$("#pasteIn").value||"",files:FILES.map(function(f){return {name:f.name,role:f.role}}).concat(loadedMeta),others:OTHERS}}
 function applySnap(d){
   C=Object.assign(blankCase(),d.C||{});C.s=C.s||{};C.c=C.c||{};C.docs=C.docs||{};
-  AIX=d.AIX||{items:[],summary:"",flags:[],seen:[]};
-  FILES.forEach(function(f){try{URL.revokeObjectURL(f.url)}catch(e){}});FILES=[];
+  AIX=d.AIX||{items:[],summary:"",flags:[],seen:[]};(AIX.items||[]).forEach(function(i){i.fid=null});
+  FILES.forEach(function(f){try{URL.revokeObjectURL(f.url)}catch(e){}});FILES=[];TXT=[];
   loadedMeta=(d.files||[]).map(function(f){return {name:f.name+" (이전 세션 · 원본 미보관)",old:1}});
   OTHERS=(d.others||[]).concat(loadedMeta.map(function(m){return {name:m.name}}));loadedMeta=[];
   $("#pasteIn").value=d.paste||"";
@@ -1683,10 +1987,48 @@ $("#vaultBtn").onclick=openVault;$("#sessAll").onclick=openVault;
 $("#saveJsonBtn").onclick=function(){$("#expMenu").removeAttribute("open");download("지출김군_작업_"+new Date().toISOString().slice(0,10)+".json",JSON.stringify({app:"jichul",ts:Date.now(),title:defaultTitle(),state:snap()},null,1),"application/json");toast("작업 파일 저장을 요청했습니다.")};
 $("#saveTxtBtn").onclick=function(){$("#expMenu").removeAttribute("open");download("지출김군_점검결과_"+new Date().toISOString().slice(0,10)+".txt",plain());toast("텍스트 파일 저장을 요청했습니다.")};
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".mn-list button");if(b){var d=b.closest("details");if(d)d.removeAttribute("open")}});
-var _upd=update;update=function(){_upd();renderSugg()};
-$("#pasteIn").addEventListener("input",function(){renderSugg()});
+/* ═════════ 서류 오류 보기 ═════════ */
+var VS={fid:null,sel:null};
+function visItems(){return (AIX.items||[]).map(function(o,i){return Object.assign({n:i+1},o)})}
+function openVis(ref){var it=(AIX.items||[])[ref];if(it&&it.fid&&FILES.some(function(f){return f.id===it.fid}))VS.fid=it.fid;VS.sel=ref+1;show("vis");setTimeout(function(){var el=document.querySelector("#visBody .vbox.hl");if(el&&el.scrollIntoView)el.scrollIntoView({block:"center",behavior:"smooth"})},60)}
+function renderVis(){
+  var el=$("#visBody");if(!el)return;
+  var its=visItems(),pos=its.filter(function(o){return o.box&&o.fid&&FILES.some(function(f){return f.id===o.fid})}),nm=pos.length;
+  var tab=document.querySelector("#gn a[data-t='vis']");if(tab)tab.textContent="오류 보기"+(nm?" ("+nm+")":"");
+  if(!its.length){el.innerHTML="<div class='card'><p style='margin:0'>아직 표시할 판독 결과가 없습니다. 서류 이미지·PDF를 올리고 상단 연결을 본인 Claude 계정·API 키·채팅창 중 하나로 설정한 뒤 ‘서류 점검하기’를 누르세요. 오류로 본 부분이 이미지 위에 번호 상자로 나타납니다.</p></div>";return}
+  if(!FILES.length||!nm){
+    el.innerHTML="<div class='card'><p style='margin:0 0 8px'>"+(FILES.length?"이번 판독에서는 서류 이미지 위의 위치를 찾지 못했습니다. 의견만 보여 드립니다.":"이전 세션의 판독 결과입니다. 원본 이미지는 보관하지 않아 위치 표시는 서류를 다시 올리고 점검해야 볼 수 있습니다.")+"</p>"+its.map(visCard).join("")+"</div>";wireVis(el);return}
+  var by={};pos.forEach(function(o){(by[o.fid]=by[o.fid]||[]).push(o)});
+  if(!VS.fid||!FILES.some(function(f){return f.id===VS.fid}))VS.fid=Object.keys(by).length?+Object.keys(by)[0]:FILES[0].id;
+  var cur=FILES.filter(function(f){return f.id===VS.fid})[0],marks=by[VS.fid]||[];
+  var strip="<div class='vstrip'>"+FILES.map(function(f){var c=(by[f.id]||[]).length;return "<button type='button' class='vth"+(f.id===VS.fid?" on":"")+"' data-vf='"+f.id+"' title='"+esc(f.name)+"'><img src='"+f.url+"' alt=''>"+(c?"<b>"+c+"</b>":"")+"</button>"}).join("")+"</div>";
+  var img="<div class='vimg'><img src='"+cur.url+"' alt='"+esc(cur.name)+"'>"+marks.map(function(o){var b=o.box;return "<div class='vbox "+o.s+(o.n===VS.sel?" hl":"")+"' data-vn='"+o.n+"' style='left:"+(b[0]*100)+"%;top:"+(b[1]*100)+"%;width:"+(b[2]*100)+"%;height:"+(b[3]*100)+"%'><b>"+o.n+"</b></div>"}).join("")+"</div>";
+  var left=strip+"<div class='vname'>"+esc(cur.name)+" · 오류 표시 "+marks.length+"건</div>"+img;
+  var side=its.map(visCard).join("");
+  el.innerHTML="<div class='vis'><div class='vl'>"+left+"</div><div class='vr'>"+side+"</div></div>";
+  wireVis(el);
+}
+function visCard(o){
+  var st={bad:"보완 필요",warn:"확인 필요",chk:"직접 확인",ok:"적합"}[o.s]||"";
+  var has=o.box&&o.fid&&FILES.some(function(f){return f.id===o.fid});
+  return "<div class='it "+o.s+(o.n===VS.sel?" on":"")+"' data-vc='"+o.n+"'><div class='t'><b><span class='vnum "+o.s+"'>"+o.n+"</span> "+esc(o.title)+"</b><span class='chip "+o.s+"'>"+st+"</span></div>"+(o.r?"<p>"+hl(esc(o.r))+"</p>":"")+(o.fix?"<p class='fix'>"+hl(esc(o.fix))+"</p>":"")+"<p class='hint' style='margin:4px 0 0'>"+(has?"서류 이미지에 위치를 표시했습니다.":"위치를 특정하지 못한 의견입니다.")+"</p></div>";
+}
+function wireVis(el){
+  $$("[data-vf]",el).forEach(function(b){b.onclick=function(){VS.fid=+b.dataset.vf;VS.sel=null;renderVis()}});
+  $$("[data-vc]",el).forEach(function(c){c.onclick=function(){var n=+c.dataset.vc,o=(AIX.items||[])[n-1];VS.sel=n;if(o&&o.fid&&FILES.some(function(f){return f.id===o.fid}))VS.fid=o.fid;renderVis();var h=document.querySelector("#visBody .vbox.hl");if(h&&h.scrollIntoView)h.scrollIntoView({block:"center",behavior:"smooth"})}});
+  $$("[data-vn]",el).forEach(function(b){b.onclick=function(){VS.sel=+b.dataset.vn;renderVis();var c=document.querySelector("#visBody [data-vc='"+VS.sel+"']");if(c&&c.scrollIntoView)c.scrollIntoView({block:"nearest",behavior:"smooth"})}});
+}
+function sxCounts(){
+  var a=$("#sxA"),sS=$("#sxS"),c=$("#sxC");
+  if(a){var v=[C.payee,C.dProp,C.dStart,C.dDeliv,C.dInsp,C.dPay].filter(Boolean).length;a.textContent=v+" / 6 입력"}
+  if(sS){var L=SPEC[C.type]||[],k=L.filter(function(f){var x=C.s[f[0]];return f[1]==="sel"?!!x:!!x}).length;sS.textContent=k+" / "+L.length+" 입력·확인"}
+  if(c){var k2=COMMON.filter(function(x){return C.c[x[0]]}).length;c.textContent=k2+" / "+COMMON.length+" 확인"}
+}
+var _upd=update;update=function(){_upd();renderSugg();sxCounts()};
+var prT=0;$("#pasteIn").addEventListener("input",function(){renderSugg();clearTimeout(prT);prT=setTimeout(function(){parseResolution(true)},900)});
+$("#resFill").onclick=function(){parseTexts(true);if(!allText(false).trim()){toast("지출결의서 내용을 글로 붙여 넣거나 .txt 파일로 올려 주세요. 이미지·PDF는 ‘서류 점검하기’로 읽습니다.");return}parseResolution(false)};
 renderBasis();renderConn();
-(function(){var d=null;try{d=JSON.parse(LS.get("jbg.draft")||"null")}catch(e){}if(d&&d.C){C=Object.assign(blankCase(),d.C);AIX=d.AIX||AIX;OTHERS=(d.others||[]).concat((d.files||[]).map(function(f){return {name:f.name+" (이전 세션 · 원본 미보관)"}}));$("#pasteIn").value=d.paste||""}})();
+(function(){var d=null;try{d=JSON.parse(LS.get("jbg.draft")||"null")}catch(e){}if(d&&d.C){C=Object.assign(blankCase(),d.C);AIX=d.AIX||AIX;(AIX.items||[]).forEach(function(i){i.fid=null});OTHERS=(d.others||[]).concat((d.files||[]).map(function(f){return {name:f.name+" (이전 세션 · 원본 미보관)"}}));$("#pasteIn").value=d.paste||""}})();
 renderFiles();renderSess();
 
 fillForm();update();renderCL();renderCases();
