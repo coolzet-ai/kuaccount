@@ -318,6 +318,12 @@ h2.sec small{margin-left:10px}
 .vr .it{cursor:pointer}.vr .it.on{outline:2px solid var(--brand)}
 .kv{background:rgba(255,200,0,.38);color:inherit;border-radius:3px;padding:0 2px;font-weight:700}
 .kw{color:var(--bad);font-weight:700;background:none}
+.itbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 10px;position:sticky;top:0;z-index:2;background:var(--card);padding:6px 0}
+.fchip{font:inherit;font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+.fchip.on{background:var(--btn);color:#fff;border-color:var(--btn)}
+.fchip:focus-visible{outline:2px solid var(--brand)}
+.fnow{font-size:12px;color:var(--mut)}
+.sum div[data-fil]{cursor:pointer}
 .keybox{border:1px solid var(--line);border-left:5px solid var(--bad);background:var(--badbg);border-radius:9px;padding:10px 12px;margin:0 0 12px}
 .keybox>b{display:block;margin-bottom:6px;font-size:14px}
 .keybox ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
@@ -808,6 +814,8 @@ function check(){
     else if(adA>mx)P(AC,"bad","선급금 70% 초과","선급금 "+fmt(adA)+"원은 계약금액 "+fmt(a)+"원의 "+Math.round(adA/a*100)+"%입니다. 계약금액의 70%를 초과해서는 집행할 수 없습니다(최대 "+fmt(mx)+"원).","선급금액을 "+fmt(mx)+"원 이하로 조정해야 합니다.");
     else P(AC,"ok","선급금 70% 이내","선급금 "+fmt(adA)+"원은 계약금액의 "+Math.round(adA/a*100)+"%로 상한(70%, "+fmt(mx)+"원) 이내입니다.");
     if(!sv("advTerm"))P(AC,"bad","계약서의 선급금 조건 미비","선급금은 계약서에 지급 조건과 정산 방법이 정해져 있어야 지급할 수 있습니다.","계약서(또는 특수조건)에 선급금 지급 조건·정산 방법을 명시해야 합니다.");
+    if(sv("advTerm")&&ADVX.mention&&!ADVX.settle)P(AC,"chk","선급금 정산 방법 문구 확인","계약서의 선급금 문구에서 정산·공제 방법을 확인하지 못했습니다.","잔금 지급 때 선급금을 어떻게 정산하는지 계약서(특수조건)에 있는지 확인해야 합니다.");
+    if(sv("advGuar")&&ADVX.guarAmt&&adA){if(ADVX.guarAmt<adA)P(AC,"bad","보증금액이 선급금액보다 적음","보증보험증권의 보증금액 "+fmt(ADVX.guarAmt)+"원이 선급금액 "+fmt(adA)+"원보다 적습니다.","선급금액 이상으로 보증이 되는 증권을 받아야 합니다.");else P(AC,"ok","보증금액이 선급금액 이상","보증금액 "+fmt(ADVX.guarAmt)+"원이 선급금액 "+fmt(adA)+"원 이상입니다.")}
     if(!sv("advGuar"))P(AC,"warn","선급금 보증서 확인","선급금은 계약 불이행에 대비해 선급금 보증서(보증보험증권)를 받고 지급하는 것이 일반적입니다.","산학협력단 계약 담당 부서에 보증서 징구 기준을 확인하고 증권을 받아야 합니다(계약예규·내규 원문 확인 필요).");
     if(!sv("advPlan"))P(AC,"chk","선급금 사용계획서·전용계좌","2026. 4. 1. 이후 선금 신청 때는 선금 사용계획서와 계약 전용계좌를 함께 받는 것으로 안내되어 있습니다(2차 자료 기준).","계약예규 원문과 산학협력단 기준으로 적용 여부를 확인해야 합니다.");
     if(!sv("advElig"))P(AC,"chk","선급 가능 경비 항목 확인","일반 용역·라이선스가 국고금 관리법 시행령 제40조의 선급 가능 경비에 해당하는지는 담당 부서의 확인이 필요합니다.","산학협력단에 해당 여부를 확인한 뒤 결재문서에 근거를 적어야 합니다.");
@@ -839,6 +847,7 @@ function check(){
   var buyTypes=["goods","service","material","asset"];
   if(buyTypes.indexOf(t)>=0&&a){
     var svc=t==="service";
+    if(CTMIS)P("구매·계약","warn","계약서 금액의 한글·숫자 표기 불일치","계약서에서 한글 금액 "+fmt(CTMIS.kr)+"원과 숫자 금액 "+fmt(CTMIS.dig)+"원이 서로 다르게 읽혔습니다.","원본 계약서의 총 계약금액(한글·숫자)을 직접 대조해야 합니다.");
     var req=svc?(a>=20000000?3:a>=10000000?2:1):(a>=20000000?3:a>=5000000?2:1);
     var rank={q:1,c:2,b:3,s:9}, mth=sv("method")||"q";
     var tier=["","견적서(개별구매)","비교견적(산학협력단 중앙구매)","입찰(산학협력단 중앙구매)"][req];
@@ -1102,24 +1111,33 @@ function renderItems(){
   else if(cnt.warn){v="확인 필요 "+cnt.warn+"건이 있어 증빙·사유를 보강해야 합니다";cls="s-warn"}
   else if(cnt.chk){v="직접 확인 "+cnt.chk+"건이 남아 있어 확인 후 지출해야 합니다";cls="s-chk"}
   else{v="입력 범위에서는 지적 사항이 없습니다";cls="s-ok"}
-  var KO={bad:0,warn:1},key=VR.filter(function(r){return r.st==="bad"||r.st==="warn"}).sort(function(a,b){return KO[a.st]-KO[b.st]}).slice(0,5);
-  $("#verdict").innerHTML="<div class='verdict "+cls+"'>"+v+"</div>"+(key.length?"<div class='keybox'><b>핵심 점검 사항 "+key.length+"건"+((cnt.bad||0)+(cnt.warn||0)>key.length?" (전체 "+((cnt.bad||0)+(cnt.warn||0))+"건 중)":"")+"</b><ol>"+key.map(function(r){return "<li><button type='button' data-jump='"+r._id+"'><span class='chip "+r.st+"'>"+ST[r.st]+"</span><b>"+r.title+"</b><span class='m'>"+hl(firstSent(r.msg))+"</span></button></li>"}).join("")+"</ol></div>":"");
-  $$("#verdict [data-jump]").forEach(function(b){b.onclick=function(){var t=document.getElementById(b.dataset.jump);if(t){t.scrollIntoView({block:"center",behavior:"smooth"});t.classList.remove("flash");void t.offsetWidth;t.classList.add("flash")}}});
-  $("#sum").innerHTML=[["bad","보완 필요"],["warn","확인 필요"],["chk","직접 확인"],["ok","적합"]].map(function(x){return "<div class='s-"+x[0]+"'><b>"+(cnt[x[0]]||0)+"</b><span>"+x[1]+"</span></div>"}).join("");
+  FILCNT=cnt;var KO={bad:0,warn:1},key=VR.filter(function(r){return r.st==="bad"||r.st==="warn"}).sort(function(a,b){return KO[a.st]-KO[b.st]}).slice(0,5);
+  $("#verdict").innerHTML="<div class='verdict "+cls+"'>"+v+"</div>"+(key.length?"<div class='keybox'><b>핵심 점검 사항 "+key.length+"건"+((cnt.bad||0)+(cnt.warn||0)>key.length?" (전체 "+((cnt.bad||0)+(cnt.warn||0))+"건 중)":"")+"</b><ol>"+key.map(function(r){return "<li><button type='button' data-jump='"+r._id+"' title='이 내용만 보기'><span class='chip "+r.st+"'>"+ST[r.st]+"</span><b>"+r.title+"</b><span class='m'>"+hl(firstSent(r.msg))+"</span></button></li>"}).join("")+"</ol></div>":"");
+  $$("#verdict [data-jump]").forEach(function(b){b.onclick=function(){FIL="id:"+b.dataset.jump.replace("it","");renderItems();var t=$("#itbar");if(t)t.scrollIntoView({block:"start",behavior:"smooth"})}});
+  $("#sum").innerHTML=[["bad","보완 필요"],["warn","확인 필요"],["chk","직접 확인"],["ok","적합"]].map(function(x){return "<div class='s-"+x[0]+"' role='button' tabindex='0' data-fil='"+x[0]+"' title='"+x[1]+"만 보기'><b>"+(cnt[x[0]]||0)+"</b><span>"+x[1]+"</span></div>"}).join("");
+  $$("#sum [data-fil]").forEach(function(b){var go=function(){FIL=(FIL===b.dataset.fil)?"all":b.dataset.fil;renderItems()};b.onclick=go;b.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
   var order={bad:0,warn:1,chk:2,ok:3},by={},cats=[];
   $("#dockStatus").innerHTML="보완 <b>"+(cnt.bad||0)+"</b> · 확인 <b>"+(cnt.warn||0)+"</b> · 직접 확인 <b>"+(cnt.chk||0)+"</b> · 적합 <b>"+(cnt.ok||0)+"</b>";
   VR.forEach(function(r){if(!by[r.cat]){by[r.cat]=[];cats.push(r.cat)}by[r.cat].push(r)});
   var h="";
+  var total=VR.length,fx=FIL.indexOf("id:")===0?FIL.slice(3):null;
+  var FN={all:"전체 내용",bad:"보완 필요",warn:"확인 필요",chk:"직접 확인",ok:"적합"};
+  var one=fx!==null?VR.filter(function(r){return r._id==="it"+fx})[0]:null;if(fx!==null&&!one){FIL="all";fx=null}
+  h+="<div class='itbar' id='itbar'>"+["all","bad","warn","chk","ok"].map(function(k){var n=k==="all"?total:(cnt[k]||0);return "<button type='button' class='fchip "+(k==="all"?"":"s-"+k)+((FIL===k)?" on":"")+"' data-f='"+k+"' aria-pressed='"+(FIL===k)+"'>"+FN[k]+" "+n+"</button>"}).join("")+(one?"<span class='fnow'>선택한 1건만 표시 중</span>":"")+"</div>";
   cats.forEach(function(c){
+    var rows=by[c].filter(function(r){return FIL==="all"||(fx!==null?r._id==="it"+fx:r.st===FIL)});if(!rows.length)return;
     h+="<div class='cat'>"+c+"</div>";
-    by[c].sort(function(a,b){return order[a.st]-order[b.st]}).forEach(function(r){
+    rows.sort(function(a,b){return order[a.st]-order[b.st]}).forEach(function(r){
       h+="<div class='it "+r.st+"' id='"+r._id+"'><div class='t'><b>"+r.title+"</b><span class='chip "+r.st+"'>"+ST[r.st]+"</span></div>"+(r.msg?"<p>"+hl(r.msg)+"</p>":"")+(r.fix?"<p class='fix'>"+hl(r.fix)+"</p>":"")+(r.ref!==undefined&&AIX.items[r.ref]&&AIX.items[r.ref].box?"<p><button type='button' class='btn g s' data-vis='"+r.ref+"'>서류에서 위치 보기</button></p>":"")+"</div>";
     });
   });
+  if(FIL!=="all"&&!VR.some(function(r){return fx!==null?r._id==="it"+fx:r.st===FIL}))h+="<p class='mut'>해당하는 내용이 없습니다.</p>";
   $("#items").innerHTML=h;
+  $$("#items [data-f]").forEach(function(b){b.onclick=function(){FIL=b.dataset.f;renderItems()}});
   $$("#items [data-vis]").forEach(function(b){b.onclick=function(){openVis(+b.dataset.vis)}});
   renderVis();renderFlow();
 }
+var FIL="all",FILCNT={};
 function paper(){
   var a=amt(),pl=res.R.filter(function(r){return r.st==="bad"||r.st==="warn"}),ck=res.R.filter(function(r){return r.st==="chk"});
   var today=new Date();
@@ -1157,10 +1175,10 @@ function fillForm(){
   $$("#common [data-c]").forEach(function(el){el.addEventListener("change",function(){C.c[el.dataset.c]=el.checked;update()})});
   renderSpec();
 }
-$("#type").addEventListener("change",function(e){C.type=e.target.value;C.s={};renderSpec();update()});
+$("#type").addEventListener("change",function(e){C.type=e.target.value;C.s={};ADVSIG="";renderSpec();update();autoAdv()});
 $("#pay").addEventListener("change",function(e){C.pay=e.target.value;C.payT=1;update()});
 $("#appr").addEventListener("change",function(e){C.appr=e.target.value;C.apprT=1;update()});
-$("#amount").addEventListener("input",function(e){var n=e.target.value.replace(/[^0-9]/g,"");C.amount=n;e.target.value=n?fmt(+n):"";update()});
+$("#amount").addEventListener("input",function(e){AMTAUTO=false;var n=e.target.value.replace(/[^0-9]/g,"");C.amount=n;e.target.value=n?fmt(+n):"";update()});
 $("#payee").addEventListener("input",function(e){C.payee=e.target.value;update()});
 ["dProp","dStart","dDeliv","dInsp","dPay"].forEach(function(k){$("#"+k).addEventListener("change",function(e){C[k]=e.target.value;update()})});
 $("#copyForm").addEventListener("click",function(){copyText(plain())});
@@ -1525,7 +1543,7 @@ $("#capBtn").onclick=async function(){
 };
 
 /* ═════════ 파일명·판독 결과로 구비 서류 추정 ═════════ */
-var TERMS=[["지출결의",/결의/],["견적",/견적/],["세금계산서",/세금\s*계산서|계산서/],["검수",/검수|서식\s*22/],["사업자등록",/사업자/],["통장",/통장|계좌/],["신분증",/신분증/],["계약서",/계약서|계약/],["근로확인",/근로\s*확인|서식\s*3\b/],["출근부",/출근/],["활동보고",/활동\s*보고|서식\s*5\b/],["회의록",/회의록|서식\s*6\b/],["출장",/출장/],["지급신청",/지급\s*신청|서식\s*9\b/],["이력서",/이력/],["동의서",/동의서|서식\s*2\b/],["이체",/이체/],["영수증",/영수증|매출|전표|카드/],["결재",/결재|기안|품의|원인행위|서식\s*1\b/],["재학증명",/재학/],["추천서",/추천/],["계획서",/계획서/],["거래명세",/거래\s*명세|거래내역/],["수령확인",/수령/],["보증보험",/보증/],["입찰",/입찰/],["사유서",/사유서|서식\s*11/],["명부",/명부/],["원천징수",/원천/],["성과평가",/평가/],["체크리스트",/체크리스트|서식\s*23/],["결과보고서",/결과\s*보고/]];
+var TERMS=[["지출결의",/결의/],["견적",/견적/],["세금계산서",/세금\s*계산서|계산서/],["검수",/검수|서식\s*22/],["사업자등록",/사업자/],["통장",/통장|계좌/],["신분증",/신분증/],["계약서",/계약서|계약/],["근로확인",/근로\s*확인|서식\s*3\b/],["출근부",/출근/],["활동보고",/활동\s*보고|서식\s*5\b/],["회의록",/회의록|서식\s*6\b/],["출장",/출장/],["지급신청",/지급\s*신청|서식\s*9\b/],["이력서",/이력/],["동의서",/동의서|서식\s*2\b/],["이체",/이체/],["영수증",/영수증|매출|전표|카드/],["결재",/결재|기안|품의|원인행위|서식\s*1\b/],["재학증명",/재학/],["추천서",/추천/],["계획서",/계획서/],["거래명세",/거래\s*명세|거래내역/],["수령확인",/수령/],["보증보험",/보증|보험\s*증[권서]/],["입찰",/입찰/],["사유서",/사유서|서식\s*11/],["명부",/명부/],["원천징수",/원천/],["성과평가",/평가/],["체크리스트",/체크리스트|서식\s*23/],["결과보고서",/결과\s*보고/]];
 function seenNames(){return FILES.map(function(f){return f.name}).concat(OTHERS.map(function(o){return o.name})).concat(AIX.seen||[])}
 function kd(v){var m=String(v).split("-");return m.length===3?m[0]+". "+(+m[1])+". "+(+m[2])+".":String(v)}
 var TKEY=[["ilyong",/일용|근로확인|출근부|근로계약/],["sangyong",/상용|퇴직금|4대보험|급여대장/],["bojik",/보직수당/],["seonggwa",/성과급|인센티브|성과평가/],["janghak",/장학|재학증명|장학생/],["jaeji",/인재지원금|조교|복무협약|복무서약/],["sisang",/시상|경진대회|수상|상금/],["expert",/자문|강연|원고료|번역|통역|속기|전문가|이력서/],["meeting",/회의록|회의비|식대|다과|간담/],["goods",/소모품|인쇄|홍보물|물품|구매|구입/],["service",/용역|라이선스|라이센스|개발|제작|설계|컨설팅|결과보고서|선금|선급금/],["material",/시약|실험|재료비/],["asset",/장비|기자재|자산취득|비품/],["rental",/임차|렌탈|유지보수/],["travel",/출장|여비|항공|숙박/],["other",/공공요금|보험료|통신비/]];
@@ -1542,7 +1560,7 @@ function renderSugg(){
   el.hidden=false;
   el.innerHTML="<b>집행 항목 추정</b> "+esc(tl(cand.type))+"<small>"+esc(cand.why)+" 현재 선택은 ‘"+esc(tl(C.type))+"’입니다.</small><div class='row' style='margin-top:8px'><button type='button' class='btn' id='sgYes' style='background:var(--btn);color:#fff;border-color:var(--btn);font-weight:700'>이 항목으로 적용</button><button type='button' class='btn g' id='sgNo'>그대로 두기</button></div>";
   $("#sgYes").onclick=function(){
-    if(lastOut)applyAi(lastOut,lastRestore,cand.type);else{C.type=cand.type;C.s={};fillForm();update()}
+    if(lastOut)applyAi(lastOut,lastRestore,cand.type);else{C.type=cand.type;C.s={};ADVSIG="";fillForm();update();autoAdv()}
     SG.ai=null;renderSugg();toast("집행 항목을 ‘"+tl(cand.type)+"’(으)로 바꿨습니다.");
   };
   $("#sgNo").onclick=function(){SG.dis[cand.type]=1;renderSugg()};
@@ -1573,6 +1591,88 @@ function korToNum(x){
   }
   return tot+sec+cur;
 }
+
+var AMTAUTO=false,CTMIS=null,ADVSIG="",ADVX={};
+var KRN="일이삼사오육칠팔구십백천만억조영공";
+function moneyTokens(s){
+  var out=[],m,re;
+  re=/((?:\d[\d,]*\s*[억만천백십]+\s*)+)\s*원/g;
+  var rg=[];while((m=re.exec(s))){var v=korToNum(m[1].replace(/,/g,""));if(v>=10000){out.push({v:v,i:m.index,kr:false});rg.push([m.index,m.index+m[0].length])}}
+  re=new RegExp("(["+KRN+"](?:\\s?["+KRN+"])*)\\s*원","g");
+  while((m=re.exec(s))){if(!/[십백천만억]/.test(m[1]))continue;if(rg.some(function(g){return m.index>=g[0]&&m.index<g[1]}))continue;var v2=korToNum(m[1]);if(v2>=10000)out.push({v:v2,i:m.index,kr:true})}
+  re=/(₩|￦|\\)?\s*(\d{1,3}(?:,\d{3})+|\d{5,})\s*(원)?/g;
+  while((m=re.exec(s))){
+    var b=s.charAt(m.index-1),a=s.charAt(m.index+m[0].length);
+    if(/[-\d.]/.test(b)&&!m[1]||/^-\d/.test(s.substr(m.index+m[0].length,2)))continue;
+    if(!m[1]&&!m[3]&&!/금액|대금|총액|합\s*계|금\s*$/.test(s.slice(Math.max(0,m.index-14),m.index)))continue;
+    var v3=+m[2].replace(/,/g,"");if(v3>=10000)out.push({v:v3,i:m.index,kr:false,dig:true});
+  }
+  return out;
+}
+var POSL=/총\s*계약\s*(?:금액|액|대금)|계약\s*(?:금액|대금|총액|총\s*액)|총\s*(?:용역|공사|도급)?\s*(?:금액|대금|액)|용역\s*(?:금액|대금)|도급\s*금액|합\s*계(?:\s*금액)?|계약\s*금(?![가-힣])/g;
+var NEGL=/선\s*급|선\s*금|계약\s*보증|이행\s*보증|보증\s*금|착수|중도|기성|잔\s*금|잔\s*액|\d\s*차|회\s*차|분\s*할|공급\s*가액|지체|하자|인지|분기|단가|개당|위약|상금|수수료|월\s*[:：]/g;
+function lastIdx(re,t){var l=-1,m;re.lastIndex=0;while((m=re.exec(t)))l=m.index+m[0].length;return l}
+function contractTotal(t){
+  var tk=moneyTokens(t);if(!tk.length)return null;
+  tk.forEach(function(k){
+    var c=t.slice(Math.max(0,k.i-40),k.i).replace(/\s+/g," ");
+    c=c.replace(/\(?\s*(?:VAT|부가\s*(?:가치)?세)\s*(?:포함|별도)?\s*\)?/g," ").replace(new RegExp("(?:"+POSL.source+")\\s*(?:의|대비|기준)","g")," ");
+    var p=lastIdx(POSL,c),n=lastIdx(NEGL,c),sc=0;
+    if(n>=0&&n>=p)sc=-20;else if(p>=0)sc=10;
+    if(/(?:일금|금)\s*$/.test(c))sc+=5;
+    k.sc=sc;
+  });
+  tk.forEach(function(a){tk.forEach(function(b){if(a!==b&&a.kr!==b.kr&&a.v===b.v&&Math.abs(a.i-b.i)<150&&a.sc>-20&&b.sc>-20){a.sc+=6;a.ag=true}})});
+  var best=null;tk.forEach(function(k){if(k.sc>=5&&(!best||k.sc>best.sc))best=k});
+  if(!best)return null;
+  var r={v:best.v,agree:!!best.ag,mis:null};
+  var o=tk.filter(function(k){return k.sc>=5&&k.v!==best.v&&k.kr!==best.kr&&Math.abs(k.i-best.i)<150})[0];
+  if(o&&!best.ag)r.mis={kr:best.kr?best.v:o.v,dig:best.kr?o.v:best.v};
+  return r;
+}
+var ADVRE=/선\s*급\s*금?\s*(?:이행\s*|지급\s*|반환\s*)?보증|선\s*금\s*(?:이행\s*|지급\s*|반환\s*)?보증/;
+var INSRE=/보증\s*보험\s*(?:증권|증서)|보험\s*증[권서]|보증\s*증[권서]|보증서/;
+function advScan(){
+  var r={mention:false,amt:0,pct:0,term:false,settle:false,guar:false,guarAmt:0};
+  var src=TXT.map(function(x){return {n:x.name,t:x.text,role:x.role}}),pt=$("#pasteIn").value||"";if(pt.trim())src.push({n:"붙여 넣은 글",t:pt,role:"etc"});
+  src.forEach(function(x){
+    var head=x.t.slice(0,800),isIns=INSRE.test(x.n)||INSRE.test(head);
+    if(isIns){
+      if(ADVRE.test(x.n)||ADVRE.test(x.t)||/선\s*급|선\s*금/.test(head)){
+        r.guar=true;
+        var gm=x.t.match(/(?:보증\s*금액|보험\s*금액|보증\s*금|보증\s*한도)\s*[:：]?\s*(?:금\s*)?/);
+        if(gm){var tk=moneyTokens(x.t.slice(gm.index,gm.index+90));if(tk.length&&!r.guarAmt)r.guarAmt=tk.sort(function(a,b){return a.i-b.i})[0].v}
+      }
+      return;
+    }
+    if(!(x.role==="ctr"||/계약/.test(head)))return;
+    var re=/선\s*급\s*금?|선\s*금|선\s*지급/g,m;
+    while((m=re.exec(x.t))){
+      var w=x.t.slice(m.index,m.index+170);
+      if(/지급\s*하지\s*(?:아니|않)|지급\s*하지\s*아니|지급\s*불가|지급하지|없음|해당\s*없/.test(w.slice(0,60)))continue;
+      r.mention=true;
+      var tk2=moneyTokens(w);if(tk2.length&&!r.amt)r.amt=tk2.sort(function(a,b){return a.i-b.i})[0].v;
+      var pm=w.match(/(\d{1,3}(?:\.\d+)?)\s*%/);if(pm&&!r.pct)r.pct=+pm[1];
+      if(/지급|납부|교부/.test(w))r.term=true;
+      if(/정산|공제|상계|반환|잔금|기성/.test(x.t.slice(m.index,m.index+300)))r.settle=true;
+    }
+  });
+  seenNames().forEach(function(n){if(ADVRE.test(n)||(INSRE.test(n)&&/선\s*급|선\s*금/.test(n)))r.guar=true});
+  return r;
+}
+function autoAdv(){
+  var r=advScan();ADVX=r;if(!r.mention&&!r.guar)return 0;
+  if(C.type!=="service"){ADVSIG="";return 0}
+  var a=amt(),sig=JSON.stringify([r,a,C.type]);if(sig===ADVSIG)return 0;ADVSIG=sig;
+  var got=[];
+  if(C.s.adv!=="y"){C.s.adv="y";got.push("선급금 지급 예정 ← "+(r.mention?"계약서의 선급금 문구":"선급금 보증서 확인"))}
+  var aa=r.amt||(r.pct&&a?Math.round(a*r.pct/100):0);
+  if(aa&&!sn("advAmt")){C.s.advAmt=String(aa);got.push("선급금액 "+fmt(aa)+"원"+(r.amt?"":" (계약금액의 "+r.pct+"%)"))}
+  if(r.mention&&r.term&&!C.s.advTerm){C.s.advTerm=true;got.push("계약서에 선급금 조건 명시")}
+  if(r.guar&&!C.s.advGuar){C.s.advGuar=true;got.push("선급금 보증서(보증보험증권) 수령"+(r.guarAmt?" · 보증금액 "+fmt(r.guarAmt)+"원":""))}
+  if(got.length){AIX.fills=(AIX.fills||[]).concat(got);SPECOPEN=true;fillForm();update();toast("용역 선급금 항목 "+got.length+"건을 서류에서 읽어 반영했습니다.")}
+  return got.length;
+}
 function normBox(b){
   if(!Array.isArray(b)||b.length<4)return null;var v=b.slice(0,4).map(Number);if(v.some(function(n){return !isFinite(n)}))return null;
   if(v.some(function(n){return n>1.5}))v=v.map(function(n){return n/100});
@@ -1589,7 +1689,7 @@ function parseTexts(quiet){
   TXT.forEach(function(x){
     var t=x.text,r=x.role;
     if(r==="ctr"||/계약서|계약\s*일반\s*조건|용역\s*계약/.test(t.slice(0,400))){
-      if(!C.amount){var m=t.match(AMT);if(m)C.amount=m[1].replace(/,/g,"");else{var km=t.match(/일금\s*([가-힣\s]+?)\s*원\s*정?/);if(km){var kv=korToNum(km[1]);if(kv>0)C.amount=String(kv)}}}
+      if(!C.amount||AMTAUTO){var ct=contractTotal(t);if(ct){if(String(ct.v)!==C.amount){C.amount=String(ct.v)}AMTAUTO=true;CTMIS=ct.mis}else if(!C.amount){var m=t.match(AMT);if(m){C.amount=m[1].replace(/,/g,"");AMTAUTO=true}else{var km=t.match(/일금\s*([가-힣\s]+?)\s*원\s*정?/);if(km){var kv=korToNum(km[1]);if(kv>0){C.amount=String(kv);AMTAUTO=true}}}}}
       set("dStart",labDate(t,"계약\\s*일자|계약\\s*체결\\s*일|체결\\s*일자|계약\\s*일"),"수행·계약일",x.name);
     }
     if(r==="req"||/시행\s*품의|품의서|기안\s*문/.test(t.slice(0,400))){
@@ -1606,9 +1706,13 @@ function parseResolution(quiet){
   var t=allText(false);if(!/결의|지출|청구|계약|품의/.test(t))return 0;
   var old=JSON.parse(JSON.stringify(C)),m,dl=[];
   if(!C.amount){
+    var ct0=contractTotal(t);if(ct0){C.amount=String(ct0.v);AMTAUTO=true;CTMIS=ct0.mis}
+  }
+  if(!C.amount){
     m=t.match(/(?:총\s*계약\s*금액|계약\s*총\s*(?:액|금액)|총\s*계약액|계약\s*금액|계약\s*대금|합\s*계|총\s*액|지출\s*(?:요구\s*)?금액|청구\s*금액|결의\s*금액|지급\s*액|금\s*액)\s*(?:\(\s*(?:VAT|부가세)[^)]*\))?\s*[:：]?\s*(?:일금\s*)?(?:₩\s*)?([\d,]{4,})/);
     if(m)C.amount=m[1].replace(/,/g,"");
     else{var km=t.match(/일금\s*([가-힣\s]+?)\s*원\s*정?/);if(km){var kv=korToNum(km[1]);if(kv>0)C.amount=String(kv)}}
+    if(C.amount)AMTAUTO=true;
     if(!C.amount){var sm1=t.match(/공급\s*가액\s*[:：]?\s*(?:₩\s*)?([\d,]{4,})/),vm1=t.match(/(?:부가\s*(?:가치)?세|VAT)\s*[:：]?\s*(?:₩\s*)?([\d,]{3,})/);if(sm1&&vm1)C.amount=String(+sm1[1].replace(/,/g,"")+ +vm1[1].replace(/,/g,""))}
   }
   if(!C.payee){m=t.match(/(?:거래처|수령인|채주|지급처|업체명|상호)\s*[:：]?\s*([^\n\t,;|]{2,30})/);if(m)C.payee=m[1].trim()}
@@ -1631,7 +1735,15 @@ function guessDates(){
     for(var i=0;i<K.length;i++){if(K[i][1].test(b)&&!C[K[i][0]]){C[K[i][0]]=v;got.push(K[i][2]+" "+kd(v)+" ← 파일명 ‘"+b+"’");break}}});
   if(got.length){AIX.dates=(AIX.dates||[]).concat(got);fillForm();update();toast("파일명의 일자 "+got.length+"건을 입력 칸에 반영했습니다. 원본과 대조해 주세요.")}
 }
+function autoPay(){
+  if(C.payT)return 0;
+  var src=seenNames().join("\n")+"\n"+allText(false);
+  var tax=/세금\s*계산서|전자\s*계산서|계산서\s*발행/.test(src),slip=/카드\s*(?:매출)?\s*전표|신용\s*카드\s*매출|카드\s*영수증|카드\s*승인|승인\s*번호/.test(src);
+  if(tax&&!slip&&C.pay!=="transfer"){C.pay="transfer";AIX.fills=(AIX.fills||[]).concat(["지급 방식 계좌이체 ← 세금계산서가 있고 카드 전표는 없어 카드가 아닌 계좌이체로 인식"]);fillForm();update();return 1}
+  return 0;
+}
 function guessDocs(quiet){
+  autoAdv();autoPay();
   if(!res&&typeof check==="function")res=check();
   var docs=docList(),names=seenNames().concat(TXT.map(function(x){return x.name+" "+x.text.slice(0,300)})),hit=0;
   if(!names.length)return;
@@ -1639,7 +1751,10 @@ function guessDocs(quiet){
     var key=C.type+":"+i;if(C.docs[key])return;
     var ts=TERMS.filter(function(t){return d.indexOf(t[0])>=0});
     if(!ts.length)return;
-    var ok=ts.every(function(t){return names.some(function(n){return t[1].test(n)})});
+    var ok;
+    if(d.indexOf("선급금 보증서")>=0)ok=ADVX.guar||names.some(function(n){return ADVRE.test(n)});
+    else if(d.indexOf("계약이행")>=0)ok=names.some(function(n){return /보증|보험\s*증[권서]/.test(n)&&!/선\s*급|선\s*금/.test(n)});
+    else ok=ts.every(function(t){return names.some(function(n){return t[1].test(n)})});
     if(ok){C.docs[key]=true;hit++}
   });
   if(hit){update();if(!quiet||hit)toast("제출서류 "+hit+"건을 구비로 표시했습니다(파일명·판독 기준). 내용은 직접 확인하세요.")}
@@ -1766,7 +1881,7 @@ function buildPrompt(masker,forChat,sub,bi,bn){
 "[핵심 기준 — 건국대 ANCHOR 사업비 관리 지침(2026.10.)]\n- 시행품의 결재 후 사업 수행, 지출 원인행위와 거래는 같은 사업연도(3.1~2월 말) 안에. 결재선: 500만 이하 센터장 / 500만 초과~1억 이하 사업부단장 / 1억 초과 사업단장.\n- 지급: e나라도움 전용카드·세금계산서 기반 계좌이체. 개인 지급 경비는 수혜자 직접 이체. 간이영수증·개인카드 불인정. 사용제한 업종(유흥·위생·레저·사행) 불가.\n- 물품 500만 미만 견적서 / 500만~2천만 비교견적(1천만 이상 계약서) / 2천만 이상 입찰·보증보험. 용역·라이선스 1천만·2천만 기준. 검수조서 [서식22] 후 지급. 3천만 원 이상 장비는 서울앵커센터 사전승인.\n- 일용임금 시급 학부 12,000·석사 18,000·박사 20,000, 1일 8시간. 인재지원금 월 130만·230만·300만. 전문가 활용비 동일인 연 1,000만, 회의 식대 내부 3만·외부 5만, 시상금 1등 250만.\n\n"+
 "[금액 읽는 법]\n- amount에는 ‘총 계약금액(계약 총액)’ 또는 지출 합계(VAT 포함)를 넣습니다. 공급가액과 부가세가 따로 있으면 둘을 더한 합계를 씁니다.\n- 회차별·분할 지급 금액, 선금, 잔금, 월 금액은 총액이 아니므로 amount에 넣지 않습니다. 계약서 표에 ‘천원·만원’ 단위가 있으면 원으로 환산합니다.\n- 한글 금액(일금 ○○원정)과 숫자가 다르면 amountNote에 불일치 내용을 적으세요. amountEvidence에는 근거 표기(원문 그대로 label·text), 공급가액 supply, 부가세 vat, VAT 포함 여부 vatIncluded를 적으세요.\n\n"+
 "[지출결의서(지출 요구 결의서) 읽는 법]\n지출결의서가 있으면 지출 건 입력의 가장 중요한 근거로 쓰세요.\n- 집행 항목: 예산과목·비목·세목·적요로 type을 정합니다(일반수용비·소모품·인쇄·홍보=goods, 일반용역비·용역·라이선스=service, 시약·실험재료=material, 장비·기자재=asset, 임차·유지보수=rental, 여비=travel, 회의·식대·다과=meeting, 전문가 자문·강연·원고=expert, 일용·보조인력=ilyong, 장학=janghak, 인재지원금·조교=jaeji, 시상=sisang, 성과급=seonggwa, 보직수당=bojik, 상용·퇴직금=sangyong, 공공요금·보험료=other).\n- 금액: 지출(청구) 합계금액(부가세 포함). 거래처: 채주·수령인·상호. 건명: 건명·제목·적요를 title에.\n- 지급 방법: 카드·계좌이체·현금 구분으로 pay를 정합니다. 결재선: 결재란의 최종 전결권자 직위로 appr를 정합니다(센터장 0, 사업부단장 1, 총괄부단장 경유 사업단장 2). 현재 사업부단장은 산학협력단장을 겸하는 고문주 교수이므로 결재란에 ‘산학협력단장’·‘산단장’·‘고문주’가 전결로 보이면 1입니다.\n- 일자: 결의(기안)일은 pay에 넣되 이체확인증·카드 매출전표 일자가 있으면 그 일자를 우선합니다. 시행품의 결재일(prop)은 시행품의 기안문에서만 읽습니다.\n\n"+
-"[할 일]\n1. 서류에서 값을 읽어 fields에 넣으세요. 보이지 않는 값은 지어내지 말고 null로 두세요. 금액은 숫자(원), 날짜는 YYYY-MM-DD. type은 위 선택지의 id, pay는 enara|transfer|corp|cash|personal|simple, appr는 0(센터장)|1(사업부단장=산학협력단장 고문주)|2(사업단장) 중 결재선이 보이면.\n2. docsSeen: 이미지·텍스트·파일명에서 실제로 확인되는 서류의 종류 이름을 문자열 배열로(예: \"견적서\",\"세금계산서\",\"검수조서\",\"통장 사본\").\n3. observations: 감사에서 지적될 만한 서류상의 문제를 최대 12개. 금액·부가세·합계 불일치, 날짜 선후 이상, 직인·서명 누락, 간이영수증, 제한업종 가맹점, 거래처·품명 불일치, 들러리 견적 신호, 분할 발주 의심 등. s는 bad|warn|chk, cat은 \"서류 판독(AI)\", r은 문서에서 본 구체적 근거 한 문장, fix는 보완 방법 한 문장. img는 문제가 보이는 이미지 번호(위 [제출 파일]의 번호), box는 그 이미지에서 문제 부위를 둘러싼 사각형 [x,y,w,h]로 이미지 전체 크기를 1로 본 비율입니다(왼쪽 위가 원점, 0~1). 위치를 확신할 수 없으면 box를 null로 두세요.\n4. dates 규칙: 시행품의 결재일(prop)은 품의문·기안문의 결재(전결)일, 수행·계약일(start)은 계약서 체결일(계약서가 없으면 사업 착수일), 납품·완료일(deliv)은 납품확인서·거래명세서·결과보고서의 일자, 검수 완료일(insp)은 검수조서 일자, 지출일(pay)은 이체확인증·카드 매출전표 일자입니다. 해당 서류가 없으면 null로 두고, 읽은 일자마다 dateSources에 근거 서류명을 적으세요.\n5. typeGuess: 서류 내용으로 집행 항목을 추정해 type(선택지 id), reason(근거 한 문장), confidence(0~1)를 적으세요. 용역이고 선급금이 보이면 spec의 adv를 y, advAmt를 선급금액으로 읽으세요.\n6. summary: 총평 2~3문장. flags: 감사 지적 가능성이 큰 사항(최대 6개).\n\n"+
+"[할 일]\n1. 서류에서 값을 읽어 fields에 넣으세요. 보이지 않는 값은 지어내지 말고 null로 두세요. 금액은 숫자(원), 날짜는 YYYY-MM-DD. type은 위 선택지의 id, pay는 enara|transfer|corp|cash|personal|simple, appr는 0(센터장)|1(사업부단장=산학협력단장 고문주)|2(사업단장) 중 결재선이 보이면.\n2. docsSeen: 이미지·텍스트·파일명에서 실제로 확인되는 서류의 종류 이름을 문자열 배열로(예: \"견적서\",\"세금계산서\",\"검수조서\",\"통장 사본\").\n3. observations: 감사에서 지적될 만한 서류상의 문제를 최대 12개. 금액·부가세·합계 불일치, 날짜 선후 이상, 직인·서명 누락, 간이영수증, 제한업종 가맹점, 거래처·품명 불일치, 들러리 견적 신호, 분할 발주 의심 등. s는 bad|warn|chk, cat은 \"서류 판독(AI)\", r은 문서에서 본 구체적 근거 한 문장, fix는 보완 방법 한 문장. img는 문제가 보이는 이미지 번호(위 [제출 파일]의 번호), box는 그 이미지에서 문제 부위를 둘러싼 사각형 [x,y,w,h]로 이미지 전체 크기를 1로 본 비율입니다(왼쪽 위가 원점, 0~1). 위치를 확신할 수 없으면 box를 null로 두세요.\n4. dates 규칙: 시행품의 결재일(prop)은 품의문·기안문의 결재(전결)일, 수행·계약일(start)은 계약서 체결일(계약서가 없으면 사업 착수일), 납품·완료일(deliv)은 납품확인서·거래명세서·결과보고서의 일자, 검수 완료일(insp)은 검수조서 일자, 지출일(pay)은 이체확인증·카드 매출전표 일자입니다. 해당 서류가 없으면 null로 두고, 읽은 일자마다 dateSources에 근거 서류명을 적으세요.\n5. typeGuess: 서류 내용으로 집행 항목을 추정해 type(선택지 id), reason(근거 한 문장), confidence(0~1)를 적으세요. 용역이고 계약서에 선급금(선금·선급) 지급 조항이 있으면 spec의 adv를 y, advTerm을 true, advAmt를 선급금액(금액이 없으면 총액×비율)으로 읽으세요. 선급금 보증보험증권(보증보험증서·선급금이행보증)이 보이면 advGuar를 true로 하고 docsSeen에 ‘선급금 보증보험증권’을 넣으세요. 계약서의 한글 금액(예: 팔천만원)과 숫자 금액을 모두 읽어 서로 일치하는 총 계약금액을 amount에 넣고, 선급금(예: 사천만원)·1차 대금·잔금을 총액으로 착각하지 마세요.\n6. summary: 총평 2~3문장. flags: 감사 지적 가능성이 큰 사항(최대 6개).\n\n"+
 "[문체] 모든 문장은 ‘합니다체’로 통일하세요(~입니다/~합니다). 금액은 ‘1,234,000원’, 날짜는 ‘2026. 10. 1.’ 형식으로 씁니다.\n\n"+
 "[출력] 다른 말 없이 JSON 하나만:\n{\"fields\":{\"title\":\"\",\"type\":\"\",\"amount\":0,\"pay\":\"\",\"payee\":\"\",\"appr\":null,\"dates\":{\"prop\":\"\",\"start\":\"\",\"deliv\":\"\",\"insp\":\"\",\"pay\":\"\"},\"spec\":{}},\"typeGuess\":{\"type\":\"\",\"reason\":\"\",\"confidence\":0},\"amountNote\":\"\",\"amountEvidence\":{\"label\":\"\",\"text\":\"\",\"supply\":0,\"vat\":0,\"vatIncluded\":true},\"dateSources\":{\"prop\":\"\",\"start\":\"\",\"deliv\":\"\",\"insp\":\"\",\"pay\":\"\"},\"docsSeen\":[],\"observations\":[{\"cat\":\"서류 판독(AI)\",\"s\":\"bad\",\"title\":\"\",\"r\":\"\",\"fix\":\"\",\"img\":1,\"box\":[0.1,0.2,0.3,0.05]}],\"summary\":\"\",\"flags\":[]}";
 }
@@ -1796,7 +1911,10 @@ function applyAi(out,restore,force){
   var A=Math.round(+String(f.amount||0).replace(/[^0-9.]/g,"")),ev=out.amountEvidence||{},amtNote="",sup=Math.round(+ev.supply||0),vt=Math.round(+ev.vat||0);
   if(sup>0&&vt>0&&Math.abs(A-(sup+vt))>1){amtNote="지출 금액 "+fmt(sup+vt)+"원 = 공급가액 "+fmt(sup)+"원 + 부가세 "+fmt(vt)+"원(판독한 값 "+fmt(A)+"원을 합계로 바로잡음)";A=sup+vt}
   else if(A>0&&ev.vatIncluded===false&&!(vt>0)){amtNote="지출 금액 "+fmt(Math.round(A*1.1))+"원 = 부가세 별도 표기 "+fmt(A)+"원 + 부가세 10% (원본 확인 필요)";A=Math.round(A*1.1)}
-  if(A>0)C.amount=String(A);
+  var ct1=contractTotal(allText(false));
+  if(ct1&&ct1.agree&&A!==ct1.v){amtNote="지출 금액 "+fmt(ct1.v)+"원 ← 계약서 글의 한글 금액과 숫자가 일치하는 총 계약금액(판독한 값 "+fmt(A)+"원 대신 적용)";A=ct1.v;CTMIS=null}
+  else if(ct1&&ct1.mis)CTMIS=ct1.mis;
+  if(A>0){C.amount=String(A);AMTAUTO=true}
   if(PAYS.some(function(p){return p[0]===f.pay}))C.pay=f.pay;
   if(f.payee)C.payee=R0(String(f.payee)).slice(0,60);
   var d=f.dates||{},ds=out.dateSources||{},dl=[],DN={prop:"시행품의 결재일",start:"수행·계약일",deliv:"납품·완료일",insp:"검수 완료일",pay:"지출일"};
@@ -1827,7 +1945,7 @@ function mergeOuts(a){
     var f=(x&&x.fields)||{};
     ["type","amount","pay","payee","appr"].forEach(function(k){var v=f[k];if((o.fields[k]===undefined||o.fields[k]===null||o.fields[k]===""||o.fields[k]===0)&&v!==undefined&&v!==null&&v!=="")o.fields[k]=v});
     var d=f.dates||{},ds=x.dateSources||{};["prop","start","deliv","insp","pay"].forEach(function(k){if(!o.fields.dates[k]&&d[k]){o.fields.dates[k]=d[k];if(ds[k])o.dateSources[k]=ds[k]}});
-    var sp=f.spec||{};Object.keys(sp).forEach(function(k){if(o.fields.spec[k]===undefined||o.fields.spec[k]===null||o.fields.spec[k]==="")o.fields.spec[k]=sp[k]});
+    var sp=f.spec||{};Object.keys(sp).forEach(function(k){if(o.fields.spec[k]===undefined||o.fields.spec[k]===null||o.fields.spec[k]===""||o.fields.spec[k]===false)o.fields.spec[k]=sp[k]});
     (x.docsSeen||[]).forEach(function(n){if(!seen[n]){seen[n]=1;o.docsSeen.push(n)}});
     (x.observations||[]).forEach(function(ob){if(ob&&ob.title&&!o.observations.some(function(y){return y.title===ob.title}))o.observations.push(ob)});
     (x.flags||[]).forEach(function(fl){if(o.flags.indexOf(fl)<0)o.flags.push(fl)});
